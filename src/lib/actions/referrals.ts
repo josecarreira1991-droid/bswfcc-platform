@@ -56,12 +56,8 @@ function generateCode(): string {
 export async function generateReferralCode(memberId: string): Promise<{ code: string } | { error: string }> {
   const supabase = createClient();
 
-  // Deactivate any existing active codes for this member
-  await supabase
-    .from("referral_codes")
-    .update({ is_active: false })
-    .eq("member_id", memberId)
-    .eq("is_active", true);
+  // Keep existing active codes alive — only deactivate when used, not when generating new ones
+  // This way previously shared links remain valid
 
   // Generate a unique code with retry
   let code = generateCode();
