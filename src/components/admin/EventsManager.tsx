@@ -73,20 +73,26 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
     setLoading(true);
     const form = new FormData(e.currentTarget);
 
-    let result;
-    if (editingEvent) {
-      result = await updateEvent(editingEvent.id, form);
-    } else {
-      result = await createEvent(form);
-    }
+    try {
+      let result;
+      if (editingEvent) {
+        result = await updateEvent(editingEvent.id, form);
+      } else {
+        result = await createEvent(form);
+      }
 
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success(editingEvent ? "Evento atualizado" : "Evento criado");
-      setShowForm(false);
-      setEditingEvent(null);
-      router.refresh();
+      if (result?.error) {
+        toast.error(result.error);
+      } else if (result?.success) {
+        toast.success(editingEvent ? "Evento atualizado" : "Evento criado");
+        setShowForm(false);
+        setEditingEvent(null);
+        router.refresh();
+      } else {
+        toast.error("Erro inesperado ao salvar evento");
+      }
+    } catch {
+      toast.error("Erro de conexão com o servidor. Tente novamente.");
     }
     setLoading(false);
   }

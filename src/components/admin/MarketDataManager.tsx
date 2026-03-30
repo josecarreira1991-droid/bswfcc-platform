@@ -70,19 +70,25 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    let result;
-    if (editItem) {
-      result = await updateMarketData(editItem.id, form);
-    } else {
-      result = await createMarketData(form);
-    }
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success(editItem ? "Indicador atualizado" : "Indicador criado");
-      setShowForm(false);
-      setEditItem(null);
-      router.refresh();
+    try {
+      let result;
+      if (editItem) {
+        result = await updateMarketData(editItem.id, form);
+      } else {
+        result = await createMarketData(form);
+      }
+      if (result?.error) {
+        toast.error(result.error);
+      } else if (result?.success) {
+        toast.success(editItem ? "Indicador atualizado" : "Indicador criado");
+        setShowForm(false);
+        setEditItem(null);
+        router.refresh();
+      } else {
+        toast.error("Erro inesperado ao salvar indicador");
+      }
+    } catch {
+      toast.error("Erro de conexão com o servidor. Tente novamente.");
     }
     setLoading(false);
   }
