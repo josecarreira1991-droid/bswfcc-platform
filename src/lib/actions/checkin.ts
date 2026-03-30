@@ -1,6 +1,7 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { APP_URL } from "@/lib/utils";
 import type { EventCheckin } from "@/types/database";
 
 export async function checkInToEvent(eventId: string, memberId: string, method: "qr" | "manual" = "qr") {
@@ -39,6 +40,5 @@ export async function getCheckinCount(eventId: string) {
 }
 
 export function generateEventQRData(eventId: string): string {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://bswfcc.quantrexnow.io";
-  return `${baseUrl}/api/checkin/${eventId}`;
+  return `${APP_URL}/api/checkin/${eventId}`;
 }

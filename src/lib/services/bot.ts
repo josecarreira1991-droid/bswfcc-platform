@@ -11,6 +11,7 @@
  */
 
 import { createClient } from "@supabase/supabase-js";
+import { APP_URL } from "@/lib/utils";
 
 const BOT_API_URL = process.env.BOT_API_URL || "https://api.deepseek.com/v1";
 const BOT_API_KEY = process.env.BOT_API_KEY || "";
@@ -91,7 +92,7 @@ function buildSystemPrompt(context: BotContext, customPrompt?: string): string {
     });
   }
 
-  contextParts.push(`\n\nSite: ${process.env.NEXT_PUBLIC_APP_URL || "https://bswfcc.quantrexnow.io"}`);
+  contextParts.push(`\n\nSite: ${APP_URL}`);
   contextParts.push("EIN: 99-4852466 | 501(c)(6) | Registrada em Set 2024");
 
   return contextParts.join("\n");
@@ -104,7 +105,7 @@ export async function generateBotResponse(
   customSystemPrompt?: string
 ): Promise<string> {
   if (!BOT_API_KEY) {
-    return "Desculpe, o assistente virtual está temporariamente indisponível. Por favor, acesse https://bswfcc.quantrexnow.io ou envie email para contato.";
+    return `Desculpe, o assistente virtual está temporariamente indisponível. Por favor, acesse ${APP_URL} ou envie email para contato.`;
   }
 
   const context = await gatherBotContext(senderPhone);

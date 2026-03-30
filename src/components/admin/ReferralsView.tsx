@@ -21,7 +21,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { createReferral, updateReferralStatus, generateReferralCode } from "@/lib/actions/referrals";
-import { cn } from "@/lib/utils";
+import { cn, APP_URL } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
 import type { Member } from "@/types/database";
@@ -80,8 +80,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
   const [expandedTree, setExpandedTree] = useState<Set<string>>(new Set());
   const [generatingCode, setGeneratingCode] = useState(false);
 
-  const appUrl = typeof window !== "undefined" ? window.location.origin : "https://bswfcc.quantrexnow.io";
-  const shareUrl = myCode ? `${appUrl}/convite/${myCode}` : null;
+  const shareUrl = myCode ? `${APP_URL}/convite/${myCode}` : null;
 
   function copyCode() {
     if (shareUrl) {
@@ -374,8 +373,8 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                 </h2>
               </div>
               <div className="divide-y divide-slate-800/50">
-                {stats.recentReferrals.map((r, i) => (
-                  <div key={i} className="px-4 py-3 flex items-center gap-3">
+                {stats.recentReferrals.map((r) => (
+                  <div key={`${r.referrer}-${r.referred}-${r.date}`} className="px-4 py-3 flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-gold flex-shrink-0" />
                     <p className="text-sm text-slate-300 flex-1">
                       <span className="text-white font-medium">{r.referrer}</span>

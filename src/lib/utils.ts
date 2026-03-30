@@ -5,6 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://bswfcc.quantrexnow.io";
+
 export const ADMIN_ROLES = [
   "presidente",
   "vice_presidente",

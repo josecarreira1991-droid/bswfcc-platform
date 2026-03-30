@@ -15,6 +15,7 @@
  */
 
 import nodemailer from "nodemailer";
+import { APP_URL } from "@/lib/utils";
 
 interface EmailOptions {
   to: string | string[];
@@ -28,7 +29,6 @@ const SMTP_PORT = parseInt(process.env.SMTP_PORT || "587");
 const SMTP_USER = process.env.SMTP_USER || "";
 const SMTP_PASS = process.env.SMTP_PASS || "";
 const SMTP_FROM = process.env.SMTP_FROM || "BSWFCC <noreply@bswfcc.com>";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://bswfcc.quantrexnow.io";
 
 let transporter: nodemailer.Transporter | null = null;
 
