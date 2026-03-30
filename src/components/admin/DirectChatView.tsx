@@ -22,7 +22,6 @@ import {
   getOrCreateConversation,
   getAvailableMembers,
 } from "@/lib/actions/chat";
-import { uploadMedia } from "@/lib/actions/group-chat";
 import { cn, ROLE_LABELS } from "@/lib/utils";
 import type { DirectConversation, DirectMessage } from "@/types/database";
 
@@ -141,10 +140,16 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
 
       if (attachment) {
         setUploading(true);
-        const formData = new FormData();
-        formData.append("file", attachment.file);
         try {
-          mediaUrl = await uploadMedia(formData);
+          const { createClient: createBrowserClient } = await import("@/lib/supabase/client");
+          const supabase = createBrowserClient();
+          const path = `${Date.now()}-${attachment.file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+          const { error: uploadError } = await supabase.storage
+            .from("chat-media")
+            .upload(path, attachment.file, { upsert: true });
+          if (uploadError) throw uploadError;
+          const { data: urlData } = supabase.storage.from("chat-media").getPublicUrl(path);
+          mediaUrl = urlData.publicUrl;
           mediaType = attachment.mediaType;
           mediaName = attachment.file.name;
         } catch (err) {
