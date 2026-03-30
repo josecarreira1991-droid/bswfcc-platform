@@ -138,8 +138,10 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
     const a = document.createElement("a");
     a.href = url;
     a.download = `membros-bswfcc-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
     toast.success("CSV exportado");
   }
 

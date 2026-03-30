@@ -76,8 +76,10 @@ export default function ReportsManager({ reports }: ReportsManagerProps) {
     const a = document.createElement("a");
     a.href = url;
     a.download = `${report.type}-${report.created_at.split("T")[0]}.csv`;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 100);
     toast.success("CSV exportado");
   }
 

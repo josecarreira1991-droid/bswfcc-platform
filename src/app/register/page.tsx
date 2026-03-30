@@ -243,7 +243,7 @@ function RegisterForm() {
 
           <form action={handleSubmit} className="space-y-4">
             {/* Hidden role */}
-            <input type="hidden" name="role" value="membro" />
+            <input type="hidden" name="role" value={tiers[selectedTier].value} />
 
             {/* Basic Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

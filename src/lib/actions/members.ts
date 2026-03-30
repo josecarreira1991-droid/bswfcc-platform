@@ -105,6 +105,30 @@ export async function rejectMember(id: string) {
   return updateMember(id, { status: "inativo" as MemberStatus });
 }
 
+export async function updateMyProfile(updates: Record<string, unknown>) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const { data: member } = await supabase
+    .from("members")
+    .select("id")
+    .eq("email", user.email!)
+    .single();
+
+  if (!member) throw new Error("Member not found");
+
+  const SAFE_FIELDS = ["full_name", "phone", "company", "industry", "city", "linkedin", "bio", "avatar_url", "website", "linkedin_url", "instagram", "facebook"];
+  const sanitized: Record<string, unknown> = {};
+  for (const key of SAFE_FIELDS) {
+    if (key in updates) sanitized[key] = updates[key];
+  }
+
+  const { error } = await supabase.from("members").update(sanitized).eq("id", member.id);
+  if (error) throw error;
+  revalidatePath("/perfil");
+}
+
 export async function addMember(formData: FormData) {
   const { supabase } = await requireAdmin();
 

@@ -4,11 +4,11 @@ import { getDirectors } from "@/lib/actions/market";
 import type { Director } from "@/types/database";
 
 const fallbackDirectors = [
-  { name: "Carlo Barbieri", role: "Presidente", profile: "CEO Oxford Group. Formação FGV, Sorbonne, Harvard, MIT. Apresentador Focus Brasil. Conselho Consular Miami. Mais de 40 anos em comércio internacional.", company: "Oxford Group", linkedin: "linkedin.com/in/carlobarbieri" },
+  { name: "Carlo Barbieri", role: "Presidente", profile: "CEO Oxford Group. Formação FGV, Sorbonne, Harvard, MIT. Apresentador Focus Brasil. Conselho Consular Miami. Mais de 40 anos em comércio internacional.", company: "Oxford Group", linkedin: "https://linkedin.com/in/carlobarbieri" },
   { name: "Andre O. Carvalho", role: "Presidente Honorário", profile: "Consul-Geral do Brasil em Miami. Diplomata com passagens por Buenos Aires, Moscou, Londres e Bruxelas. Confere credibilidade diplomática à câmara.", company: "Consulado do Brasil em Miami" },
   { name: "Bruno Rogers", role: "Vice-Presidente", profile: "4 empresas ativas na Florida. Liderança comunitária em Sarasota. Ampla experiência em gestão e desenvolvimento de negócios internacionais." },
   { name: "Sidney Bezerra", role: "Secretário", profile: "Engenheiro elétrico com mais de 10 anos na AT&T. Responsável pela documentação oficial e processos organizacionais da câmara.", company: "AT&T" },
-  { name: "Andrea Schossler", role: "Tesoureira", profile: "Gestão financeira. Baseada em Lakewood Ranch, FL. Responsável pela transparência financeira e contabilidade da BSWFCC.", linkedin: "linkedin.com/in/andreaschossler" },
+  { name: "Andrea Schossler", role: "Tesoureira", profile: "Gestão financeira. Baseada em Lakewood Ranch, FL. Responsável pela transparência financeira e contabilidade da BSWFCC.", linkedin: "https://linkedin.com/in/andreaschossler" },
   { name: "Isabelle Nepomuceno", role: "Diretora de Marketing", profile: "Head de Operações na Seven Ophthalmic. Lidera as estratégias de comunicação e posicionamento da câmara no mercado.", company: "Seven Ophthalmic" },
   { name: "Ricardo Padovan", role: "Diretor de Tecnologia", profile: "Fundador RPM Digital. Ex-IBM, Nokia, Intel. Responsável pela infraestrutura digital e inovação tecnológica da BSWFCC.", company: "RPM Digital" },
   { name: "Brenno Dias", role: "Diretor de Inovação Financeira", profile: "CEO TB Financial Services. Formado pelo ITA. Contador. Traz expertise financeira e inovação para o ecossistema da câmara.", company: "TB Financial Services" },

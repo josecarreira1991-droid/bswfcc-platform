@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Edit2 } from "lucide-react";
-import { updateMember } from "@/lib/actions/members";
+import { updateMyProfile } from "@/lib/actions/members";
 import Modal from "@/components/ui/Modal";
 import type { Member } from "@/types/database";
 
@@ -18,7 +18,7 @@ export default function ProfileEditor({ member }: { member: Member }) {
     setLoading(true);
     const form = new FormData(e.currentTarget);
     try {
-      await updateMember(member.id, {
+      await updateMyProfile({
         full_name: form.get("full_name") as string,
         phone: (form.get("phone") as string) || null,
         company: (form.get("company") as string) || null,
@@ -26,7 +26,7 @@ export default function ProfileEditor({ member }: { member: Member }) {
         city: (form.get("city") as string) || null,
         linkedin: (form.get("linkedin") as string) || null,
         bio: (form.get("bio") as string) || null,
-      } as Partial<Member>);
+      });
       toast.success("Perfil atualizado");
       setOpen(false);
       router.refresh();

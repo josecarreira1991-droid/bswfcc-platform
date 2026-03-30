@@ -92,7 +92,7 @@ export default function MatchmakingView({ currentMember, myProfile, profiles }: 
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center flex-shrink-0">
                 <span className="text-gold text-xs font-semibold">
-                  {p.members?.full_name || "".split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                  {(p.members?.full_name || "").split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
                 </span>
               </div>
               <div className="min-w-0">

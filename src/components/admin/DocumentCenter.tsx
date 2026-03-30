@@ -126,7 +126,7 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
               {doc.file_url && (
-                <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-500 hover:text-gold rounded-lg transition-colors">
+                <a href={doc.file_url!.startsWith("http") ? doc.file_url! : `https://${doc.file_url}`} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-500 hover:text-gold rounded-lg transition-colors">
                   <Download size={15} />
                 </a>
               )}

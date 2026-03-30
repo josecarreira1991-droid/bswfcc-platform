@@ -55,14 +55,19 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
   async function handleVote(optionId: string) {
     if (!viewPoll) return;
     setVoting(true);
-    const result = await submitVote(viewPoll.poll.id, optionId, currentMember.id);
-    if (result?.error) toast.error(result.error);
-    else {
-      toast.success("Voto registrado");
-      const { voteCounts, totalVoters } = await getPollResults(viewPoll.poll.id);
-      setViewPoll({ ...viewPoll, results: voteCounts, totalVoters });
+    try {
+      const result = await submitVote(viewPoll.poll.id, optionId, currentMember.id);
+      if (result?.error) toast.error(result.error);
+      else {
+        toast.success("Voto registrado");
+        const { voteCounts, totalVoters } = await getPollResults(viewPoll.poll.id);
+        setViewPoll({ ...viewPoll, results: voteCounts, totalVoters });
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao votar");
+    } finally {
+      setVoting(false);
     }
-    setVoting(false);
   }
 
   async function handleStatusChange(pollId: string, status: "draft" | "active" | "closed" | "archived") {

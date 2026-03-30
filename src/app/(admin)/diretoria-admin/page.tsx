@@ -43,7 +43,7 @@ export default async function DiretoriaAdminPage() {
                 )}
                 {d.linkedin && (
                   <a
-                    href={d.linkedin}
+                    href={d.linkedin!.startsWith("http") ? d.linkedin! : `https://${d.linkedin}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1 text-blue-400 hover:text-blue-300"

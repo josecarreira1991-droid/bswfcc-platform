@@ -54,14 +54,25 @@ export default async function PerfilPage() {
               { icon: Phone, label: "Telefone", value: member.phone },
               { icon: Building2, label: "Empresa", value: member.company },
               { icon: MapPin, label: "Cidade", value: member.city },
-              { icon: Linkedin, label: "LinkedIn", value: member.linkedin },
+              { icon: Linkedin, label: "LinkedIn", value: member.linkedin, isLink: true },
               { icon: Calendar, label: "Membro desde", value: formatDate(member.created_at) },
             ].map((field) => (
               <div key={field.label} className="flex items-start gap-3">
                 <field.icon size={16} className="text-slate-600 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
                 <div>
                   <p className="text-[11px] text-slate-500 uppercase tracking-wider">{field.label}</p>
-                  <p className="text-sm text-white">{field.value || "—"}</p>
+                  {field.isLink && field.value ? (
+                    <a
+                      href={field.value.startsWith("http") ? field.value : `https://${field.value}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-blue-400 hover:text-blue-300 hover:underline"
+                    >
+                      {field.value}
+                    </a>
+                  ) : (
+                    <p className="text-sm text-white">{field.value || "—"}</p>
+                  )}
                 </div>
               </div>
             ))}
