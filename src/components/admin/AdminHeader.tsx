@@ -7,12 +7,14 @@ import { useRouter } from "next/navigation";
 
 const BREADCRUMB_MAP: Record<string, string> = {
   "/dashboard": "Dashboard",
-  "/inbox": "Inbox",
+  "/chat": "Chat",
+  "/grupo": "Grupo",
+  "/mural": "Mural",
+  "/workspace": "Workspace",
   "/membros": "Membros",
   "/eventos": "Eventos",
   "/mercado": "Dados de Mercado",
   "/inteligencia": "Inteligência",
-  "/workspace": "Workspace",
   "/matchmaking": "Matchmaking",
   "/networking": "Networking AI",
   "/documentos": "Documentos",
@@ -21,6 +23,7 @@ const BREADCRUMB_MAP: Record<string, string> = {
   "/billing": "Billing",
   "/relatorios": "Relatórios",
   "/diretoria-admin": "Diretoria",
+  "/ferramentas": "Ferramentas",
   "/configuracoes": "Configurações",
   "/perfil": "Meu Perfil",
 };
@@ -58,9 +61,9 @@ export default function AdminHeader({ onMenuClick, pendingCount = 0 }: AdminHead
       <div className="flex items-center gap-2">
         {/* Pending members alert */}
         <button
-          onClick={() => router.push("/membros")}
-          className="relative p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-          title={pendingCount > 0 ? `${pendingCount} membro${pendingCount > 1 ? "s" : ""} pendente${pendingCount > 1 ? "s" : ""} de aprovação` : "Nenhum membro pendente"}
+          onClick={() => pendingCount > 0 ? router.push("/membros") : null}
+          className={`relative p-2 rounded-lg transition-colors ${pendingCount > 0 ? "text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 cursor-pointer" : "text-slate-500 cursor-default"}`}
+          title={pendingCount > 0 ? `${pendingCount} membro${pendingCount > 1 ? "s" : ""} pendente${pendingCount > 1 ? "s" : ""} de aprovação` : "Nenhuma notificação"}
         >
           <Bell size={18} strokeWidth={1.8} />
           {pendingCount > 0 && (
