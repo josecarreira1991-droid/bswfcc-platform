@@ -40,17 +40,33 @@ export default function MatchmakingView({ currentMember, myProfile, profiles }: 
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    const result = await upsertBusinessProfile(currentMember.id, form);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Perfil atualizado"); setShowProfile(false); router.refresh(); }
+    try {
+      const result = await upsertBusinessProfile(currentMember.id, form);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Perfil atualizado");
+        setShowProfile(false);
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
     setLoading(false);
   }
 
   async function handleConnect(toMemberId: string, toName: string) {
     setConnecting(toMemberId);
-    const result = await sendMatchRequest(currentMember.id, toMemberId, `${currentMember.full_name} quer se conectar com você na BSWFCC.`);
-    if (result?.error) toast.error(result.error);
-    else toast.success(`Solicitação enviada para ${toName}`);
+    try {
+      const result = await sendMatchRequest(currentMember.id, toMemberId, `${currentMember.full_name} quer se conectar com você na BSWFCC.`);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success(`Solicitação enviada para ${toName}`);
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
     setConnecting(null);
   }
 

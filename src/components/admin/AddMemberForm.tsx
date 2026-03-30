@@ -17,13 +17,17 @@ export default function AddMemberForm() {
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    const result = await addMember(form);
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success("Membro adicionado com sucesso");
-      setOpen(false);
-      router.refresh();
+    try {
+      const result = await addMember(form);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Membro adicionado com sucesso");
+        setOpen(false);
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
     }
     setLoading(false);
   }

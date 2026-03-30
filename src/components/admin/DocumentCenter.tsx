@@ -56,20 +56,39 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    const result = await createDocument(form);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Documento adicionado"); setShowForm(false); router.refresh(); }
-    setLoading(false);
+    try {
+      const result = await createDocument(form);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Documento adicionado");
+        setShowForm(false);
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleDelete() {
     if (!deleteTarget) return;
     setLoading(true);
-    const result = await deleteDocument(deleteTarget.id);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Documento removido"); router.refresh(); }
-    setDeleteTarget(null);
-    setLoading(false);
+    try {
+      const result = await deleteDocument(deleteTarget.id);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Documento removido");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    } finally {
+      setDeleteTarget(null);
+      setLoading(false);
+    }
   }
 
   return (

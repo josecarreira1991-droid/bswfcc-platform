@@ -124,36 +124,67 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
   async function handleGenerateCode() {
     setGeneratingCode(true);
-    const result = await generateReferralCode(currentMember.id);
-    if ("error" in result) {
-      toast.error(result.error);
-    } else {
-      toast.success("Novo código gerado!");
-      router.refresh();
+    try {
+      const result = await generateReferralCode(currentMember.id);
+      if ("error" in result) {
+        toast.error(result.error);
+      } else {
+        toast.success("Novo código gerado!");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    } finally {
+      setGeneratingCode(false);
     }
-    setGeneratingCode(false);
   }
 
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    const result = await createReferral(currentMember.id, form);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Indicação registrada"); setShowForm(false); router.refresh(); }
-    setLoading(false);
+    try {
+      const result = await createReferral(currentMember.id, form);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Indicação registrada");
+        setShowForm(false);
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleStatus(id: string, status: "pending" | "contacted" | "registered" | "active" | "declined") {
-    const result = await updateReferralStatus(id, status);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Status atualizado"); router.refresh(); }
+    try {
+      const result = await updateReferralStatus(id, status);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Status atualizado");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
   }
 
   async function handleRedeem(rewardId: string) {
-    const result = await redeemReward(rewardId);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Bonificação resgatada!"); router.refresh(); }
+    try {
+      const result = await redeemReward(rewardId);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Bonificação resgatada!");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
   }
 
   const approvedReferralCount = myReferrals?.filter((r) => r.status === "ativo").length || 0;

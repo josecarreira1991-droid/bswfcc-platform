@@ -100,12 +100,16 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
   async function handleDelete() {
     if (!deleteTarget) return;
     setLoading(true);
-    const result = await deleteEvent(deleteTarget.id);
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success("Evento removido");
-      router.refresh();
+    try {
+      const result = await deleteEvent(deleteTarget.id);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Evento removido");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
     }
     setDeleteTarget(null);
     setLoading(false);

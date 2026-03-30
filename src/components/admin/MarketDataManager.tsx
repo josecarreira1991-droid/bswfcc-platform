@@ -96,12 +96,16 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
   async function handleDelete() {
     if (!deleteTarget) return;
     setLoading(true);
-    const result = await deleteMarketData(deleteTarget.id);
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success("Indicador removido");
-      router.refresh();
+    try {
+      const result = await deleteMarketData(deleteTarget.id);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Indicador removido");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
     }
     setDeleteTarget(null);
     setLoading(false);

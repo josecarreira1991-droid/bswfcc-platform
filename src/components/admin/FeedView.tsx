@@ -66,51 +66,98 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    const result = await createPost(form);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Post publicado!"); setShowNewPost(false); router.refresh(); }
+    try {
+      const result = await createPost(form);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Post publicado!");
+        setShowNewPost(false);
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
     setLoading(false);
   }
 
   async function handleDelete(postId: string) {
     if (!confirm("Tem certeza que deseja excluir este post?")) return;
-    const result = await deletePost(postId);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Post excluído"); router.refresh(); }
+    try {
+      const result = await deletePost(postId);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Post excluído");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
   }
 
   async function handlePin(postId: string) {
-    const result = await togglePin(postId);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Post atualizado"); router.refresh(); }
+    try {
+      const result = await togglePin(postId);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Post atualizado");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
   }
 
   async function handleLike(postId: string) {
-    const result = await toggleLike(postId);
-    if (result?.error) { toast.error(result.error); return; }
-    setLikedSet((prev) => {
-      const next = new Set(prev);
-      if (result.liked) next.add(postId);
-      else next.delete(postId);
-      return next;
-    });
-    startTransition(() => router.refresh());
+    try {
+      const result = await toggleLike(postId);
+      if (result?.error) {
+        toast.error(result.error);
+        return;
+      }
+      setLikedSet((prev) => {
+        const next = new Set(prev);
+        if (result.liked) next.add(postId);
+        else next.delete(postId);
+        return next;
+      });
+      startTransition(() => router.refresh());
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
   }
 
   async function handleComment(postId: string) {
     const text = commentText[postId]?.trim();
     if (!text) return;
-    const result = await addComment(postId, text);
-    if (result?.error) { toast.error(result.error); return; }
-    setCommentText((prev) => ({ ...prev, [postId]: "" }));
-    toast.success("Comentário adicionado");
-    router.refresh();
+    try {
+      const result = await addComment(postId, text);
+      if (result?.error) {
+        toast.error(result.error);
+        return;
+      }
+      setCommentText((prev) => ({ ...prev, [postId]: "" }));
+      toast.success("Comentário adicionado");
+      router.refresh();
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
   }
 
   async function handleDeleteComment(commentId: string) {
-    const result = await deleteComment(commentId);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Comentário removido"); router.refresh(); }
+    try {
+      const result = await deleteComment(commentId);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Comentário removido");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
   }
 
   function toggleExpand(postId: string) {

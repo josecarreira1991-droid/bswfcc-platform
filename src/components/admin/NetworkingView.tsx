@@ -28,27 +28,44 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
 
   async function handleGenerate() {
     setGenerating(true);
-    const result = await generateNetworkingSuggestions(currentMember.id);
-    if ("error" in result) toast.error(String(result.error));
-    else { toast.success(`${result.suggestions} sugestões geradas`); router.refresh(); }
+    try {
+      const result = await generateNetworkingSuggestions(currentMember.id);
+      if ("error" in result) {
+        toast.error(String(result.error));
+      } else {
+        toast.success(`${result.suggestions} sugestões geradas`);
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
     setGenerating(false);
   }
 
   async function handleConnect(suggestionId: string, memberId: string, name: string) {
     setConnecting(suggestionId);
-    const result = await sendMatchRequest(currentMember.id, memberId, `Sugestão de networking da BSWFCC AI`);
-    if (result?.error) toast.error(result.error);
-    else {
-      await updateSuggestionStatus(suggestionId, "connected");
-      toast.success(`Conectado com ${name}`);
-      router.refresh();
+    try {
+      const result = await sendMatchRequest(currentMember.id, memberId, `Sugestão de networking da BSWFCC AI`);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        await updateSuggestionStatus(suggestionId, "connected");
+        toast.success(`Conectado com ${name}`);
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
     }
     setConnecting(null);
   }
 
   async function handleDismiss(id: string) {
-    await updateSuggestionStatus(id, "dismissed");
-    router.refresh();
+    try {
+      await updateSuggestionStatus(id, "dismissed");
+      router.refresh();
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
   }
 
   return (

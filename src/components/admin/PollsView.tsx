@@ -34,10 +34,20 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    const result = await createPoll(form);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Enquete criada"); setShowCreate(false); router.refresh(); }
-    setLoading(false);
+    try {
+      const result = await createPoll(form);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Enquete criada");
+        setShowCreate(false);
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function openPoll(poll: Poll) {
@@ -71,9 +81,17 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
   }
 
   async function handleStatusChange(pollId: string, status: "draft" | "active" | "closed" | "archived") {
-    const result = await updatePollStatus(pollId, status);
-    if (result?.error) toast.error(result.error);
-    else { toast.success("Status atualizado"); router.refresh(); }
+    try {
+      const result = await updatePollStatus(pollId, status);
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Status atualizado");
+        router.refresh();
+      }
+    } catch {
+      toast.error("Erro de conexão. Tente novamente.");
+    }
   }
 
   return (
