@@ -56,11 +56,11 @@ export default function AdminHeader({ onMenuClick, pendingCount = 0 }: AdminHead
       </div>
 
       <div className="flex items-center gap-2">
-        {/* Notifications */}
+        {/* Pending members alert */}
         <button
           onClick={() => router.push("/membros")}
           className="relative p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
-          title={pendingCount > 0 ? `${pendingCount} membros pendentes` : "Notificações"}
+          title={pendingCount > 0 ? `${pendingCount} membro${pendingCount > 1 ? "s" : ""} pendente${pendingCount > 1 ? "s" : ""} de aprovação` : "Nenhum membro pendente"}
         >
           <Bell size={18} strokeWidth={1.8} />
           {pendingCount > 0 && (

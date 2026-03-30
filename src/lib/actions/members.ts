@@ -38,13 +38,16 @@ export async function getAllMembers() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("members")
-    .select("*, referrer:members!members_referred_by_fkey(full_name, company)")
+    .select("*")
     .order("created_at", { ascending: false });
   if (error) throw error;
+
+  // Resolve referrer names via JS map (avoids fragile FK self-join that was causing empty results)
+  const memberMap = new Map((data || []).map((m) => [m.id, m]));
   return (data || []).map((m) => ({
     ...m,
-    referrer_name: (m.referrer as { full_name: string } | null)?.full_name || null,
-    referrer_company: (m.referrer as { company: string | null } | null)?.company || null,
+    referrer_name: m.referred_by ? memberMap.get(m.referred_by)?.full_name || null : null,
+    referrer_company: m.referred_by ? memberMap.get(m.referred_by)?.company || null : null,
   }));
 }
 

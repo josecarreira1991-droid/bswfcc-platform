@@ -15,7 +15,6 @@ import {
   LogOut,
   X,
   ChevronLeft,
-  MessageCircle,
   MessageSquare,
   Users2,
   CreditCard,
@@ -34,7 +33,6 @@ import type { Member } from "@/types/database";
 
 const mainMenu = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Inbox", href: "/inbox", icon: MessageCircle },
   { label: "Chat", href: "/chat", icon: MessageSquare },
   { label: "Grupo", href: "/grupo", icon: Users2 },
   { label: "Mural", href: "/mural", icon: Newspaper },

@@ -258,7 +258,7 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
         title={editingEvent ? "Editar Evento" : "Novo Evento"}
         size="lg"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form key={editingEvent?.id || "new"} onSubmit={handleSubmit} className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="sm:col-span-2">
               <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Título *</label>
@@ -282,7 +282,7 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
             </div>
             <div>
               <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Capacidade</label>
-              <input name="max_attendees" type="number" min="1" defaultValue={editingEvent?.max_attendees || ""} placeholder="Ilimitado" className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
+              <input name="max_attendees" type="number" min="1" defaultValue={editingEvent?.max_attendees ?? ""} placeholder="Ilimitado" className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
             </div>
             <div className="sm:col-span-2">
               <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Local</label>
@@ -293,7 +293,7 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
               <textarea name="description" rows={3} defaultValue={editingEvent?.description || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none resize-none" />
             </div>
             <div className="flex items-center gap-2">
-              <input type="hidden" name="is_public" value={editingEvent ? String(editingEvent.is_public) : "true"} />
+              <input type="hidden" name="is_public" defaultValue={editingEvent ? String(editingEvent.is_public) : "true"} />
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"

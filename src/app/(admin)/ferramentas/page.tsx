@@ -29,20 +29,20 @@ export default async function FerramentasPage() {
     { icon: Mail, label: "Email automatizado com templates inteligentes" },
     { icon: BarChart3, label: "Workspace com CRM e pipeline de vendas" },
     { icon: CalendarDays, label: "Agenda integrada com Google Calendar" },
-    { icon: FileText, label: "Geracao automatica de propostas e documentos" },
-    { icon: Link2, label: "Integracoes com +50 ferramentas" },
+    { icon: FileText, label: "Geração automática de propostas e documentos" },
+    { icon: Link2, label: "Integrações com +50 ferramentas" },
   ];
 
   const steps = [
-    { number: "01", title: "Acesse myceo.store e crie sua conta", description: "Cadastro rapido com email e senha. Sem cartao de credito." },
-    { number: "02", title: "Configure seu WhatsApp Business", description: "Conecte seu numero existente em poucos cliques." },
-    { number: "03", title: "Personalize seu assistente IA", description: "Defina o tom, respostas e fluxos do seu negocio." },
-    { number: "04", title: "Comece a automatizar", description: "Seu assistente ja esta ativo e respondendo clientes." },
+    { number: "01", title: "Acesse myceo.store e crie sua conta", description: "Cadastro rápido com email e senha. Sem cartão de crédito." },
+    { number: "02", title: "Configure seu WhatsApp Business", description: "Conecte seu número existente em poucos cliques." },
+    { number: "03", title: "Personalize seu assistente IA", description: "Defina o tom, respostas e fluxos do seu negócio." },
+    { number: "04", title: "Comece a automatizar", description: "Seu assistente já está ativo e respondendo clientes." },
   ];
 
   const stats = [
-    { icon: Globe, value: "5 paises", label: "Usado por empresarios" },
-    { icon: Building2, value: "9 industrias", label: "Atendidas" },
+    { icon: Globe, value: "5 países", label: "Usado por empresários" },
+    { icon: Building2, value: "9 indústrias", label: "Atendidas" },
     { icon: Shield, value: "Quantrex LLC", label: "Parceira oficial BSWFCC" },
   ];
 
@@ -60,7 +60,7 @@ export default async function FerramentasPage() {
             Ferramentas Exclusivas
           </h1>
           <p className="text-slate-400 text-lg max-w-2xl">
-            Beneficios exclusivos para membros da BSWFCC. Acesse plataformas e recursos que impulsionam seu negocio.
+            Benefícios exclusivos para membros da BSWFCC. Acesse plataformas e recursos que impulsionam seu negócio.
           </p>
         </div>
       </div>
@@ -85,7 +85,7 @@ export default async function FerramentasPage() {
                     MyCEO
                   </h2>
                   <p className="text-gold/80 text-sm font-medium">
-                    Seu Assistente de Negocios com IA
+                    Seu Assistente de Negócios com IA
                   </p>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export default async function FerramentasPage() {
             <div className="flex-shrink-0 bg-[#0A1628] border border-gold/20 rounded-xl p-5 text-center min-w-[220px]">
               <p className="text-slate-400 text-xs uppercase tracking-wider mb-1">Investimento</p>
               <p className="text-3xl font-bold text-gold">~US$ 10</p>
-              <p className="text-slate-400 text-sm">/mes pelo uso da API</p>
+              <p className="text-slate-400 text-sm">/mês pelo uso da API</p>
               <div className="mt-3 pt-3 border-t border-slate-700/50">
                 <p className="text-emerald-400 text-xs font-semibold">Sem mensalidade fixa</p>
               </div>
@@ -108,7 +108,7 @@ export default async function FerramentasPage() {
 
           {/* Description */}
           <p className="text-slate-300 text-base leading-relaxed mb-8 max-w-3xl">
-            Plataforma de automacao completa para empresarios. WhatsApp Business com IA, workspace inteligente, CRM, email automatizado — tudo por apenas US$ 10/mes de uso de API. Sem mensalidade fixa.
+            Plataforma de automação completa para empresários. WhatsApp Business com IA, workspace inteligente, CRM, email automatizado — tudo por apenas US$ 10/mês de uso de API. Sem mensalidade fixa.
           </p>
 
           {/* Features Grid */}
@@ -150,7 +150,7 @@ export default async function FerramentasPage() {
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-transparent border border-gold/30 text-gold font-semibold text-sm hover:bg-gold/10 transition-colors"
             >
               <Play size={16} />
-              Ver Demonstracao
+              Ver Demonstração
             </a>
           </div>
         </div>
@@ -192,7 +192,7 @@ export default async function FerramentasPage() {
           Desenvolvido pela Quantrex LLC, parceira oficial da BSWFCC
         </p>
         <p className="text-slate-400 text-sm max-w-xl mx-auto">
-          A Quantrex LLC e especializada em automacao de processos com inteligencia artificial para empresas tradicionais. Usado por empresarios em 5 paises, atendendo 9 industrias diferentes.
+          A Quantrex LLC é especializada em automação de processos com inteligência artificial para empresas tradicionais. Usado por empresários em 5 países, atendendo 9 indústrias diferentes.
         </p>
       </div>
 

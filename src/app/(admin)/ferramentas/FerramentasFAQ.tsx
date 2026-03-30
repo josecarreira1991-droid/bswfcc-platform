@@ -8,22 +8,22 @@ const faqs = [
   {
     question: "Quanto custa?",
     answer:
-      "Nao tem mensalidade fixa. Voce paga apenas pelo uso da API de IA, que fica em torno de US$ 10/mes com uso normal.",
+      "Não tem mensalidade fixa. Você paga apenas pelo uso da API de IA, que fica em torno de US$ 10/mês com uso normal.",
   },
   {
     question: "Preciso saber programar?",
     answer:
-      "Nao. O MyCEO e 100% visual. Voce configura tudo pelo painel.",
+      "Não. O MyCEO é 100% visual. Você configura tudo pelo painel.",
   },
   {
-    question: "Funciona com meu numero de WhatsApp?",
+    question: "Funciona com meu número de WhatsApp?",
     answer:
-      "Sim. Voce conecta seu WhatsApp Business existente.",
+      "Sim. Você conecta seu WhatsApp Business existente.",
   },
   {
-    question: "E exclusivo pra membros BSWFCC?",
+    question: "É exclusivo pra membros BSWFCC?",
     answer:
-      "O acesso prioritario e suporte direto sao exclusivos para membros. A plataforma e aberta mas membros BSWFCC tem condicoes especiais.",
+      "O acesso prioritário e suporte direto são exclusivos para membros. A plataforma é aberta mas membros BSWFCC têm condições especiais.",
   },
 ];
 

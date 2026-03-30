@@ -149,7 +149,7 @@ export interface EventCheckin {
   notes: string | null;
 }
 
-export type ReferralRewardType = "discount_10" | "discount_20" | "free_renewal" | "vip_ambassador" | "lifetime_ambassador";
+export type ReferralRewardType = "discount_10" | "discount_20" | "vip_ambassador" | "lifetime_ambassador";
 export type ReferralRewardStatus = "earned" | "redeemed" | "expired";
 
 export interface ReferralReward {

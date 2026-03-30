@@ -310,8 +310,15 @@ export async function getRewardTiers() {
   return REWARD_TIERS;
 }
 
+// Called by approveMember — requires authenticated admin caller
 export async function checkAndGrantRewards(referrerId: string): Promise<ReferralReward | null> {
   const supabase = createClient();
+
+  // Auth guard: only admin/diretoria can trigger reward checks
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user?.email) return null;
+  const { data: caller } = await supabase.from("members").select("role").eq("email", user.email).single();
+  if (!caller || !(ADMIN_ROLES as readonly string[]).includes(caller.role)) return null;
 
   // Count approved referrals (status = 'ativo') for this referrer
   const { count } = await supabase

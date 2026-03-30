@@ -170,11 +170,8 @@ export async function addComment(postId: string, content: string): Promise<{ suc
 
   if (commentError) return { success: false, error: commentError.message };
 
-  // Increment comments_count on the post
-  const { data: post } = await supabase.from("posts").select("comments_count").eq("id", postId).single();
-  if (post) {
-    await supabase.from("posts").update({ comments_count: post.comments_count + 1 }).eq("id", postId);
-  }
+  // Atomic increment to avoid race conditions
+  await supabase.rpc("increment_post_counter", { post_id: postId, column_name: "comments_count", amount: 1 });
 
   revalidatePath("/mural");
   return { success: true };
@@ -199,11 +196,8 @@ export async function deleteComment(commentId: string): Promise<{ success: boole
   const { error } = await supabase.from("post_comments").update({ is_visible: false }).eq("id", commentId);
   if (error) return { success: false, error: error.message };
 
-  // Decrement comments_count
-  const { data: post } = await supabase.from("posts").select("comments_count").eq("id", comment.post_id).single();
-  if (post && post.comments_count > 0) {
-    await supabase.from("posts").update({ comments_count: post.comments_count - 1 }).eq("id", comment.post_id);
-  }
+  // Atomic decrement to avoid race conditions
+  await supabase.rpc("increment_post_counter", { post_id: comment.post_id, column_name: "comments_count", amount: -1 });
 
   revalidatePath("/mural");
   return { success: true };
@@ -224,24 +218,18 @@ export async function toggleLike(postId: string): Promise<{ liked: boolean; erro
     .single();
 
   if (existing) {
-    // Unlike
+    // Unlike — atomic decrement
     await supabase.from("post_likes").delete().eq("id", existing.id);
-    const { data: post } = await supabase.from("posts").select("likes_count").eq("id", postId).single();
-    if (post && post.likes_count > 0) {
-      await supabase.from("posts").update({ likes_count: post.likes_count - 1 }).eq("id", postId);
-    }
+    await supabase.rpc("increment_post_counter", { post_id: postId, column_name: "likes_count", amount: -1 });
     revalidatePath("/mural");
     return { liked: false };
   }
 
-  // Like
+  // Like — atomic increment
   const { error } = await supabase.from("post_likes").insert({ post_id: postId, member_id: member.id });
   if (error) return { liked: false, error: error.message };
 
-  const { data: post } = await supabase.from("posts").select("likes_count").eq("id", postId).single();
-  if (post) {
-    await supabase.from("posts").update({ likes_count: post.likes_count + 1 }).eq("id", postId);
-  }
+  await supabase.rpc("increment_post_counter", { post_id: postId, column_name: "likes_count", amount: 1 });
 
   revalidatePath("/mural");
   return { liked: true };
