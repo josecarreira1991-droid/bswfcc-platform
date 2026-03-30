@@ -12,6 +12,7 @@ export const ADMIN_ROLES = [
   "tesoureiro",
   "diretor_tecnologia",
   "diretor_marketing",
+  "head_automation",
 ] as const;
 
 export const ROLE_LABELS: Record<string, string> = {
@@ -21,6 +22,7 @@ export const ROLE_LABELS: Record<string, string> = {
   tesoureiro: "Tesoureiro",
   diretor_marketing: "Dir. Marketing",
   diretor_tecnologia: "Dir. Tecnologia",
+  head_automation: "Head of Automation",
   diretor_inovacao: "Dir. Inovação",
   diretor: "Diretor",
   membro: "Membro",
