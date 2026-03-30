@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   Send,
@@ -14,12 +15,18 @@ import {
   FileText,
   Users2,
   Download,
+  Trash2,
+  Settings,
+  Edit3,
 } from "lucide-react";
 import {
   getChannels,
   getChannelMessages,
   sendChannelMessage,
   createChannel,
+  deleteChannelMessage,
+  updateChannel,
+  deleteChannel,
 } from "@/lib/actions/group-chat";
 import { cn, ROLE_LABELS, ADMIN_ROLES } from "@/lib/utils";
 import type { ChatChannel, ChatMessage } from "@/types/database";
@@ -61,8 +68,15 @@ export default function GroupChatView({
   const [attachment, setAttachment] = useState<AttachedFile | null>(null);
   const [uploading, setUploading] = useState(false);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
+  const [hoveredMessage, setHoveredMessage] = useState<string | null>(null);
+  const [showEditChannelModal, setShowEditChannelModal] = useState(false);
+  const [editChannelName, setEditChannelName] = useState("");
+  const [editChannelDesc, setEditChannelDesc] = useState("");
+  const [savingChannel, setSavingChannel] = useState(false);
+  const [showChannelMenu, setShowChannelMenu] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const isAdmin = ADMIN_ROLES.includes(
     currentMemberRole as (typeof ADMIN_ROLES)[number]
@@ -104,7 +118,7 @@ export default function GroupChatView({
       } catch {
         /* silent */
       }
-    }, 5000);
+    }, 15000);
     return () => clearInterval(interval);
   }, [selected]);
 
@@ -221,6 +235,55 @@ export default function GroupChatView({
       );
     }
     setCreatingChannel(false);
+  }
+
+  async function handleDeleteMessage(messageId: string) {
+    if (!window.confirm("Apagar mensagem?")) return;
+    try {
+      await deleteChannelMessage(messageId);
+      if (selected) {
+        const msgs = await getChannelMessages(selected.id);
+        setMessages(msgs);
+      }
+    } catch {
+      toast.error("Erro ao apagar mensagem");
+    }
+  }
+
+  async function handleEditChannel() {
+    if (!selected || !editChannelName.trim() || savingChannel) return;
+    setSavingChannel(true);
+    try {
+      await updateChannel(selected.id, editChannelName.trim(), editChannelDesc.trim());
+      setSelected({ ...selected, name: editChannelName.trim(), description: editChannelDesc.trim() || null });
+      setChannelList((prev) =>
+        prev.map((c) =>
+          c.id === selected.id
+            ? { ...c, name: editChannelName.trim(), description: editChannelDesc.trim() || null }
+            : c
+        )
+      );
+      setShowEditChannelModal(false);
+      toast.success("Canal atualizado");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao atualizar canal");
+    }
+    setSavingChannel(false);
+  }
+
+  async function handleDeleteChannel() {
+    if (!selected) return;
+    if (!window.confirm(`Excluir o canal "${selected.name}"? Esta ação não pode ser desfeita.`)) return;
+    try {
+      await deleteChannel(selected.id);
+      setChannelList((prev) => prev.filter((c) => c.id !== selected.id));
+      setSelected(null);
+      setMobileShowChat(false);
+      router.push("/grupo");
+      toast.success("Canal excluído");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao excluir canal");
+    }
   }
 
   const formatTime = (ts: string) => {
@@ -392,6 +455,44 @@ export default function GroupChatView({
                     )}
                   </div>
                 </div>
+                {isAdmin && (
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowChannelMenu((v) => !v)}
+                      className="p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-slate-800/50"
+                    >
+                      <Settings size={16} />
+                    </button>
+                    {showChannelMenu && (
+                      <div className="absolute right-0 top-full mt-1 w-40 bg-[#0D1B2A] border border-slate-700/50 rounded-lg shadow-lg z-20 py-1">
+                        <button
+                          onClick={() => {
+                            setEditChannelName(selected.name);
+                            setEditChannelDesc(selected.description || "");
+                            setShowEditChannelModal(true);
+                            setShowChannelMenu(false);
+                          }}
+                          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800/50 hover:text-white transition-colors"
+                        >
+                          <Edit3 size={13} />
+                          Editar
+                        </button>
+                        {!selected.is_default && (
+                          <button
+                            onClick={() => {
+                              setShowChannelMenu(false);
+                              handleDeleteChannel();
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 transition-colors"
+                          >
+                            <Trash2 size={13} />
+                            Excluir
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Messages */}
@@ -403,13 +504,16 @@ export default function GroupChatView({
                 ) : messages.length > 0 ? (
                   messages.map((msg) => {
                     const isMine = msg.sender_id === currentMemberId;
+                    const canDelete = isMine || isAdmin;
                     return (
                       <div
                         key={msg.id}
                         className={cn(
-                          "flex",
+                          "flex group",
                           isMine ? "justify-end" : "justify-start"
                         )}
+                        onMouseEnter={() => setHoveredMessage(msg.id)}
+                        onMouseLeave={() => setHoveredMessage(null)}
                       >
                         {/* Avatar for others */}
                         {!isMine && (
@@ -421,59 +525,74 @@ export default function GroupChatView({
                             </span>
                           </div>
                         )}
-                        <div
-                          className={cn(
-                            "max-w-[75%] rounded-xl px-3.5 py-2.5",
-                            isMine
-                              ? "bg-gold/15 border border-gold/20"
-                              : "bg-slate-800/60 border border-slate-700/30"
+                        <div className="max-w-[75%]">
+                          {/* FIX 1: Sender name above bubble for others */}
+                          {!isMine && (
+                            <p className="text-[11px] text-gold font-medium mb-0.5">{msg.sender?.full_name || "Membro"}</p>
                           )}
-                        >
-                          {!isMine && msg.sender && (
-                            <div className="flex items-center gap-1.5 mb-0.5">
-                              <p className="text-[10px] text-gold font-medium">
-                                {msg.sender.full_name}
-                              </p>
-                              {msg.sender.company && (
-                                <>
-                                  <span className="text-[9px] text-slate-600">
-                                    |
-                                  </span>
-                                  <p className="text-[9px] text-slate-500">
-                                    {msg.sender.company}
-                                  </p>
-                                </>
+                          <div className="relative">
+                            <div
+                              className={cn(
+                                "rounded-xl px-3.5 py-2.5",
+                                isMine
+                                  ? "bg-gold/15 border border-gold/20"
+                                  : "bg-slate-800/60 border border-slate-700/30"
                               )}
-                              <span className="text-[9px] text-slate-600">
-                                |
-                              </span>
-                              <span className="text-[9px] px-1.5 py-0.5 bg-slate-700/50 text-slate-400 rounded-full">
-                                {ROLE_LABELS[msg.sender.role] ||
-                                  msg.sender.role}
-                              </span>
+                            >
+                              {!isMine && msg.sender && (
+                                <div className="flex items-center gap-1.5 mb-0.5">
+                                  {msg.sender.company && (
+                                    <p className="text-[9px] text-slate-500">
+                                      {msg.sender.company}
+                                    </p>
+                                  )}
+                                  {msg.sender.company && (
+                                    <span className="text-[9px] text-slate-600">
+                                      |
+                                    </span>
+                                  )}
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-slate-700/50 text-slate-400 rounded-full">
+                                    {ROLE_LABELS[msg.sender.role] ||
+                                      msg.sender.role}
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Media */}
+                              {renderMedia(msg)}
+
+                              {/* Text content */}
+                              {msg.content && (
+                                <p className="text-sm text-white whitespace-pre-wrap break-words">
+                                  {msg.content}
+                                </p>
+                              )}
+
+                              <p
+                                className={cn(
+                                  "text-[10px] mt-1",
+                                  isMine
+                                    ? "text-gold/50 text-right"
+                                    : "text-slate-600"
+                                )}
+                              >
+                                {formatTime(msg.created_at)}
+                              </p>
                             </div>
-                          )}
-
-                          {/* Media */}
-                          {renderMedia(msg)}
-
-                          {/* Text content */}
-                          {msg.content && (
-                            <p className="text-sm text-white whitespace-pre-wrap break-words">
-                              {msg.content}
-                            </p>
-                          )}
-
-                          <p
-                            className={cn(
-                              "text-[10px] mt-1",
-                              isMine
-                                ? "text-gold/50 text-right"
-                                : "text-slate-600"
+                            {/* FIX 2: Delete button on hover */}
+                            {canDelete && hoveredMessage === msg.id && (
+                              <button
+                                onClick={() => handleDeleteMessage(msg.id)}
+                                className={cn(
+                                  "absolute top-1 p-1 rounded-md bg-slate-800/80 border border-slate-700/50 text-slate-400 hover:text-red-400 hover:border-red-500/30 transition-colors",
+                                  isMine ? "-left-8" : "-right-8"
+                                )}
+                                title="Apagar mensagem"
+                              >
+                                <Trash2 size={12} />
+                              </button>
                             )}
-                          >
-                            {formatTime(msg.created_at)}
-                          </p>
+                          </div>
                         </div>
                       </div>
                     );
@@ -654,6 +773,67 @@ export default function GroupChatView({
                 className="px-4 py-2 text-xs font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-30"
               >
                 {creatingChannel ? "Criando..." : "Criar Canal"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Channel Modal */}
+      {showEditChannelModal && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+          <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl w-full max-w-md flex flex-col">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50">
+              <div className="flex items-center gap-2">
+                <Edit3 size={16} className="text-gold" />
+                <h3 className="text-sm font-medium text-white">Editar Canal</h3>
+              </div>
+              <button
+                onClick={() => setShowEditChannelModal(false)}
+                className="text-slate-400 hover:text-white p-1"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="px-4 py-4 space-y-3">
+              <div>
+                <label className="text-[11px] text-slate-400 font-medium mb-1 block">
+                  Nome do Canal
+                </label>
+                <input
+                  type="text"
+                  value={editChannelName}
+                  onChange={(e) => setEditChannelName(e.target.value)}
+                  autoFocus
+                  className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-[11px] text-slate-400 font-medium mb-1 block">
+                  Descri&ccedil;&atilde;o (opcional)
+                </label>
+                <input
+                  type="text"
+                  value={editChannelDesc}
+                  onChange={(e) => setEditChannelDesc(e.target.value)}
+                  placeholder="Sobre o que é este canal..."
+                  className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 px-4 py-3 border-t border-slate-700/50">
+              <button
+                onClick={() => setShowEditChannelModal(false)}
+                className="px-3 py-2 text-xs text-slate-400 hover:text-white transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleEditChannel}
+                disabled={!editChannelName.trim() || savingChannel}
+                className="px-4 py-2 text-xs font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-30"
+              >
+                {savingChannel ? "Salvando..." : "Salvar"}
               </button>
             </div>
           </div>

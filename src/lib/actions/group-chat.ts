@@ -146,6 +146,93 @@ export async function sendChannelMessage(
   } as ChatMessage;
 }
 
+// ─── Delete Message ───
+
+export async function deleteChannelMessage(messageId: string) {
+  const member = await getCurrentMember();
+  if (!member) throw new Error("Unauthorized");
+
+  const supabase = createClient();
+
+  // Only allow deleting own messages (or admin can delete any)
+  const { data: msg } = await supabase
+    .from("chat_messages")
+    .select("sender_id")
+    .eq("id", messageId)
+    .single();
+
+  if (!msg) throw new Error("Message not found");
+
+  const isOwn = msg.sender_id === member.id;
+  const isAdmin = (ADMIN_ROLES as readonly string[]).includes(member.role);
+
+  if (!isOwn && !isAdmin) throw new Error("Forbidden");
+
+  const { error } = await supabase
+    .from("chat_messages")
+    .delete()
+    .eq("id", messageId);
+
+  if (error) throw error;
+
+  revalidatePath("/grupo");
+}
+
+// ─── Update / Delete Channel ───
+
+export async function updateChannel(
+  channelId: string,
+  name: string,
+  description: string
+) {
+  const member = await getCurrentMember();
+  if (
+    !member ||
+    !(ADMIN_ROLES as readonly string[]).includes(member.role)
+  )
+    throw new Error("Forbidden");
+
+  const supabase = createClient();
+
+  const { error } = await supabase
+    .from("chat_channels")
+    .update({ name, description: description || null })
+    .eq("id", channelId);
+
+  if (error) throw error;
+
+  revalidatePath("/grupo");
+}
+
+export async function deleteChannel(channelId: string) {
+  const member = await getCurrentMember();
+  if (
+    !member ||
+    !(ADMIN_ROLES as readonly string[]).includes(member.role)
+  )
+    throw new Error("Forbidden");
+
+  const supabase = createClient();
+
+  // Don't allow deleting the default channel
+  const { data } = await supabase
+    .from("chat_channels")
+    .select("is_default")
+    .eq("id", channelId)
+    .single();
+
+  if (data?.is_default) throw new Error("Cannot delete default channel");
+
+  const { error } = await supabase
+    .from("chat_channels")
+    .delete()
+    .eq("id", channelId);
+
+  if (error) throw error;
+
+  revalidatePath("/grupo");
+}
+
 // ─── Media Upload ───
 
 export async function uploadMedia(formData: FormData): Promise<string> {

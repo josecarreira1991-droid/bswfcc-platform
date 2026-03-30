@@ -231,6 +231,33 @@ export async function sendMessage(
   } as DirectMessage;
 }
 
+// ─── Delete Message ───
+
+export async function deleteDirectMessage(messageId: string) {
+  const member = await getCurrentMember();
+  if (!member) throw new Error("Unauthorized");
+
+  const supabase = createClient();
+
+  const { data: msg } = await supabase
+    .from("direct_messages")
+    .select("sender_id")
+    .eq("id", messageId)
+    .single();
+
+  if (!msg) throw new Error("Message not found");
+  if (msg.sender_id !== member.id) throw new Error("Forbidden");
+
+  const { error } = await supabase
+    .from("direct_messages")
+    .delete()
+    .eq("id", messageId);
+
+  if (error) throw error;
+
+  revalidatePath("/chat");
+}
+
 // ─── Members ───
 
 export async function getAvailableMembers() {

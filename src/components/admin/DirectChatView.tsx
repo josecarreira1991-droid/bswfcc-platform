@@ -15,12 +15,14 @@ import {
   Film,
   FileText,
   Download,
+  Trash2,
 } from "lucide-react";
 import {
   getMessages,
   sendMessage,
   getOrCreateConversation,
   getAvailableMembers,
+  deleteDirectMessage,
 } from "@/lib/actions/chat";
 import { cn, ROLE_LABELS } from "@/lib/utils";
 import type { DirectConversation, DirectMessage } from "@/types/database";
@@ -54,6 +56,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
   const [attachment, setAttachment] = useState<{ file: File; preview: string | null; mediaType: "image" | "video" | "file" } | null>(null);
   const [uploading, setUploading] = useState(false);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
+  const [hoveredMessage, setHoveredMessage] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -89,7 +92,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
       } catch {
         /* silent */
       }
-    }, 5000);
+    }, 15000);
     return () => clearInterval(interval);
   }, [selected]);
 
@@ -97,7 +100,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
   useEffect(() => {
     const interval = setInterval(() => {
       router.refresh();
-    }, 10000);
+    }, 30000);
     return () => clearInterval(interval);
   }, [router]);
 
@@ -180,6 +183,19 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
       toast.error("Erro ao enviar mensagem");
     }
     setSending(false);
+  }
+
+  async function handleDeleteMessage(messageId: string) {
+    if (!window.confirm("Apagar mensagem?")) return;
+    try {
+      await deleteDirectMessage(messageId);
+      if (selected) {
+        const msgs = await getMessages(selected.id);
+        setMessages(msgs);
+      }
+    } catch {
+      toast.error("Erro ao apagar mensagem");
+    }
   }
 
   async function openNewConvModal() {
@@ -410,49 +426,63 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                       <div
                         key={msg.id}
                         className={cn("flex", isMine ? "justify-end" : "justify-start")}
+                        onMouseEnter={() => setHoveredMessage(msg.id)}
+                        onMouseLeave={() => setHoveredMessage(null)}
                       >
-                        <div
-                          className={cn(
-                            "max-w-[75%] rounded-xl px-3.5 py-2.5",
-                            isMine
-                              ? "bg-gold/15 border border-gold/20"
-                              : "bg-slate-800/60 border border-slate-700/30"
-                          )}
-                        >
-                          {!isMine && msg.sender?.full_name && (
-                            <p className="text-[10px] text-slate-400 mb-0.5 font-medium">
-                              {msg.sender.full_name}
-                            </p>
-                          )}
-                          {/* Media rendering */}
-                          {msg.media_url && msg.media_type === "image" && (
-                            <button onClick={() => setFullscreenImage(msg.media_url)} className="mt-1 block">
-                              <img src={msg.media_url} alt={msg.media_name || "Imagem"} className="max-w-sm w-full rounded-lg border border-slate-700/30 hover:opacity-90 transition-opacity cursor-pointer" />
-                            </button>
-                          )}
-                          {msg.media_url && msg.media_type === "video" && (
-                            <video src={msg.media_url} controls className="max-w-sm w-full rounded-lg border border-slate-700/30 mt-1" />
-                          )}
-                          {msg.media_url && msg.media_type === "file" && (
-                            <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 mt-1 px-3 py-2 bg-slate-800/50 border border-slate-700/30 rounded-lg hover:bg-slate-800/80 transition-colors max-w-sm">
-                              <FileText size={16} className="text-gold flex-shrink-0" />
-                              <span className="text-xs text-slate-300 truncate">{msg.media_name || "Arquivo"}</span>
-                              <Download size={14} className="text-slate-500 flex-shrink-0 ml-auto" />
-                            </a>
-                          )}
-                          {msg.content && (
-                            <p className="text-sm text-white whitespace-pre-wrap break-words">
-                              {msg.content}
-                            </p>
-                          )}
-                          <p
+                        <div className="relative max-w-[75%]">
+                          <div
                             className={cn(
-                              "text-[10px] mt-1",
-                              isMine ? "text-gold/50 text-right" : "text-slate-600"
+                              "rounded-xl px-3.5 py-2.5",
+                              isMine
+                                ? "bg-gold/15 border border-gold/20"
+                                : "bg-slate-800/60 border border-slate-700/30"
                             )}
                           >
-                            {formatTime(msg.created_at)}
-                          </p>
+                            {!isMine && msg.sender?.full_name && (
+                              <p className="text-[10px] text-slate-400 mb-0.5 font-medium">
+                                {msg.sender.full_name}
+                              </p>
+                            )}
+                            {/* Media rendering */}
+                            {msg.media_url && msg.media_type === "image" && (
+                              <button onClick={() => setFullscreenImage(msg.media_url)} className="mt-1 block">
+                                <img src={msg.media_url} alt={msg.media_name || "Imagem"} className="max-w-sm w-full rounded-lg border border-slate-700/30 hover:opacity-90 transition-opacity cursor-pointer" />
+                              </button>
+                            )}
+                            {msg.media_url && msg.media_type === "video" && (
+                              <video src={msg.media_url} controls className="max-w-sm w-full rounded-lg border border-slate-700/30 mt-1" />
+                            )}
+                            {msg.media_url && msg.media_type === "file" && (
+                              <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 mt-1 px-3 py-2 bg-slate-800/50 border border-slate-700/30 rounded-lg hover:bg-slate-800/80 transition-colors max-w-sm">
+                                <FileText size={16} className="text-gold flex-shrink-0" />
+                                <span className="text-xs text-slate-300 truncate">{msg.media_name || "Arquivo"}</span>
+                                <Download size={14} className="text-slate-500 flex-shrink-0 ml-auto" />
+                              </a>
+                            )}
+                            {msg.content && (
+                              <p className="text-sm text-white whitespace-pre-wrap break-words">
+                                {msg.content}
+                              </p>
+                            )}
+                            <p
+                              className={cn(
+                                "text-[10px] mt-1",
+                                isMine ? "text-gold/50 text-right" : "text-slate-600"
+                              )}
+                            >
+                              {formatTime(msg.created_at)}
+                            </p>
+                          </div>
+                          {/* Delete button on hover (own messages only) */}
+                          {isMine && hoveredMessage === msg.id && (
+                            <button
+                              onClick={() => handleDeleteMessage(msg.id)}
+                              className="absolute top-1 -left-8 p-1 rounded-md bg-slate-800/80 border border-slate-700/50 text-slate-400 hover:text-red-400 hover:border-red-500/30 transition-colors"
+                              title="Apagar mensagem"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          )}
                         </div>
                       </div>
                     );
