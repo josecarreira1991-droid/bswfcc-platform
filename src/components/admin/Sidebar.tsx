@@ -27,6 +27,7 @@ import {
   Sparkles,
   Briefcase,
   Newspaper,
+  Wrench,
 } from "lucide-react";
 import { logout } from "@/lib/actions/auth";
 import type { Member } from "@/types/database";
@@ -53,6 +54,7 @@ const mainMenu = [
 ];
 
 const secondaryMenu = [
+  { label: "Ferramentas", href: "/ferramentas", icon: Wrench },
   { label: "Configurações", href: "/configuracoes", icon: Settings },
   { label: "Meu Perfil", href: "/perfil", icon: User },
 ];
