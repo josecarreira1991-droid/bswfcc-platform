@@ -2,6 +2,7 @@ import { getCurrentMember } from "@/lib/actions/auth";
 import { redirect } from "next/navigation";
 import { ROLE_LABELS, formatDate } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
+import ProfileEditor from "@/components/admin/ProfileEditor";
 import { Mail, Phone, Building2, MapPin, Linkedin, Calendar } from "lucide-react";
 
 export default async function PerfilPage() {
@@ -12,9 +13,12 @@ export default async function PerfilPage() {
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold text-white">Meu Perfil</h1>
-        <p className="text-sm text-slate-500 mt-0.5">Informações da sua conta</p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-xl font-semibold text-white">Meu Perfil</h1>
+          <p className="text-sm text-slate-500 mt-0.5">Informações da sua conta</p>
+        </div>
+        <ProfileEditor member={member} />
       </div>
 
       <div className="max-w-2xl space-y-6">

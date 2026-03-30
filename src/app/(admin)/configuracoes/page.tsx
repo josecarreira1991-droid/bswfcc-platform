@@ -1,7 +1,8 @@
 import { getCurrentMember } from "@/lib/actions/auth";
 import { redirect } from "next/navigation";
-import { Settings, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
 import { isAdmin } from "@/lib/utils";
+import IntegrationsPanel from "@/components/admin/IntegrationsPanel";
 
 export default async function ConfiguracoesPage() {
   const member = await getCurrentMember();
@@ -25,6 +26,7 @@ export default async function ConfiguracoesPage() {
       </div>
 
       <div className="space-y-4">
+        {/* Organization Info */}
         <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5">
           <h3 className="text-sm font-medium text-white mb-3">Informações da Organização</h3>
           <div className="grid sm:grid-cols-2 gap-4 text-sm">
@@ -47,22 +49,8 @@ export default async function ConfiguracoesPage() {
           </div>
         </div>
 
-        <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5">
-          <h3 className="text-sm font-medium text-white mb-3">Integrações</h3>
-          <div className="space-y-3">
-            {[
-              { name: "Supabase", status: "Conectado", color: "text-emerald-400" },
-              { name: "WhatsApp (Waha)", status: "Pendente", color: "text-amber-400" },
-              { name: "Stripe", status: "Pendente", color: "text-amber-400" },
-              { name: "Email (SMTP)", status: "Pendente", color: "text-amber-400" },
-            ].map((i) => (
-              <div key={i.name} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
-                <span className="text-sm text-slate-300">{i.name}</span>
-                <span className={`text-xs font-medium ${i.color}`}>{i.status}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Integrations (live status + WhatsApp QR) */}
+        <IntegrationsPanel />
       </div>
     </div>
   );

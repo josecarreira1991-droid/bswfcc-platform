@@ -34,17 +34,30 @@ export async function POST(request: NextRequest) {
         const memberId = session.metadata?.member_id;
         if (!memberId) break;
 
-        // Update subscription
         if (session.subscription) {
-          const { data: tier } = await supabase
-            .from("membership_tiers")
-            .select("id")
-            .eq("stripe_price_id_monthly", session.line_items?.data?.[0]?.price?.id)
-            .single();
+          // Fetch the subscription from Stripe to get the price ID
+          let tierId = null;
+          try {
+            const subRes = await fetch(`https://api.stripe.com/v1/subscriptions/${session.subscription}`, {
+              headers: { Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}` },
+            });
+            const subData = await subRes.json();
+            const priceId = subData.items?.data?.[0]?.price?.id;
+            if (priceId) {
+              const { data: tier } = await supabase
+                .from("membership_tiers")
+                .select("id")
+                .or(`stripe_price_id_monthly.eq.${priceId},stripe_price_id_yearly.eq.${priceId}`)
+                .single();
+              tierId = tier?.id || null;
+            }
+          } catch {
+            // If we can't resolve the tier, still save the subscription
+          }
 
           await supabase.from("subscriptions").upsert({
             member_id: memberId,
-            tier_id: tier?.id || null,
+            tier_id: tierId,
             stripe_customer_id: session.customer,
             stripe_subscription_id: session.subscription,
             status: "active",

@@ -54,10 +54,18 @@ export default function InboxChat({ conversations }: InboxChatProps) {
       try {
         const msgs = await getMessages(selected.id);
         setMessages(msgs);
-      } catch { /* silent fail on poll */ }
+      } catch { /* silent */ }
     }, 5000);
     return () => clearInterval(interval);
   }, [selected]);
+
+  // Refresh conversation list every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      router.refresh();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [router]);
 
   async function handleSend() {
     if (!newMessage.trim() || !selected || sending) return;

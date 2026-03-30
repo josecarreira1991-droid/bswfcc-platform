@@ -96,9 +96,9 @@ export default async function InteligenciaPage() {
                   </div>
                 </div>
               </div>
-              <button className="p-2 text-slate-500 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors flex-shrink-0">
+              <span className="p-2 text-slate-600 flex-shrink-0" title="Disponível em breve">
                 <Download size={16} />
-              </button>
+              </span>
             </div>
           </div>
         ))}

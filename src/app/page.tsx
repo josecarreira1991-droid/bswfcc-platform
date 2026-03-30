@@ -26,8 +26,8 @@ export default function Home() {
             <p className="text-xs text-gray-400 mt-1">Brazilian Southwest Florida Chamber of Commerce</p>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/dashboard" className="text-sm text-gray-300 hover:text-gold transition-colors hidden sm:block">
-              Dashboard
+            <Link href="/login" className="text-sm text-gray-300 hover:text-gold transition-colors hidden sm:block">
+              Entrar
             </Link>
             <Link href="/diretoria" className="text-sm text-gray-300 hover:text-gold transition-colors hidden sm:block">
               Diretoria
@@ -58,10 +58,10 @@ export default function Home() {
               Tornar-se Membro
             </Link>
             <Link
-              href="/inteligencia"
+              href="/diretoria"
               className="px-8 py-3.5 border border-gold/30 text-gold font-medium rounded-xl hover:bg-gold/10 transition-all"
             >
-              Ver Relatórios
+              Conheça a Diretoria
             </Link>
           </div>
         </div>
@@ -140,9 +140,9 @@ export default function Home() {
             <p className="text-xs text-gray-500 mt-1">Brazilian Southwest Florida Chamber of Commerce, Inc.</p>
           </div>
           <div className="flex gap-6 text-sm text-gray-400">
-            <Link href="/dashboard" className="hover:text-gold transition-colors">Dashboard</Link>
+            <Link href="/login" className="hover:text-gold transition-colors">Entrar</Link>
             <Link href="/diretoria" className="hover:text-gold transition-colors">Diretoria</Link>
-            <Link href="/eventos" className="hover:text-gold transition-colors">Eventos</Link>
+            <Link href="/register" className="hover:text-gold transition-colors">Cadastrar</Link>
             <a href="https://bswfcc.com" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">bswfcc.com</a>
           </div>
           <p className="text-xs text-gray-600">

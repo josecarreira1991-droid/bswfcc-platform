@@ -23,6 +23,7 @@ import {
   UserPlus,
   Vote,
   Sparkles,
+  Briefcase,
 } from "lucide-react";
 import { logout } from "@/lib/actions/auth";
 import type { Member } from "@/types/database";
@@ -30,6 +31,7 @@ import type { Member } from "@/types/database";
 const mainMenu = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Inbox", href: "/inbox", icon: MessageCircle },
+  { label: "Workspace", href: "/workspace", icon: Briefcase },
   { label: "Membros", href: "/membros", icon: Users },
   { label: "Eventos", href: "/eventos", icon: Calendar },
   { label: "Mercado", href: "/mercado", icon: BarChart3 },

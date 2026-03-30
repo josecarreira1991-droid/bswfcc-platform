@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Menu, Bell } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const BREADCRUMB_MAP: Record<string, string> = {
   "/dashboard": "Dashboard",
@@ -11,6 +12,7 @@ const BREADCRUMB_MAP: Record<string, string> = {
   "/eventos": "Eventos",
   "/mercado": "Dados de Mercado",
   "/inteligencia": "Inteligência",
+  "/workspace": "Workspace",
   "/matchmaking": "Matchmaking",
   "/networking": "Networking AI",
   "/documentos": "Documentos",
@@ -30,6 +32,7 @@ interface AdminHeaderProps {
 
 export default function AdminHeader({ onMenuClick, pendingCount = 0 }: AdminHeaderProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const pageTitle = BREADCRUMB_MAP[pathname] || "BSWFCC";
 
   return (
@@ -54,7 +57,11 @@ export default function AdminHeader({ onMenuClick, pendingCount = 0 }: AdminHead
 
       <div className="flex items-center gap-2">
         {/* Notifications */}
-        <button className="relative p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors">
+        <button
+          onClick={() => router.push("/membros")}
+          className="relative p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+          title={pendingCount > 0 ? `${pendingCount} membros pendentes` : "Notificações"}
+        >
           <Bell size={18} strokeWidth={1.8} />
           {pendingCount > 0 && (
             <span className="absolute top-1 right-1 w-4 h-4 bg-amber-500 rounded-full text-[10px] font-bold text-navy flex items-center justify-center">

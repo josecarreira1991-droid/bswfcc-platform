@@ -293,7 +293,7 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
               <textarea name="description" rows={3} defaultValue={editingEvent?.description || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none resize-none" />
             </div>
             <div className="flex items-center gap-2">
-              <input type="hidden" name="is_public" value="false" />
+              <input type="hidden" name="is_public" value={editingEvent ? String(editingEvent.is_public) : "true"} />
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"

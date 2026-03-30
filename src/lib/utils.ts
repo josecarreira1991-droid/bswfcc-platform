@@ -11,6 +11,7 @@ export const ADMIN_ROLES = [
   "secretario",
   "tesoureiro",
   "diretor_tecnologia",
+  "diretor_marketing",
 ] as const;
 
 export const ROLE_LABELS: Record<string, string> = {
