@@ -70,6 +70,65 @@ export interface Director {
   order_index: number;
 }
 
+// Phase 4: Billing & Reports
+
+export type SubscriptionStatus = "active" | "past_due" | "canceled" | "trialing" | "incomplete" | "free";
+export type PaymentStatus = "pending" | "succeeded" | "failed" | "refunded";
+export type ReportType = "members" | "events" | "financial" | "market" | "monthly";
+
+export interface MembershipTier {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  price_monthly: number;
+  price_yearly: number;
+  stripe_price_id_monthly: string | null;
+  stripe_price_id_yearly: string | null;
+  features: string[];
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface Subscription {
+  id: string;
+  member_id: string;
+  tier_id: string;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  status: SubscriptionStatus;
+  current_period_start: string | null;
+  current_period_end: string | null;
+  cancel_at_period_end: boolean;
+  canceled_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Payment {
+  id: string;
+  member_id: string | null;
+  subscription_id: string | null;
+  stripe_payment_intent_id: string | null;
+  stripe_invoice_id: string | null;
+  amount: number;
+  currency: string;
+  status: PaymentStatus;
+  description: string | null;
+  created_at: string;
+}
+
+export interface Report {
+  id: string;
+  title: string;
+  type: ReportType;
+  generated_by: string | null;
+  data: Record<string, unknown>;
+  file_url: string | null;
+  created_at: string;
+}
+
 // Phase 3: Messaging & Notifications
 
 export type ConversationStatus = "open" | "closed" | "archived";
