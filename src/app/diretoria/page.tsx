@@ -1,74 +1,31 @@
 import Navbar from "@/components/Navbar";
 import DirectorCard from "@/components/DirectorCard";
+import { getDirectors } from "@/lib/actions/market";
+import type { Director } from "@/types/database";
 
-const directors = [
-  {
-    name: "Carlo Barbieri",
-    role: "Presidente",
-    profile: "CEO Oxford Group. Formação FGV, Sorbonne, Harvard, MIT. Apresentador Focus Brasil. Conselho Consular Miami. Mais de 40 anos em comércio internacional.",
-    company: "Oxford Group",
-    linkedin: "linkedin.com/in/carlobarbieri",
-  },
-  {
-    name: "Andre O. Carvalho",
-    role: "Presidente Honorário",
-    profile: "Consul-Geral do Brasil em Miami. Diplomata com passagens por Buenos Aires, Moscou, Londres e Bruxelas. Confere credibilidade diplomática à câmara.",
-    company: "Consulado do Brasil em Miami",
-  },
-  {
-    name: "Bruno Rogers",
-    role: "Vice-Presidente",
-    profile: "4 empresas ativas na Florida. Liderança comunitária em Sarasota. Ampla experiência em gestão e desenvolvimento de negócios internacionais.",
-  },
-  {
-    name: "Sidney Bezerra",
-    role: "Secretário",
-    profile: "Engenheiro elétrico com mais de 10 anos na AT&T. Responsável pela documentação oficial e processos organizacionais da câmara.",
-    company: "AT&T",
-  },
-  {
-    name: "Andrea Schossler",
-    role: "Tesoureira",
-    profile: "Gestão financeira. Baseada em Lakewood Ranch, FL. Responsável pela transparência financeira e contabilidade da BSWFCC.",
-    linkedin: "linkedin.com/in/andreaschossler",
-  },
-  {
-    name: "Isabelle Nepomuceno",
-    role: "Diretora de Marketing",
-    profile: "Head de Operações na Seven Ophthalmic. Lidera as estratégias de comunicação e posicionamento da câmara no mercado.",
-    company: "Seven Ophthalmic",
-  },
-  {
-    name: "Ricardo Padovan",
-    role: "Diretor de Tecnologia",
-    profile: "Fundador RPM Digital. Ex-IBM, Nokia, Intel. Responsável pela infraestrutura digital e inovação tecnológica da BSWFCC.",
-    company: "RPM Digital",
-  },
-  {
-    name: "Brenno Dias",
-    role: "Diretor de Inovação Financeira",
-    profile: "CEO TB Financial Services. Formado pelo ITA. Contador. Traz expertise financeira e inovação para o ecossistema da câmara.",
-    company: "TB Financial Services",
-  },
-  {
-    name: "Josue Colucci",
-    role: "Diretor",
-    profile: "Mais de 30 anos de experiência em contabilidade e tecnologia. Contribui com visão estratégica para o crescimento da câmara.",
-  },
-  {
-    name: "Tatiana Arcencio",
-    role: "Diretora",
-    profile: "3 empresas ativas na Florida. Empreendedora serial com experiência em múltiplos setores e forte presença no mercado SWFL.",
-  },
-  {
-    name: "Caroline Jones",
-    role: "Diretora",
-    profile: "Enfermeira com mestrado. CEO Vitalify Wellness. Representa o setor de saúde e bem-estar na diretoria da câmara.",
-    company: "Vitalify Wellness",
-  },
+const fallbackDirectors = [
+  { name: "Carlo Barbieri", role: "Presidente", profile: "CEO Oxford Group. Formação FGV, Sorbonne, Harvard, MIT. Apresentador Focus Brasil. Conselho Consular Miami. Mais de 40 anos em comércio internacional.", company: "Oxford Group", linkedin: "linkedin.com/in/carlobarbieri" },
+  { name: "Andre O. Carvalho", role: "Presidente Honorário", profile: "Consul-Geral do Brasil em Miami. Diplomata com passagens por Buenos Aires, Moscou, Londres e Bruxelas. Confere credibilidade diplomática à câmara.", company: "Consulado do Brasil em Miami" },
+  { name: "Bruno Rogers", role: "Vice-Presidente", profile: "4 empresas ativas na Florida. Liderança comunitária em Sarasota. Ampla experiência em gestão e desenvolvimento de negócios internacionais." },
+  { name: "Sidney Bezerra", role: "Secretário", profile: "Engenheiro elétrico com mais de 10 anos na AT&T. Responsável pela documentação oficial e processos organizacionais da câmara.", company: "AT&T" },
+  { name: "Andrea Schossler", role: "Tesoureira", profile: "Gestão financeira. Baseada em Lakewood Ranch, FL. Responsável pela transparência financeira e contabilidade da BSWFCC.", linkedin: "linkedin.com/in/andreaschossler" },
+  { name: "Isabelle Nepomuceno", role: "Diretora de Marketing", profile: "Head de Operações na Seven Ophthalmic. Lidera as estratégias de comunicação e posicionamento da câmara no mercado.", company: "Seven Ophthalmic" },
+  { name: "Ricardo Padovan", role: "Diretor de Tecnologia", profile: "Fundador RPM Digital. Ex-IBM, Nokia, Intel. Responsável pela infraestrutura digital e inovação tecnológica da BSWFCC.", company: "RPM Digital" },
+  { name: "Brenno Dias", role: "Diretor de Inovação Financeira", profile: "CEO TB Financial Services. Formado pelo ITA. Contador. Traz expertise financeira e inovação para o ecossistema da câmara.", company: "TB Financial Services" },
+  { name: "Josue Colucci", role: "Diretor", profile: "Mais de 30 anos de experiência em contabilidade e tecnologia. Contribui com visão estratégica para o crescimento da câmara." },
+  { name: "Tatiana Arcencio", role: "Diretora", profile: "3 empresas ativas na Florida. Empreendedora serial com experiência em múltiplos setores e forte presença no mercado SWFL." },
+  { name: "Caroline Jones", role: "Diretora", profile: "Enfermeira com mestrado. CEO Vitalify Wellness. Representa o setor de saúde e bem-estar na diretoria da câmara.", company: "Vitalify Wellness" },
 ];
 
-export default function DiretoriaPage() {
+const presidencia = ["Presidente", "Presidente Honorário", "Vice-Presidente"];
+const conselho = ["Secretário", "Tesoureira"];
+
+export default async function DiretoriaPage() {
+  const dbDirectors = await getDirectors().catch(() => null);
+
+  const directors: { name: string; role: string; profile: string; company?: string | null; linkedin?: string | null }[] =
+    dbDirectors && dbDirectors.length > 0 ? dbDirectors : fallbackDirectors;
+
   return (
     <div className="min-h-screen bg-navy">
       <Navbar />
@@ -86,8 +43,8 @@ export default function DiretoriaPage() {
         <section className="mb-10">
           <h2 className="text-lg font-semibold text-gold mb-4 uppercase tracking-wider">Presidência</h2>
           <div className="grid md:grid-cols-2 gap-4">
-            {directors.filter((d) => d.role === "Presidente" || d.role === "Presidente Honorário" || d.role === "Vice-Presidente").map((d) => (
-              <DirectorCard key={d.name} {...d} />
+            {directors.filter((d) => presidencia.includes(d.role)).map((d) => (
+              <DirectorCard key={d.name} name={d.name} role={d.role} profile={d.profile} company={d.company ?? undefined} linkedin={d.linkedin ?? undefined} />
             ))}
           </div>
         </section>
@@ -96,8 +53,8 @@ export default function DiretoriaPage() {
         <section className="mb-10">
           <h2 className="text-lg font-semibold text-gold mb-4 uppercase tracking-wider">Conselho Fiscal</h2>
           <div className="grid md:grid-cols-2 gap-4">
-            {directors.filter((d) => d.role === "Secretário" || d.role === "Tesoureira").map((d) => (
-              <DirectorCard key={d.name} {...d} />
+            {directors.filter((d) => conselho.includes(d.role)).map((d) => (
+              <DirectorCard key={d.name} name={d.name} role={d.role} profile={d.profile} company={d.company ?? undefined} linkedin={d.linkedin ?? undefined} />
             ))}
           </div>
         </section>
@@ -106,10 +63,8 @@ export default function DiretoriaPage() {
         <section>
           <h2 className="text-lg font-semibold text-gold mb-4 uppercase tracking-wider">Diretoria Executiva</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {directors.filter((d) =>
-              !["Presidente", "Presidente Honorário", "Vice-Presidente", "Secretário", "Tesoureira"].includes(d.role)
-            ).map((d) => (
-              <DirectorCard key={d.name} {...d} />
+            {directors.filter((d) => !presidencia.includes(d.role) && !conselho.includes(d.role)).map((d) => (
+              <DirectorCard key={d.name} name={d.name} role={d.role} profile={d.profile} company={d.company ?? undefined} linkedin={d.linkedin ?? undefined} />
             ))}
           </div>
         </section>
