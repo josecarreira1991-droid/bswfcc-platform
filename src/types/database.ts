@@ -408,6 +408,38 @@ export interface BotConfig {
   updated_at: string;
 }
 
+// Phase 6: Direct Messaging
+
+export interface DirectConversation {
+  id: string;
+  participant_1: string;
+  participant_2: string;
+  last_message: string | null;
+  last_message_at: string;
+  created_at: string;
+  // Joined fields
+  other_member?: {
+    id: string;
+    full_name: string;
+    company: string | null;
+    role: string;
+  };
+  unread_count?: number;
+}
+
+export interface DirectMessage {
+  id: string;
+  conversation_id: string;
+  sender_id: string;
+  content: string;
+  read_at: string | null;
+  created_at: string;
+  sender?: {
+    full_name: string;
+    company: string | null;
+  };
+}
+
 export type Database = {
   public: {
     Tables: {

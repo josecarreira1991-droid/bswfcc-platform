@@ -16,6 +16,7 @@ import {
   X,
   ChevronLeft,
   MessageCircle,
+  MessageSquare,
   CreditCard,
   ClipboardList,
   Handshake,
@@ -32,6 +33,7 @@ import type { Member } from "@/types/database";
 const mainMenu = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Inbox", href: "/inbox", icon: MessageCircle },
+  { label: "Chat", href: "/chat", icon: MessageSquare },
   { label: "Mural", href: "/mural", icon: Newspaper },
   { label: "Workspace", href: "/workspace", icon: Briefcase },
   { label: "Membros", href: "/membros", icon: Users },
