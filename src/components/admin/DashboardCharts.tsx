@@ -1,5 +1,6 @@
 "use client";
 
+import { ROLE_LABELS } from "@/lib/utils";
 import {
   BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip,
   ResponsiveContainer, CartesianGrid,
@@ -118,19 +119,5 @@ function EmptyChart() {
 }
 
 function formatRoleName(role: string): string {
-  const map: Record<string, string> = {
-    presidente: "Presidente",
-    vice_presidente: "Vice-Pres.",
-    secretario: "Secretário",
-    tesoureiro: "Tesoureiro",
-    diretor_marketing: "Dir. Mkt",
-    diretor_tecnologia: "Dir. Tech",
-    head_automation: "Head Autom.",
-    diretor_inovacao: "Dir. Inov.",
-    diretor: "Diretor",
-    membro: "Membro",
-    parceiro_estrategico: "Parceiro",
-    voluntario: "Voluntário",
-  };
-  return map[role] || role;
+  return ROLE_LABELS[role] || role;
 }
