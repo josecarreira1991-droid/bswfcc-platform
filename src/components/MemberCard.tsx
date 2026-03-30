@@ -1,4 +1,15 @@
-import type { Member } from "@/types/database";
+type MemberCardData = {
+  id: string;
+  full_name: string;
+  role: string;
+  status: string;
+  company?: string | null;
+  industry?: string | null;
+  city?: string | null;
+  linkedin?: string | null;
+  bio?: string | null;
+  avatar_url?: string | null;
+};
 
 const roleLabels: Record<string, string> = {
   presidente: "Presidente",
@@ -20,7 +31,7 @@ const statusColors: Record<string, string> = {
   inativo: "bg-red-500/20 text-red-400",
 };
 
-export default function MemberCard({ member }: { member: Member }) {
+export default function MemberCard({ member }: { member: MemberCardData }) {
   const initials = member.full_name
     .split(" ")
     .map((n) => n[0])

@@ -7,7 +7,8 @@ export async function getMembers() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("members")
-    .select("*")
+    .select("id, full_name, role, status, company, industry, city, linkedin, bio, avatar_url, created_at")
+    .eq("status", "ativo")
     .order("created_at", { ascending: false });
   if (error) throw error;
   return data;
@@ -40,9 +41,30 @@ export async function getMemberStats() {
   return { total: members.length, ativos, pendentes, byRole };
 }
 
+const ADMIN_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro", "diretor_tecnologia"];
+
 export async function updateMember(id: string, updates: Partial<Member>) {
   const supabase = createClient();
-  const { error } = await supabase.from("members").update(updates).eq("id", id);
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const { data: caller } = await supabase
+    .from("members")
+    .select("role")
+    .eq("email", user.email!)
+    .single();
+
+  if (!caller || !ADMIN_ROLES.includes(caller.role)) {
+    throw new Error("Forbidden: admin role required");
+  }
+
+  const ALLOWED_FIELDS = ["full_name", "phone", "company", "industry", "city", "linkedin", "bio", "avatar_url", "status", "role"];
+  const sanitized: Record<string, unknown> = {};
+  for (const key of ALLOWED_FIELDS) {
+    if (key in updates) sanitized[key] = updates[key as keyof typeof updates];
+  }
+
+  const { error } = await supabase.from("members").update(sanitized).eq("id", id);
   if (error) throw error;
   revalidatePath("/membros");
 }

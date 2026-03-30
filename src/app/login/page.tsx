@@ -40,8 +40,9 @@ function LoginForm() {
 
           <form action={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-400 mb-1.5">Email</label>
+              <label htmlFor="email" className="block text-sm text-gray-400 mb-1.5">Email</label>
               <input
+                id="email"
                 name="email"
                 type="email"
                 required
@@ -50,8 +51,9 @@ function LoginForm() {
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-400 mb-1.5">Senha</label>
+              <label htmlFor="password" className="block text-sm text-gray-400 mb-1.5">Senha</label>
               <input
+                id="password"
                 name="password"
                 type="password"
                 required

@@ -24,7 +24,18 @@ export async function POST(request: NextRequest) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await request.json();
-  const { data, error } = await supabase.from("market_data").insert(body).select().single();
+  const { indicator, value, category, source } = body;
+
+  if (!indicator || !value || !category) {
+    return NextResponse.json({ error: "indicator, value, and category are required" }, { status: 400 });
+  }
+
+  const { data, error } = await supabase.from("market_data").insert({
+    indicator: String(indicator),
+    value: String(value),
+    category: String(category),
+    source: source ? String(source) : null,
+  }).select().single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   return NextResponse.json(data, { status: 201 });

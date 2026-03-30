@@ -88,8 +88,9 @@ export default function RegisterPage() {
           <form action={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
-                <label className="block text-sm text-gray-400 mb-1.5">Nome Completo *</label>
+                <label htmlFor="full_name" className="block text-sm text-gray-400 mb-1.5">Nome Completo *</label>
                 <input
+                  id="full_name"
                   name="full_name"
                   type="text"
                   required
@@ -98,8 +99,9 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Email *</label>
+                <label htmlFor="reg_email" className="block text-sm text-gray-400 mb-1.5">Email *</label>
                 <input
+                  id="reg_email"
                   name="email"
                   type="email"
                   required
@@ -108,8 +110,9 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Telefone</label>
+                <label htmlFor="phone" className="block text-sm text-gray-400 mb-1.5">Telefone</label>
                 <input
+                  id="phone"
                   name="phone"
                   type="tel"
                   className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
@@ -117,8 +120,9 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Senha *</label>
+                <label htmlFor="reg_password" className="block text-sm text-gray-400 mb-1.5">Senha *</label>
                 <input
+                  id="reg_password"
                   name="password"
                   type="password"
                   required
@@ -128,8 +132,9 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Tipo de Cadastro</label>
+                <label htmlFor="role" className="block text-sm text-gray-400 mb-1.5">Tipo de Cadastro</label>
                 <select
+                  id="role"
                   name="role"
                   className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
                 >
@@ -139,8 +144,9 @@ export default function RegisterPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Empresa</label>
+                <label htmlFor="company" className="block text-sm text-gray-400 mb-1.5">Empresa</label>
                 <input
+                  id="company"
                   name="company"
                   type="text"
                   className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
@@ -148,8 +154,9 @@ export default function RegisterPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Indústria</label>
+                <label htmlFor="industry" className="block text-sm text-gray-400 mb-1.5">Indústria</label>
                 <select
+                  id="industry"
                   name="industry"
                   className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
                 >
@@ -160,8 +167,9 @@ export default function RegisterPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1.5">Cidade</label>
+                <label htmlFor="city" className="block text-sm text-gray-400 mb-1.5">Cidade</label>
                 <input
+                  id="city"
                   name="city"
                   type="text"
                   className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"

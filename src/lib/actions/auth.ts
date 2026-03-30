@@ -15,9 +15,12 @@ export async function login(formData: FormData) {
     return { error: error.message };
   }
 
-  const redirectTo = formData.get("redirect") as string;
+  const rawRedirect = formData.get("redirect") as string;
+  const safeRedirect = rawRedirect && rawRedirect.startsWith("/") && !rawRedirect.startsWith("//")
+    ? rawRedirect
+    : "/dashboard";
   revalidatePath("/", "layout");
-  redirect(redirectTo || "/dashboard");
+  redirect(safeRedirect);
 }
 
 export async function register(formData: FormData) {
@@ -25,7 +28,11 @@ export async function register(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const fullName = formData.get("full_name") as string;
-  const role = (formData.get("role") as MemberRole) || "membro";
+  const requestedRole = formData.get("role") as string;
+  const ALLOWED_SELF_REGISTER_ROLES: MemberRole[] = ["membro", "parceiro_estrategico", "voluntario"];
+  const role: MemberRole = ALLOWED_SELF_REGISTER_ROLES.includes(requestedRole as MemberRole)
+    ? (requestedRole as MemberRole)
+    : "membro";
   const company = formData.get("company") as string;
   const phone = formData.get("phone") as string;
   const city = formData.get("city") as string;
@@ -56,7 +63,9 @@ export async function register(formData: FormData) {
     });
 
     if (profileError) {
-      return { error: profileError.message };
+      // Cleanup orphaned auth user to prevent stuck login state
+      await supabase.auth.signOut();
+      return { error: "Erro ao criar perfil. Tente novamente." };
     }
   }
 

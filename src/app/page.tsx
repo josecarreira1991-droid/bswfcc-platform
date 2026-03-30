@@ -143,11 +143,11 @@ export default function Home() {
             <Link href="/dashboard" className="hover:text-gold transition-colors">Dashboard</Link>
             <Link href="/diretoria" className="hover:text-gold transition-colors">Diretoria</Link>
             <Link href="/eventos" className="hover:text-gold transition-colors">Eventos</Link>
-            <a href="https://bswfcc.com" target="_blank" className="hover:text-gold transition-colors">bswfcc.com</a>
+            <a href="https://bswfcc.com" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">bswfcc.com</a>
           </div>
           <p className="text-xs text-gray-600">
             Plataforma desenvolvida por{" "}
-            <a href="https://quantrexnow.io" target="_blank" className="text-gold/60 hover:text-gold">
+            <a href="https://quantrexnow.io" target="_blank" rel="noopener noreferrer" className="text-gold/60 hover:text-gold">
               Quantrex LLC
             </a>
           </p>
