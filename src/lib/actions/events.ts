@@ -2,6 +2,25 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
+const ADMIN_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro", "diretor_tecnologia", "diretor_marketing"];
+
+async function requireAdmin() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const { data: caller } = await supabase
+    .from("members")
+    .select("role")
+    .eq("email", user.email!)
+    .single();
+
+  if (!caller || !ADMIN_ROLES.includes(caller.role)) {
+    throw new Error("Forbidden: admin role required");
+  }
+  return { supabase, caller };
+}
+
 export async function getEvents() {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -25,36 +44,59 @@ export async function getUpcomingEvents(limit = 5) {
   return data;
 }
 
-const ADMIN_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro", "diretor_tecnologia", "diretor_marketing"];
-
 export async function createEvent(formData: FormData) {
-  const supabase = createClient();
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: "Unauthorized" };
-
-  const { data: caller } = await supabase
-    .from("members")
-    .select("role")
-    .eq("email", user.email!)
-    .single();
-
-  if (!caller || !ADMIN_ROLES.includes(caller.role)) {
-    return { error: "Forbidden: admin role required" };
-  }
+  const { supabase } = await requireAdmin();
 
   const { error } = await supabase.from("events").insert({
     title: formData.get("title") as string,
-    description: formData.get("description") as string,
+    description: (formData.get("description") as string) || null,
     date: formData.get("date") as string,
-    time: formData.get("time") as string,
-    location: formData.get("location") as string,
+    time: (formData.get("time") as string) || null,
+    location: (formData.get("location") as string) || null,
     type: formData.get("type") as "networking" | "palestra" | "workshop" | "gala" | "almoco" | "outro",
-    max_attendees: formData.get("max_attendees") ? Number(formData.get("max_attendees")) : undefined,
+    max_attendees: formData.get("max_attendees") ? Number(formData.get("max_attendees")) : null,
     is_public: formData.get("is_public") === "true",
   });
   if (error) return { error: error.message };
   revalidatePath("/eventos");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+export async function updateEvent(id: string, formData: FormData) {
+  const { supabase } = await requireAdmin();
+
+  const { error } = await supabase
+    .from("events")
+    .update({
+      title: formData.get("title") as string,
+      description: (formData.get("description") as string) || null,
+      date: formData.get("date") as string,
+      time: (formData.get("time") as string) || null,
+      location: (formData.get("location") as string) || null,
+      type: formData.get("type") as "networking" | "palestra" | "workshop" | "gala" | "almoco" | "outro",
+      max_attendees: formData.get("max_attendees") ? Number(formData.get("max_attendees")) : null,
+      is_public: formData.get("is_public") === "true",
+    })
+    .eq("id", id);
+
+  if (error) return { error: error.message };
+  revalidatePath("/eventos");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+export async function deleteEvent(id: string) {
+  const { supabase } = await requireAdmin();
+
+  // Delete registrations first
+  await supabase.from("event_registrations").delete().eq("event_id", id);
+
+  const { error } = await supabase.from("events").delete().eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/eventos");
+  revalidatePath("/dashboard");
+  return { success: true };
 }
 
 export async function registerForEvent(eventId: string, memberId: string) {
@@ -67,6 +109,7 @@ export async function registerForEvent(eventId: string, memberId: string) {
   });
   if (error) return { error: error.message };
   revalidatePath("/eventos");
+  return { success: true };
 }
 
 export async function getEventRegistrations(eventId: string) {
@@ -78,4 +121,15 @@ export async function getEventRegistrations(eventId: string) {
     .eq("status", "confirmado");
   if (error) throw error;
   return data;
+}
+
+export async function getEventRegistrationCount(eventId: string) {
+  const supabase = createClient();
+  const { count, error } = await supabase
+    .from("event_registrations")
+    .select("*", { count: "exact", head: true })
+    .eq("event_id", eventId)
+    .eq("status", "confirmado");
+  if (error) return 0;
+  return count || 0;
 }
