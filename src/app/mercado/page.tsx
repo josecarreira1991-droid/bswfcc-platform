@@ -7,15 +7,15 @@ import { redirect } from "next/navigation";
 const fallbackData = {
   comercio: [
     { value: "$25.6B", label: "Comércio FL-Brasil", sublabel: "Bilateral 2024" },
-    { value: "$8.2B", label: "Exportações FL→Brasil", sublabel: "2024" },
-    { value: "$17.4B", label: "Importações Brasil→FL", sublabel: "2024" },
-    { value: "#3", label: "Ranking FL", sublabel: "Parceiro comercial Brasil" },
+    { value: "$19B", label: "Exportações FL→Brasil", sublabel: "2024" },
+    { value: "$6.6B", label: "Importações FL do Brasil", sublabel: "2024" },
+    { value: "+5.3%", label: "Crescimento YoY", sublabel: "Comércio bilateral" },
   ],
   demografico: [
     { value: "894K", label: "Pop. Lee County", sublabel: "Estimativa 2026" },
     { value: "15-20K", label: "Brasileiros Lee County", sublabel: "Maior concentração SWFL" },
-    { value: "42%", label: "Crescimento SWFL", sublabel: "Pop. 2010-2024" },
-    { value: "760K+", label: "Pop. Cape Coral-FM MSA", sublabel: "Metropolitan area" },
+    { value: "$73K", label: "Renda Mediana", sublabel: "Familiar Lee County" },
+    { value: "400K+", label: "Brasileiros na FL", sublabel: "Estimativa total" },
   ],
   infraestrutura: [
     { value: "11.8M", label: "SeaPort Manatee", sublabel: "Toneladas FY2025 — recorde" },
