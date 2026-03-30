@@ -75,7 +75,7 @@ export default function MatchmakingView({ currentMember, myProfile, profiles }: 
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-xl font-semibold text-white">Business Matchmaking</h1>
-          <p className="text-sm text-slate-500 mt-0.5">{profiles.length} empresas no diretório</p>
+          <p className="text-sm text-slate-500 mt-0.5">{profiles.length} {profiles.length === 1 ? "empresa" : "empresas"} no diretório</p>
         </div>
         <button
           onClick={() => setShowProfile(true)}

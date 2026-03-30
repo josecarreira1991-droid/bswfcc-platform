@@ -260,7 +260,7 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
         onClose={() => { setShowForm(false); setEditItem(null); }}
         title={editItem ? "Editar Indicador" : "Novo Indicador"}
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form key={editItem?.id || "new"} onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Indicador *</label>
             <input name="indicator" defaultValue={editItem?.indicator || ""} required className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />

@@ -198,7 +198,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
         <div>
           <h1 className="text-xl font-semibold text-white">Mural</h1>
           <p className="text-sm text-slate-500 mt-0.5">
-            {feedStats.totalPosts} publicações · {feedStats.totalOpportunities} oportunidades
+            {feedStats.totalPosts} {feedStats.totalPosts === 1 ? "publicação" : "publicações"} · {feedStats.totalOpportunities} {feedStats.totalOpportunities === 1 ? "oportunidade" : "oportunidades"}
           </p>
         </div>
         <button

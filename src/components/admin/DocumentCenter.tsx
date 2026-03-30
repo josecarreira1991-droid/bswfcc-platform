@@ -96,7 +96,7 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-xl font-semibold text-white">Central de Documentos</h1>
-          <p className="text-sm text-slate-500 mt-0.5">{documents.length} documentos disponíveis</p>
+          <p className="text-sm text-slate-500 mt-0.5">{documents.length} {documents.length === 1 ? "documento disponível" : "documentos disponíveis"}</p>
         </div>
         {admin && (
           <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors">

@@ -288,16 +288,22 @@ export default function GroupChatView({
 
     if (msg.media_type === "image") {
       return (
-        <button
-          onClick={() => setFullscreenImage(msg.media_url)}
-          className="mt-1.5 block"
-        >
+        <div className="mt-1.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={msg.media_url}
             alt={msg.media_name || "Imagem"}
             className="max-w-sm w-full rounded-lg border border-slate-700/30 hover:opacity-90 transition-opacity cursor-pointer"
+            onClick={() => setFullscreenImage(msg.media_url)}
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+              (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
+            }}
           />
-        </button>
+          <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="hidden flex items-center gap-2 px-3 py-2 bg-slate-800/50 border border-slate-700/30 rounded-lg text-xs text-slate-400 hover:text-gold transition-colors max-w-sm">
+            {msg.media_name || "Imagem"} — Abrir em nova aba
+          </a>
+        </div>
       );
     }
 

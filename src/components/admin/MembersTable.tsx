@@ -65,7 +65,9 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
     result.sort((a, b) => {
       const aVal = (a[sortKey] || "") as string;
       const bVal = (b[sortKey] || "") as string;
-      const cmp = aVal.localeCompare(bVal);
+      const cmp = sortKey === "created_at"
+        ? new Date(aVal).getTime() - new Date(bVal).getTime()
+        : aVal.localeCompare(bVal);
       return sortDir === "asc" ? cmp : -cmp;
     });
 

@@ -1,10 +1,12 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { requireAuth } from "./auth-helpers";
+import { ADMIN_ROLES } from "@/lib/utils";
 import type { BusinessProfile, MatchRequest } from "@/types/database";
 
 export async function getBusinessProfile(memberId: string) {
-  const supabase = createClient();
+  const { supabase } = await requireAuth();
   const { data } = await supabase
     .from("business_profiles")
     .select("*")
@@ -14,7 +16,7 @@ export async function getBusinessProfile(memberId: string) {
 }
 
 export async function getVisibleProfiles() {
-  const supabase = createClient();
+  const { supabase } = await requireAuth();
   const { data, error } = await supabase
     .from("business_profiles")
     .select("*, members(full_name, company, industry, city, avatar_url)")
@@ -25,7 +27,10 @@ export async function getVisibleProfiles() {
 }
 
 export async function upsertBusinessProfile(memberId: string, formData: FormData) {
-  const supabase = createClient();
+  const { supabase, memberId: callerId, memberRole } = await requireAuth();
+  if (memberId !== callerId && !(ADMIN_ROLES as readonly string[]).includes(memberRole)) {
+    return { error: "Sem permissão para editar perfil de outro membro" };
+  }
   const splitTags = (val: string) => val.split(",").map((s) => s.trim()).filter(Boolean);
 
   const profile = {
@@ -55,7 +60,8 @@ export async function upsertBusinessProfile(memberId: string, formData: FormData
 }
 
 export async function sendMatchRequest(fromId: string, toId: string, message?: string, score?: number, reason?: string) {
-  const supabase = createClient();
+  const { supabase, memberId: callerId } = await requireAuth();
+  if (fromId !== callerId) return { error: "Sem permissão" };
   const { error } = await supabase.from("match_requests").insert({
     from_member_id: fromId,
     to_member_id: toId,
@@ -70,7 +76,7 @@ export async function sendMatchRequest(fromId: string, toId: string, message?: s
 }
 
 export async function respondToMatch(requestId: string, status: "accepted" | "declined") {
-  const supabase = createClient();
+  const { supabase } = await requireAuth();
   const { error } = await supabase
     .from("match_requests")
     .update({ status, updated_at: new Date().toISOString() })
@@ -81,7 +87,8 @@ export async function respondToMatch(requestId: string, status: "accepted" | "de
 }
 
 export async function getMyMatchRequests(memberId: string) {
-  const supabase = createClient();
+  const { supabase, memberId: callerId } = await requireAuth();
+  if (memberId !== callerId) throw new Error("Forbidden");
   const [sent, received] = await Promise.all([
     supabase.from("match_requests").select("*, members!match_requests_to_member_id_fkey(full_name, company)").eq("from_member_id", memberId).order("created_at", { ascending: false }),
     supabase.from("match_requests").select("*, members!match_requests_from_member_id_fkey(full_name, company)").eq("to_member_id", memberId).order("created_at", { ascending: false }),
