@@ -1,5 +1,6 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createServiceClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { MemberRole } from "@/types/database";
@@ -63,8 +64,17 @@ export async function register(formData: FormData) {
     });
 
     if (profileError) {
-      // Cleanup orphaned auth user to prevent stuck login state
-      await supabase.auth.signOut();
+      // Delete orphaned auth user using service_role to prevent stuck registration
+      try {
+        const adminClient = createServiceClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.SUPABASE_SERVICE_ROLE_KEY!
+        );
+        await adminClient.auth.admin.deleteUser(authData.user!.id);
+      } catch {
+        // Fallback: at minimum sign out the broken session
+        await supabase.auth.signOut();
+      }
       return { error: "Erro ao criar perfil. Tente novamente." };
     }
   }

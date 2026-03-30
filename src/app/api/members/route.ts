@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
 }
 
 const ALLOWED_MEMBER_UPDATE_FIELDS = ["full_name", "phone", "company", "industry", "city", "linkedin", "bio", "avatar_url"] as const;
+const ADMIN_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro", "diretor_tecnologia"];
 
 export async function PATCH(request: NextRequest) {
   const supabase = createClient();
@@ -31,6 +32,16 @@ export async function PATCH(request: NextRequest) {
   const { id } = body;
 
   if (!id) return NextResponse.json({ error: "Member ID required" }, { status: 400 });
+
+  const { data: caller } = await supabase
+    .from("members")
+    .select("role")
+    .eq("email", user.email!)
+    .single();
+
+  if (!caller || !ADMIN_ROLES.includes(caller.role)) {
+    return NextResponse.json({ error: "Forbidden: admin role required" }, { status: 403 });
+  }
 
   const sanitized: Record<string, unknown> = {};
   for (const key of ALLOWED_MEMBER_UPDATE_FIELDS) {

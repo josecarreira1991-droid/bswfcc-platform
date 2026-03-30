@@ -59,9 +59,16 @@ export async function updateMember(id: string, updates: Partial<Member>) {
   }
 
   const ALLOWED_FIELDS = ["full_name", "phone", "company", "industry", "city", "linkedin", "bio", "avatar_url", "status", "role"];
+  const PROTECTED_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro"];
   const sanitized: Record<string, unknown> = {};
   for (const key of ALLOWED_FIELDS) {
     if (key in updates) sanitized[key] = updates[key as keyof typeof updates];
+  }
+
+  if ("role" in sanitized && PROTECTED_ROLES.includes(sanitized.role as string)) {
+    if (caller.role !== "presidente") {
+      throw new Error("Only the presidente can assign executive roles");
+    }
   }
 
   const { error } = await supabase.from("members").update(sanitized).eq("id", id);

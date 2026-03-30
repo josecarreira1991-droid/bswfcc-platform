@@ -25,8 +25,24 @@ export async function getUpcomingEvents(limit = 5) {
   return data;
 }
 
+const ADMIN_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro", "diretor_tecnologia", "diretor_marketing"];
+
 export async function createEvent(formData: FormData) {
   const supabase = createClient();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: "Unauthorized" };
+
+  const { data: caller } = await supabase
+    .from("members")
+    .select("role")
+    .eq("email", user.email!)
+    .single();
+
+  if (!caller || !ADMIN_ROLES.includes(caller.role)) {
+    return { error: "Forbidden: admin role required" };
+  }
+
   const { error } = await supabase.from("events").insert({
     title: formData.get("title") as string,
     description: formData.get("description") as string,
