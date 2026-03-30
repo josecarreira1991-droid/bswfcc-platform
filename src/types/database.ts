@@ -70,6 +70,123 @@ export interface Director {
   order_index: number;
 }
 
+// Phase 5: Advanced Features
+
+export interface BusinessProfile {
+  id: string;
+  member_id: string;
+  business_name: string | null;
+  business_type: "product" | "service" | "both" | "other" | null;
+  description: string | null;
+  services_offered: string[];
+  services_needed: string[];
+  target_industries: string[];
+  languages: string[];
+  website: string | null;
+  year_established: number | null;
+  employee_count: string | null;
+  revenue_range: string | null;
+  looking_for: string[];
+  tags: string[];
+  is_visible: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MatchRequest {
+  id: string;
+  from_member_id: string;
+  to_member_id: string;
+  message: string | null;
+  status: "pending" | "accepted" | "declined" | "expired";
+  match_score: number | null;
+  match_reason: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Document {
+  id: string;
+  title: string;
+  description: string | null;
+  category: "legal" | "financial" | "marketing" | "operations" | "compliance" | "templates" | "guides" | "reports" | "general";
+  file_url: string | null;
+  file_type: string | null;
+  file_size: number | null;
+  access_level: "public" | "member" | "business_partner" | "executive" | "admin";
+  uploaded_by: string | null;
+  download_count: number;
+  is_pinned: boolean;
+  tags: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EventCheckin {
+  id: string;
+  event_id: string;
+  member_id: string;
+  checked_in_at: string;
+  check_in_method: "qr" | "manual" | "auto";
+  notes: string | null;
+}
+
+export interface Referral {
+  id: string;
+  referrer_id: string;
+  referred_name: string;
+  referred_email: string | null;
+  referred_phone: string | null;
+  referred_company: string | null;
+  referred_member_id: string | null;
+  status: "pending" | "contacted" | "registered" | "active" | "declined";
+  notes: string | null;
+  reward_given: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Poll {
+  id: string;
+  title: string;
+  description: string | null;
+  type: "single" | "multiple" | "ranked";
+  status: "draft" | "active" | "closed" | "archived";
+  created_by: string | null;
+  starts_at: string | null;
+  ends_at: string | null;
+  is_anonymous: boolean;
+  eligible_roles: string[];
+  created_at: string;
+}
+
+export interface PollOption {
+  id: string;
+  poll_id: string;
+  label: string;
+  description: string | null;
+  sort_order: number;
+}
+
+export interface PollVote {
+  id: string;
+  poll_id: string;
+  option_id: string;
+  member_id: string;
+  rank_position: number | null;
+  created_at: string;
+}
+
+export interface NetworkingSuggestion {
+  id: string;
+  member_id: string;
+  suggested_member_id: string;
+  score: number;
+  reasons: string[];
+  status: "pending" | "seen" | "connected" | "dismissed";
+  created_at: string;
+}
+
 // Phase 4: Billing & Reports
 
 export type SubscriptionStatus = "active" | "past_due" | "canceled" | "trialing" | "incomplete" | "free";

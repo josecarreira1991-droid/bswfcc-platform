@@ -18,6 +18,11 @@ import {
   MessageCircle,
   CreditCard,
   ClipboardList,
+  Handshake,
+  FolderOpen,
+  UserPlus,
+  Vote,
+  Sparkles,
 } from "lucide-react";
 import { logout } from "@/lib/actions/auth";
 import type { Member } from "@/types/database";
@@ -29,6 +34,11 @@ const mainMenu = [
   { label: "Eventos", href: "/eventos", icon: Calendar },
   { label: "Mercado", href: "/mercado", icon: BarChart3 },
   { label: "Inteligência", href: "/inteligencia", icon: FileText },
+  { label: "Matchmaking", href: "/matchmaking", icon: Handshake },
+  { label: "Networking AI", href: "/networking", icon: Sparkles },
+  { label: "Documentos", href: "/documentos", icon: FolderOpen },
+  { label: "Indicações", href: "/referrals", icon: UserPlus },
+  { label: "Votações", href: "/votacoes", icon: Vote },
   { label: "Billing", href: "/billing", icon: CreditCard },
   { label: "Relatórios", href: "/relatorios", icon: ClipboardList },
   { label: "Diretoria", href: "/diretoria-admin", icon: Shield },
