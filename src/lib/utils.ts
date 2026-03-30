@@ -44,7 +44,9 @@ export const EVENT_TYPE_LABELS: Record<string, string> = {
 };
 
 export function formatDate(dateStr: string): string {
-  const date = new Date(dateStr + "T00:00:00");
+  if (!dateStr) return "—";
+  const date = dateStr.includes("T") ? new Date(dateStr) : new Date(dateStr + "T00:00:00");
+  if (isNaN(date.getTime())) return "—";
   return date.toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "short",
