@@ -203,8 +203,13 @@ export default function GroupChatView({
       // Refresh messages
       const msgs = await getChannelMessages(selected.id);
       setMessages(msgs);
-    } catch {
-      toast.error("Erro ao enviar mensagem");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Erro ao enviar mensagem";
+      if (msg.includes("storage") || msg.includes("upload") || msg.includes("bucket")) {
+        toast.error("Erro ao enviar arquivo. Tente novamente.");
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setSending(false);
       setUploading(false);
