@@ -310,7 +310,7 @@ const REWARD_TIERS: Array<{
   { milestone: 10, type: "lifetime_ambassador", label: "Ambassador Vitalício + Anuidade vitalícia", discount_pct: 100 },
 ];
 
-export function getRewardTiers() {
+export async function getRewardTiers() {
   return REWARD_TIERS;
 }
 

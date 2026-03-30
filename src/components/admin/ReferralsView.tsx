@@ -25,11 +25,18 @@ import {
   Trophy,
   CircleDollarSign,
 } from "lucide-react";
-import { createReferral, updateReferralStatus, generateReferralCode, redeemReward, getRewardTiers } from "@/lib/actions/referrals";
+import { createReferral, updateReferralStatus, generateReferralCode, redeemReward } from "@/lib/actions/referrals";
 import { cn, APP_URL } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
-import type { Member, ReferralReward } from "@/types/database";
+import type { Member, ReferralReward, ReferralRewardType } from "@/types/database";
+
+const REWARD_TIERS: Array<{ milestone: number; type: ReferralRewardType; label: string; discount_pct: number }> = [
+  { milestone: 1, type: "discount_10", label: "10% de desconto na próxima anuidade", discount_pct: 10 },
+  { milestone: 3, type: "free_renewal", label: "Anuidade grátis no próximo ciclo", discount_pct: 100 },
+  { milestone: 5, type: "vip_ambassador", label: "VIP Ambassador + Anuidade grátis", discount_pct: 100 },
+  { milestone: 10, type: "lifetime_ambassador", label: "Ambassador Vitalício + Anuidade vitalícia", discount_pct: 100 },
+];
 
 const statusVariant: Record<string, "warning" | "info" | "success" | "gold" | "danger"> = {
   pending: "warning", contacted: "info", registered: "gold", active: "success", declined: "danger",
@@ -149,10 +156,9 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
     else { toast.success("Bonificação resgatada!"); router.refresh(); }
   }
 
-  const rewardTiers = getRewardTiers();
   const approvedReferralCount = myReferrals?.filter((r) => r.status === "ativo").length || 0;
-  const nextTier = rewardTiers.find((t) => t.milestone > approvedReferralCount);
-  const currentTier = [...rewardTiers].reverse().find((t) => approvedReferralCount >= t.milestone);
+  const nextTier = REWARD_TIERS.find((t) => t.milestone > approvedReferralCount);
+  const currentTier = [...REWARD_TIERS].reverse().find((t) => approvedReferralCount >= t.milestone);
 
   function toggleTree(id: string) {
     const next = new Set(expandedTree);
@@ -299,7 +305,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
         {/* Tier roadmap */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
-          {rewardTiers.map((tier) => {
+          {REWARD_TIERS.map((tier) => {
             const achieved = approvedReferralCount >= tier.milestone;
             return (
               <div
