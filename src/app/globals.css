@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --navy: #0A1628;
+  --dark-blue: #1B2A4A;
+  --gold: #C9A84C;
+  --light-gold: #E8D5A0;
+  --accent: #2D5F8A;
+}
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background: var(--navy);
+  color: #ffffff;
+}
+
+@layer utilities {
+  .text-gold { color: var(--gold); }
+  .bg-navy { background-color: var(--navy); }
+  .bg-dark-blue { background-color: var(--dark-blue); }
+  .border-gold { border-color: var(--gold); }
+  .gold-gradient {
+    background: linear-gradient(135deg, var(--gold), var(--light-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
