@@ -27,6 +27,24 @@ export interface Member {
   linkedin: string | null;
   bio: string | null;
   avatar_url: string | null;
+  website: string | null;
+  linkedin_url: string | null;
+  instagram: string | null;
+  facebook: string | null;
+  ein: string | null;
+  services_offered: string[] | null;
+  referred_by: string | null;
+  referral_count: number;
+}
+
+export interface ReferralCode {
+  id: string;
+  member_id: string;
+  code: string;
+  is_active: boolean;
+  used_by: string | null;
+  used_at: string | null;
+  created_at: string;
 }
 
 export interface Event {

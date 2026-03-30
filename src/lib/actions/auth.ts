@@ -39,6 +39,19 @@ export async function register(formData: FormData) {
   const city = formData.get("city") as string;
   const industry = formData.get("industry") as string;
 
+  // New extended fields
+  const website = formData.get("website") as string;
+  const linkedinUrl = formData.get("linkedin_url") as string;
+  const instagram = formData.get("instagram") as string;
+  const facebook = formData.get("facebook") as string;
+  const ein = formData.get("ein") as string;
+  const bio = formData.get("bio") as string;
+  const servicesRaw = formData.get("services_offered") as string;
+  const servicesOffered = servicesRaw
+    ? servicesRaw.split(",").map((s) => s.trim()).filter(Boolean)
+    : null;
+  const referralCode = formData.get("referral_code") as string;
+
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
@@ -52,7 +65,7 @@ export async function register(formData: FormData) {
   }
 
   if (authData.user) {
-    const { error: profileError } = await supabase.from("members").insert({
+    const { data: memberData, error: profileError } = await supabase.from("members").insert({
       full_name: fullName,
       email,
       phone: phone || undefined,
@@ -61,7 +74,14 @@ export async function register(formData: FormData) {
       company: company || undefined,
       industry: industry || undefined,
       city: city || undefined,
-    });
+      website: website || undefined,
+      linkedin_url: linkedinUrl || undefined,
+      instagram: instagram || undefined,
+      facebook: facebook || undefined,
+      ein: ein || undefined,
+      bio: bio || undefined,
+      services_offered: servicesOffered || undefined,
+    }).select("id").single();
 
     if (profileError) {
       // Delete orphaned auth user using service_role to prevent stuck registration
@@ -76,6 +96,17 @@ export async function register(formData: FormData) {
         await supabase.auth.signOut();
       }
       return { error: "Erro ao criar perfil. Tente novamente." };
+    }
+
+    // Process referral code if provided
+    if (referralCode && memberData?.id) {
+      const { useReferralCode, generateReferralCode } = await import("@/lib/actions/referrals");
+      await useReferralCode(referralCode, memberData.id);
+      await generateReferralCode(memberData.id);
+    } else if (memberData?.id) {
+      // Generate a referral code for the new member even without referral
+      const { generateReferralCode } = await import("@/lib/actions/referrals");
+      await generateReferralCode(memberData.id);
     }
   }
 

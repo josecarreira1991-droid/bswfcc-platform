@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   Users, Calendar, BarChart3, TrendingUp, Clock,
   UserCheck, UserX, Building2, MapPin, ArrowRight,
-  Search, Filter,
+  Search, Filter, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { cn, ROLE_LABELS, STATUS_STYLES, EVENT_TYPE_LABELS, formatDate, isAdmin } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
@@ -26,9 +26,259 @@ interface WorkspaceViewProps {
   marketData: MarketData[];
 }
 
+const WEEKDAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+const MONTHS = [
+  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+];
+
+const EVENT_TYPE_COLORS: Record<string, string> = {
+  networking: "bg-blue-500",
+  palestra: "bg-purple-500",
+  workshop: "bg-emerald-500",
+  gala: "bg-gold",
+  almoco: "bg-amber-500",
+  outro: "bg-slate-500",
+};
+
+function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingEvents: Event[] }) {
+  const today = new Date();
+  const [viewMonth, setViewMonth] = useState(today.getMonth());
+  const [viewYear, setViewYear] = useState(today.getFullYear());
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+
+  const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
+  const eventsByDate = useMemo(() => {
+    const map: Record<string, Event[]> = {};
+    for (const ev of events) {
+      if (!ev.date) continue;
+      if (!map[ev.date]) map[ev.date] = [];
+      map[ev.date].push(ev);
+    }
+    return map;
+  }, [events]);
+
+  const prevMonth = () => {
+    if (viewMonth === 0) {
+      setViewMonth(11);
+      setViewYear(viewYear - 1);
+    } else {
+      setViewMonth(viewMonth - 1);
+    }
+    setSelectedDate(null);
+  };
+
+  const nextMonth = () => {
+    if (viewMonth === 11) {
+      setViewMonth(0);
+      setViewYear(viewYear + 1);
+    } else {
+      setViewMonth(viewMonth + 1);
+    }
+    setSelectedDate(null);
+  };
+
+  const goToToday = () => {
+    setViewMonth(today.getMonth());
+    setViewYear(today.getFullYear());
+    setSelectedDate(null);
+  };
+
+  const cells: (number | null)[] = [];
+  for (let i = 0; i < firstDay; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+
+  const selectedEvents = selectedDate ? eventsByDate[selectedDate] || [] : [];
+
+  return (
+    <div className="space-y-4">
+      {/* Calendar header */}
+      <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h3 className="text-lg font-semibold text-white">
+              {MONTHS[viewMonth]} {viewYear}
+            </h3>
+            <button
+              onClick={goToToday}
+              className="text-[11px] text-gold hover:text-light-gold border border-gold/30 rounded px-2 py-0.5 transition-colors"
+            >
+              Hoje
+            </button>
+          </div>
+          <div className="flex items-center gap-1">
+            <button onClick={prevMonth} className="p-1.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors">
+              <ChevronLeft size={18} />
+            </button>
+            <button onClick={nextMonth} className="p-1.5 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors">
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </div>
+
+        {/* Weekday headers */}
+        <div className="grid grid-cols-7 mb-1">
+          {WEEKDAYS.map((d) => (
+            <div key={d} className="text-center text-[10px] font-semibold text-slate-500 uppercase tracking-wider py-2">
+              {d}
+            </div>
+          ))}
+        </div>
+
+        {/* Calendar grid */}
+        <div className="grid grid-cols-7 gap-px bg-slate-700/20 rounded-lg overflow-hidden">
+          {cells.map((day, i) => {
+            if (day === null) {
+              return <div key={`empty-${i}`} className="bg-[#0D1B2A] min-h-[80px]" />;
+            }
+            const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+            const dayEvents = eventsByDate[dateStr] || [];
+            const isToday = dateStr === todayStr;
+            const isSelected = dateStr === selectedDate;
+
+            return (
+              <button
+                key={dateStr}
+                onClick={() => setSelectedDate(isSelected ? null : dateStr)}
+                className={cn(
+                  "bg-[#0D1B2A] min-h-[80px] p-1.5 text-left transition-colors relative group",
+                  isSelected && "ring-1 ring-gold/50 bg-gold/5",
+                  !isSelected && "hover:bg-white/[0.03]"
+                )}
+              >
+                <span
+                  className={cn(
+                    "inline-flex items-center justify-center w-6 h-6 text-xs font-medium rounded-full",
+                    isToday ? "bg-gold text-navy font-bold" : "text-slate-400 group-hover:text-white"
+                  )}
+                >
+                  {day}
+                </span>
+                {dayEvents.length > 0 && (
+                  <div className="mt-1 space-y-0.5">
+                    {dayEvents.slice(0, 2).map((ev) => (
+                      <div
+                        key={ev.id}
+                        className={cn(
+                          "text-[9px] leading-tight px-1 py-0.5 rounded truncate text-white/90 font-medium",
+                          EVENT_TYPE_COLORS[ev.type] || "bg-slate-600"
+                        )}
+                      >
+                        {ev.time ? `${ev.time} ` : ""}{ev.title}
+                      </div>
+                    ))}
+                    {dayEvents.length > 2 && (
+                      <span className="text-[9px] text-slate-500 px-1">+{dayEvents.length - 2} mais</span>
+                    )}
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Legend */}
+        <div className="flex flex-wrap gap-3 mt-4 pt-3 border-t border-slate-700/50">
+          {Object.entries(EVENT_TYPE_LABELS).map(([key, label]) => (
+            <div key={key} className="flex items-center gap-1.5">
+              <div className={cn("w-2.5 h-2.5 rounded-sm", EVENT_TYPE_COLORS[key] || "bg-slate-600")} />
+              <span className="text-[10px] text-slate-500">{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Selected date detail */}
+      {selectedDate && (
+        <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5">
+          <h3 className="text-sm font-medium text-white mb-3">
+            {new Date(selectedDate + "T00:00:00").toLocaleDateString("pt-BR", {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </h3>
+          {selectedEvents.length > 0 ? (
+            <div className="space-y-3">
+              {selectedEvents.map((ev) => (
+                <div key={ev.id} className="flex items-start gap-3 p-3 bg-slate-800/30 rounded-lg">
+                  <div className={cn("w-1 self-stretch rounded-full flex-shrink-0", EVENT_TYPE_COLORS[ev.type] || "bg-slate-600")} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-white">{ev.title}</p>
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
+                      {ev.time && (
+                        <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                          <Clock size={10} /> {ev.time}
+                        </span>
+                      )}
+                      {ev.location && (
+                        <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                          <MapPin size={10} /> {ev.location}
+                        </span>
+                      )}
+                      <span className="text-[11px] text-slate-500">{EVENT_TYPE_LABELS[ev.type]}</span>
+                    </div>
+                    {ev.description && (
+                      <p className="text-[11px] text-slate-500 mt-1.5 line-clamp-2">{ev.description}</p>
+                    )}
+                  </div>
+                  <Badge variant={ev.is_public ? "success" : "default"}>
+                    {ev.is_public ? "Público" : "Privado"}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-slate-500 text-center py-4">Nenhum evento neste dia</p>
+          )}
+        </div>
+      )}
+
+      {/* Upcoming events sidebar */}
+      <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-medium text-white">Próximos Eventos</h3>
+          <Link href="/eventos" className="text-[11px] text-gold hover:text-light-gold flex items-center gap-1">
+            Gerenciar <ArrowRight size={10} />
+          </Link>
+        </div>
+        {upcomingEvents.length > 0 ? (
+          <div className="space-y-2">
+            {upcomingEvents.map((ev) => (
+              <div key={ev.id} className="flex items-center gap-3 py-2 border-b border-slate-800/30 last:border-0">
+                <div className="flex flex-col items-center w-10 flex-shrink-0">
+                  <span className="text-lg font-bold text-gold leading-none">
+                    {new Date(ev.date + "T00:00:00").getDate()}
+                  </span>
+                  <span className="text-[10px] text-slate-500 uppercase">
+                    {new Date(ev.date + "T00:00:00").toLocaleDateString("pt-BR", { month: "short" })}
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-white truncate">{ev.title}</p>
+                  <p className="text-[10px] text-slate-500">
+                    {EVENT_TYPE_LABELS[ev.type]}{ev.time ? ` · ${ev.time}` : ""}{ev.location ? ` · ${ev.location}` : ""}
+                  </p>
+                </div>
+                <div className={cn("w-2 h-2 rounded-full flex-shrink-0", EVENT_TYPE_COLORS[ev.type] || "bg-slate-600")} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-slate-500 text-center py-4">Nenhum evento agendado</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function WorkspaceView({ members, stats, events, upcomingEvents, marketData }: WorkspaceViewProps) {
   const [memberSearch, setMemberSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<"overview" | "members" | "pipeline" | "activity">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "members" | "pipeline" | "activity" | "agenda">("overview");
 
   const recentMembers = members.slice(0, 10);
   const pendingMembers = members.filter((m) => m.status === "pendente");
@@ -57,9 +307,10 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 border-b border-slate-700/50 pb-px">
+      <div className="flex gap-1 mb-6 border-b border-slate-700/50 pb-px overflow-x-auto">
         {[
           { key: "overview" as const, label: "Visão Geral" },
+          { key: "agenda" as const, label: "Agenda" },
           { key: "members" as const, label: "Membros" },
           { key: "pipeline" as const, label: "Pipeline" },
           { key: "activity" as const, label: "Atividade" },
@@ -312,6 +563,11 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
             </div>
           )}
         </div>
+      )}
+
+      {/* Agenda Tab */}
+      {activeTab === "agenda" && (
+        <AgendaCalendar events={events} upcomingEvents={upcomingEvents} />
       )}
     </div>
   );
