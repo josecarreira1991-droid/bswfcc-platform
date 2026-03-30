@@ -1,7 +1,8 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import type { Referral } from "@/types/database";
+import type { Referral, ReferralReward, ReferralRewardType } from "@/types/database";
+import { ADMIN_ROLES } from "@/lib/utils";
 
 // ── Legacy referral functions (keep for backwards compat) ──────────────
 
@@ -293,4 +294,160 @@ export async function getMyReferrals(memberId: string): Promise<
     .order("created_at", { ascending: false });
 
   return data || [];
+}
+
+// ── Referral Rewards / Bonificação ────────────────────────────────────
+
+const REWARD_TIERS: Array<{
+  milestone: number;
+  type: ReferralRewardType;
+  label: string;
+  discount_pct: number;
+}> = [
+  { milestone: 1, type: "discount_10", label: "10% de desconto na próxima anuidade", discount_pct: 10 },
+  { milestone: 3, type: "free_renewal", label: "Anuidade grátis no próximo ciclo", discount_pct: 100 },
+  { milestone: 5, type: "vip_ambassador", label: "VIP Ambassador + Anuidade grátis", discount_pct: 100 },
+  { milestone: 10, type: "lifetime_ambassador", label: "Ambassador Vitalício + Anuidade vitalícia", discount_pct: 100 },
+];
+
+export function getRewardTiers() {
+  return REWARD_TIERS;
+}
+
+export async function checkAndGrantRewards(referrerId: string): Promise<ReferralReward | null> {
+  const supabase = createClient();
+
+  // Count approved referrals (status = 'ativo') for this referrer
+  const { count } = await supabase
+    .from("members")
+    .select("id", { count: "exact", head: true })
+    .eq("referred_by", referrerId)
+    .eq("status", "ativo");
+
+  const approvedCount = count || 0;
+
+  // Find the highest tier they qualify for
+  const qualifiedTier = [...REWARD_TIERS]
+    .reverse()
+    .find((t) => approvedCount >= t.milestone);
+
+  if (!qualifiedTier) return null;
+
+  // Check if they already have this reward (or higher)
+  const { data: existingRewards } = await supabase
+    .from("referral_rewards")
+    .select("reward_type, milestone")
+    .eq("member_id", referrerId);
+
+  const alreadyHas = (existingRewards || []).some(
+    (r) => r.milestone >= qualifiedTier.milestone
+  );
+
+  if (alreadyHas) return null;
+
+  // Grant the reward
+  const { data: reward, error } = await supabase
+    .from("referral_rewards")
+    .insert({
+      member_id: referrerId,
+      reward_type: qualifiedTier.type,
+      status: "earned",
+      milestone: qualifiedTier.milestone,
+      discount_pct: qualifiedTier.discount_pct,
+      label: qualifiedTier.label,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error granting reward:", error);
+    return null;
+  }
+
+  revalidatePath("/referrals");
+  return reward as ReferralReward;
+}
+
+export async function getMyRewards(memberId: string): Promise<ReferralReward[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("referral_rewards")
+    .select("*")
+    .eq("member_id", memberId)
+    .order("milestone", { ascending: true });
+
+  return (data || []) as ReferralReward[];
+}
+
+export async function getAllRewards(): Promise<
+  Array<ReferralReward & { member_name: string; member_company: string | null }>
+> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("referral_rewards")
+    .select("*, members!referral_rewards_member_id_fkey(full_name, company)")
+    .order("earned_at", { ascending: false });
+
+  return (data || []).map((r) => {
+    const member = r.members as unknown as { full_name: string; company: string | null } | null;
+    return {
+      ...r,
+      member_name: member?.full_name || "Desconhecido",
+      member_company: member?.company || null,
+    };
+  }) as Array<ReferralReward & { member_name: string; member_company: string | null }>;
+}
+
+export async function redeemReward(rewardId: string): Promise<{ success: boolean; error?: string }> {
+  const supabase = createClient();
+
+  // Verify caller is admin
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user?.email) return { success: false, error: "Unauthorized" };
+
+  const { data: caller } = await supabase
+    .from("members")
+    .select("id, role")
+    .eq("email", user.email)
+    .single();
+
+  if (!caller || !(ADMIN_ROLES as readonly string[]).includes(caller.role)) {
+    return { success: false, error: "Apenas diretoria pode resgatar bonificações" };
+  }
+
+  const { error } = await supabase
+    .from("referral_rewards")
+    .update({
+      status: "redeemed",
+      redeemed_at: new Date().toISOString(),
+      redeemed_by: caller.id,
+    })
+    .eq("id", rewardId)
+    .eq("status", "earned");
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/referrals");
+  return { success: true };
+}
+
+export async function getRewardSummary(): Promise<{
+  totalEarned: number;
+  totalRedeemed: number;
+  totalPending: number;
+  totalDiscountValue: number;
+}> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("referral_rewards")
+    .select("status, discount_pct");
+
+  const rewards = data || [];
+  return {
+    totalEarned: rewards.length,
+    totalRedeemed: rewards.filter((r) => r.status === "redeemed").length,
+    totalPending: rewards.filter((r) => r.status === "earned").length,
+    totalDiscountValue: rewards
+      .filter((r) => r.status === "earned")
+      .reduce((sum, r) => sum + r.discount_pct, 0),
+  };
 }

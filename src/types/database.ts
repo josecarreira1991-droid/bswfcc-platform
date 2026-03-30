@@ -149,6 +149,25 @@ export interface EventCheckin {
   notes: string | null;
 }
 
+export type ReferralRewardType = "discount_10" | "discount_20" | "free_renewal" | "vip_ambassador" | "lifetime_ambassador";
+export type ReferralRewardStatus = "earned" | "redeemed" | "expired";
+
+export interface ReferralReward {
+  id: string;
+  member_id: string;
+  reward_type: ReferralRewardType;
+  status: ReferralRewardStatus;
+  milestone: number;
+  discount_pct: number;
+  label: string;
+  earned_at: string;
+  redeemed_at: string | null;
+  expires_at: string | null;
+  redeemed_by: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
 export interface Referral {
   id: string;
   referrer_id: string;
@@ -162,6 +181,43 @@ export interface Referral {
   reward_given: boolean;
   created_at: string;
   updated_at: string;
+}
+
+// Feed / Mural
+
+export type PostCategory = "anuncio" | "oportunidade" | "parceria" | "evento" | "discussao" | "geral";
+
+export interface Post {
+  id: string;
+  author_id: string;
+  category: PostCategory;
+  title: string;
+  content: string;
+  is_pinned: boolean;
+  is_opportunity: boolean;
+  opportunity_type: string | null;
+  tags: string[];
+  likes_count: number;
+  comments_count: number;
+  is_visible: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PostComment {
+  id: string;
+  post_id: string;
+  author_id: string;
+  content: string;
+  is_visible: boolean;
+  created_at: string;
+}
+
+export interface PostLike {
+  id: string;
+  post_id: string;
+  member_id: string;
+  created_at: string;
 }
 
 export interface Poll {

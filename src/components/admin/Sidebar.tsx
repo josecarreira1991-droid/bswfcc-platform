@@ -24,6 +24,7 @@ import {
   Vote,
   Sparkles,
   Briefcase,
+  Newspaper,
 } from "lucide-react";
 import { logout } from "@/lib/actions/auth";
 import type { Member } from "@/types/database";
@@ -31,6 +32,7 @@ import type { Member } from "@/types/database";
 const mainMenu = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Inbox", href: "/inbox", icon: MessageCircle },
+  { label: "Mural", href: "/mural", icon: Newspaper },
   { label: "Workspace", href: "/workspace", icon: Briefcase },
   { label: "Membros", href: "/membros", icon: Users },
   { label: "Eventos", href: "/eventos", icon: Calendar },

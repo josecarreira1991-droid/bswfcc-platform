@@ -19,12 +19,17 @@ import {
   Phone,
   X,
   ExternalLink,
+  Gift,
+  Star,
+  Sparkles,
+  Trophy,
+  CircleDollarSign,
 } from "lucide-react";
-import { createReferral, updateReferralStatus, generateReferralCode } from "@/lib/actions/referrals";
+import { createReferral, updateReferralStatus, generateReferralCode, redeemReward, getRewardTiers } from "@/lib/actions/referrals";
 import { cn, APP_URL } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
-import type { Member } from "@/types/database";
+import type { Member, ReferralReward } from "@/types/database";
 
 const statusVariant: Record<string, "warning" | "info" | "success" | "gold" | "danger"> = {
   pending: "warning", contacted: "info", registered: "gold", active: "success", declined: "danger",
@@ -58,6 +63,15 @@ interface MyReferral {
   created_at: string;
 }
 
+type RewardWithMember = ReferralReward & { member_name: string; member_company: string | null };
+
+interface RewardSummary {
+  totalEarned: number;
+  totalRedeemed: number;
+  totalPending: number;
+  totalDiscountValue: number;
+}
+
 interface ReferralsViewProps {
   referrals: Array<{
     id: string; referred_name: string; referred_email: string | null; referred_phone: string | null;
@@ -70,9 +84,12 @@ interface ReferralsViewProps {
   stats?: ReferralStats;
   tree?: ReferralTreeItem[];
   myReferrals?: MyReferral[];
+  myRewards?: ReferralReward[];
+  allRewards?: RewardWithMember[];
+  rewardSummary?: RewardSummary;
 }
 
-export default function ReferralsView({ referrals, currentMember, isAdmin, myCode, stats, tree, myReferrals }: ReferralsViewProps) {
+export default function ReferralsView({ referrals, currentMember, isAdmin, myCode, stats, tree, myReferrals, myRewards, allRewards, rewardSummary }: ReferralsViewProps) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -125,6 +142,17 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
     if (result?.error) toast.error(result.error);
     else { toast.success("Status atualizado"); router.refresh(); }
   }
+
+  async function handleRedeem(rewardId: string) {
+    const result = await redeemReward(rewardId);
+    if (result?.error) toast.error(result.error);
+    else { toast.success("Bonificação resgatada!"); router.refresh(); }
+  }
+
+  const rewardTiers = getRewardTiers();
+  const approvedReferralCount = myReferrals?.filter((r) => r.status === "ativo").length || 0;
+  const nextTier = rewardTiers.find((t) => t.milestone > approvedReferralCount);
+  const currentTier = [...rewardTiers].reverse().find((t) => approvedReferralCount >= t.milestone);
 
   function toggleTree(id: string) {
     const next = new Set(expandedTree);
@@ -230,6 +258,185 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* My Rewards / Bonificações Section — for all members */}
+      <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-6 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+            <Gift size={16} className="text-gold" />
+            Suas Bonificações
+          </h2>
+          {currentTier && (
+            <Badge variant="gold">{currentTier.label}</Badge>
+          )}
+        </div>
+
+        {/* Progress toward next tier */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between text-xs mb-2">
+            <span className="text-slate-400">
+              {approvedReferralCount} indicação{approvedReferralCount !== 1 ? "ões" : ""} aprovada{approvedReferralCount !== 1 ? "s" : ""}
+            </span>
+            {nextTier ? (
+              <span className="text-gold">
+                Próximo: {nextTier.label} ({nextTier.milestone - approvedReferralCount} faltando)
+              </span>
+            ) : (
+              <span className="text-gold">Nível máximo atingido!</span>
+            )}
+          </div>
+          <div className="w-full bg-slate-800 rounded-full h-2.5">
+            <div
+              className="bg-gradient-to-r from-gold to-amber-400 h-2.5 rounded-full transition-all duration-500"
+              style={{
+                width: `${Math.min(100, nextTier ? (approvedReferralCount / nextTier.milestone) * 100 : 100)}%`,
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Tier roadmap */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+          {rewardTiers.map((tier) => {
+            const achieved = approvedReferralCount >= tier.milestone;
+            return (
+              <div
+                key={tier.type}
+                className={cn(
+                  "border rounded-lg p-3 text-center transition-all",
+                  achieved
+                    ? "bg-gold/10 border-gold/30"
+                    : "bg-slate-900/30 border-slate-700/30 opacity-60"
+                )}
+              >
+                <div className="flex justify-center mb-1.5">
+                  {tier.milestone === 1 && <Star size={18} className={achieved ? "text-gold" : "text-slate-500"} />}
+                  {tier.milestone === 3 && <Sparkles size={18} className={achieved ? "text-gold" : "text-slate-500"} />}
+                  {tier.milestone === 5 && <Trophy size={18} className={achieved ? "text-gold" : "text-slate-500"} />}
+                  {tier.milestone === 10 && <Crown size={18} className={achieved ? "text-gold" : "text-slate-500"} />}
+                </div>
+                <p className={cn("text-xs font-medium", achieved ? "text-gold" : "text-slate-400")}>
+                  {tier.milestone} indicação{tier.milestone !== 1 ? "ões" : ""}
+                </p>
+                <p className={cn("text-[10px] mt-0.5", achieved ? "text-slate-300" : "text-slate-500")}>
+                  {tier.discount_pct === 100 ? "Anuidade grátis" : `${tier.discount_pct}% desconto`}
+                </p>
+                {achieved && (
+                  <Check size={12} className="text-emerald-400 mx-auto mt-1" />
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* My earned rewards */}
+        {myRewards && myRewards.length > 0 ? (
+          <div className="border-t border-slate-700/50 pt-3">
+            <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-2">Recompensas Conquistadas</p>
+            <div className="space-y-2">
+              {myRewards.map((r) => (
+                <div key={r.id} className="flex items-center justify-between bg-slate-900/30 border border-slate-700/30 rounded-lg px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <CircleDollarSign size={14} className="text-gold" />
+                    <div>
+                      <p className="text-sm text-white">{r.label}</p>
+                      <p className="text-[10px] text-slate-500">
+                        Conquistada em {new Date(r.earned_at).toLocaleDateString("pt-BR")}
+                      </p>
+                    </div>
+                  </div>
+                  <Badge variant={r.status === "redeemed" ? "success" : r.status === "expired" ? "danger" : "gold"}>
+                    {r.status === "earned" ? "Pendente" : r.status === "redeemed" ? "Resgatada" : "Expirada"}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p className="text-xs text-slate-500 border-t border-slate-700/50 pt-3">
+            Indique membros para ganhar bonificações! Cada membro aprovado conta para seu progresso.
+          </p>
+        )}
+      </div>
+
+      {/* Admin: Reward Management */}
+      {isAdmin && rewardSummary && (
+        <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl overflow-hidden mb-6">
+          <div className="px-4 py-3 border-b border-slate-700/50">
+            <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+              <Gift size={16} className="text-gold" />
+              Gestão de Bonificações
+            </h2>
+          </div>
+
+          {/* Summary cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4">
+            <div className="bg-navy/40 border border-slate-700/30 rounded-lg p-2.5 text-center">
+              <p className="text-lg font-bold text-white">{rewardSummary.totalEarned}</p>
+              <p className="text-[10px] text-slate-500">Total Conquistadas</p>
+            </div>
+            <div className="bg-navy/40 border border-slate-700/30 rounded-lg p-2.5 text-center">
+              <p className="text-lg font-bold text-gold">{rewardSummary.totalPending}</p>
+              <p className="text-[10px] text-slate-500">Pendentes Resgate</p>
+            </div>
+            <div className="bg-navy/40 border border-slate-700/30 rounded-lg p-2.5 text-center">
+              <p className="text-lg font-bold text-emerald-400">{rewardSummary.totalRedeemed}</p>
+              <p className="text-[10px] text-slate-500">Resgatadas</p>
+            </div>
+            <div className="bg-navy/40 border border-slate-700/30 rounded-lg p-2.5 text-center">
+              <p className="text-lg font-bold text-white">{rewardSummary.totalDiscountValue}%</p>
+              <p className="text-[10px] text-slate-500">Descontos Pendentes</p>
+            </div>
+          </div>
+
+          {/* All rewards list */}
+          {allRewards && allRewards.length > 0 && (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-700/50">
+                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Membro</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Recompensa</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Desconto</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                  <th className="px-4 py-3 text-right text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Ação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {allRewards.map((r, i) => (
+                  <tr key={r.id} className={cn("border-b border-slate-800/50 hover:bg-slate-800/30", i % 2 !== 0 && "bg-slate-900/20")}>
+                    <td className="px-4 py-3">
+                      <p className="font-medium text-white">{r.member_name}</p>
+                      {r.member_company && <p className="text-[10px] text-slate-500">{r.member_company}</p>}
+                    </td>
+                    <td className="px-4 py-3 text-slate-300 text-xs">{r.label}</td>
+                    <td className="px-4 py-3 text-gold font-medium">{r.discount_pct}%</td>
+                    <td className="px-4 py-3">
+                      <Badge variant={r.status === "redeemed" ? "success" : r.status === "expired" ? "danger" : "gold"}>
+                        {r.status === "earned" ? "Pendente" : r.status === "redeemed" ? "Resgatada" : "Expirada"}
+                      </Badge>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      {r.status === "earned" && (
+                        <button
+                          onClick={() => handleRedeem(r.id)}
+                          className="px-3 py-1.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg hover:bg-emerald-500/20 transition-colors"
+                        >
+                          Resgatar
+                        </button>
+                      )}
+                      {r.status === "redeemed" && r.redeemed_at && (
+                        <span className="text-[10px] text-slate-500">
+                          {new Date(r.redeemed_at).toLocaleDateString("pt-BR")}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
 

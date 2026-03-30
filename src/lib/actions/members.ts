@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import type { Member, MemberRole, MemberStatus } from "@/types/database";
 
 import { ADMIN_ROLES } from "@/lib/utils";
+import { checkAndGrantRewards } from "@/lib/actions/referrals";
 
 async function requireAdmin() {
   const supabase = createClient();
@@ -102,7 +103,19 @@ export async function updateMember(id: string, updates: Partial<Member>) {
 }
 
 export async function approveMember(id: string) {
-  return updateMember(id, { status: "ativo" as MemberStatus });
+  await updateMember(id, { status: "ativo" as MemberStatus });
+
+  // Check if this member was referred — grant reward to referrer if milestone hit
+  const supabase = createClient();
+  const { data: member } = await supabase
+    .from("members")
+    .select("referred_by")
+    .eq("id", id)
+    .single();
+
+  if (member?.referred_by) {
+    await checkAndGrantRewards(member.referred_by);
+  }
 }
 
 export async function rejectMember(id: string) {
