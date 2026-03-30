@@ -301,9 +301,9 @@ const REWARD_TIERS: Array<{
   discount_pct: number;
 }> = [
   { milestone: 1, type: "discount_10", label: "10% de desconto na próxima anuidade", discount_pct: 10 },
-  { milestone: 3, type: "free_renewal", label: "Anuidade grátis no próximo ciclo", discount_pct: 100 },
-  { milestone: 5, type: "vip_ambassador", label: "VIP Ambassador + Anuidade grátis", discount_pct: 100 },
-  { milestone: 10, type: "lifetime_ambassador", label: "Ambassador Vitalício + Anuidade vitalícia", discount_pct: 100 },
+  { milestone: 3, type: "discount_20", label: "20% de desconto na próxima anuidade", discount_pct: 20 },
+  { milestone: 5, type: "vip_ambassador", label: "VIP Ambassador + 50% na anuidade", discount_pct: 50 },
+  { milestone: 10, type: "lifetime_ambassador", label: "Lifetime Ambassador + anuidade grátis", discount_pct: 100 },
 ];
 
 export async function getRewardTiers() {

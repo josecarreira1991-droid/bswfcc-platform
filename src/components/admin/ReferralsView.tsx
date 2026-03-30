@@ -31,11 +31,11 @@ import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
 import type { Member, ReferralReward, ReferralRewardType } from "@/types/database";
 
-const REWARD_TIERS: Array<{ milestone: number; type: ReferralRewardType; label: string; discount_pct: number }> = [
-  { milestone: 1, type: "discount_10", label: "10% de desconto na próxima anuidade", discount_pct: 10 },
-  { milestone: 3, type: "free_renewal", label: "Anuidade grátis no próximo ciclo", discount_pct: 100 },
-  { milestone: 5, type: "vip_ambassador", label: "VIP Ambassador + Anuidade grátis", discount_pct: 100 },
-  { milestone: 10, type: "lifetime_ambassador", label: "Ambassador Vitalício + Anuidade vitalícia", discount_pct: 100 },
+const REWARD_TIERS: Array<{ milestone: number; type: ReferralRewardType; label: string; shortLabel: string; discount_pct: number }> = [
+  { milestone: 1, type: "discount_10", label: "10% de desconto na próxima anuidade", shortLabel: "10% off", discount_pct: 10 },
+  { milestone: 3, type: "discount_20", label: "20% de desconto na próxima anuidade", shortLabel: "20% off", discount_pct: 20 },
+  { milestone: 5, type: "vip_ambassador", label: "VIP Ambassador + 50% na anuidade", shortLabel: "50% off + VIP", discount_pct: 50 },
+  { milestone: 10, type: "lifetime_ambassador", label: "Lifetime Ambassador + anuidade grátis", shortLabel: "100% off", discount_pct: 100 },
 ];
 
 const statusVariant: Record<string, "warning" | "info" | "success" | "gold" | "danger"> = {
@@ -326,8 +326,8 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                 <p className={cn("text-xs font-medium", achieved ? "text-gold" : "text-slate-400")}>
                   {tier.milestone} indicação{tier.milestone !== 1 ? "ões" : ""}
                 </p>
-                <p className={cn("text-[10px] mt-0.5", achieved ? "text-slate-300" : "text-slate-500")}>
-                  {tier.discount_pct === 100 ? "Anuidade grátis" : `${tier.discount_pct}% desconto`}
+                <p className={cn("text-[10px] mt-0.5 font-medium", achieved ? "text-slate-300" : "text-slate-500")}>
+                  {tier.shortLabel}
                 </p>
                 {achieved && (
                   <Check size={12} className="text-emerald-400 mx-auto mt-1" />
