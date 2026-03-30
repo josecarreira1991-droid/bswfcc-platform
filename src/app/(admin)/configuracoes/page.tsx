@@ -1,8 +1,10 @@
 import { getCurrentMember } from "@/lib/actions/auth";
+import { getBotConfig } from "@/lib/actions/bot-config";
 import { redirect } from "next/navigation";
 import { Lock } from "lucide-react";
 import { isAdmin } from "@/lib/utils";
 import IntegrationsPanel from "@/components/admin/IntegrationsPanel";
+import BotConfigPanel from "@/components/admin/BotConfigPanel";
 
 export default async function ConfiguracoesPage() {
   const member = await getCurrentMember();
@@ -17,6 +19,8 @@ export default async function ConfiguracoesPage() {
       </div>
     );
   }
+
+  const botConfig = await getBotConfig().catch(() => null);
 
   return (
     <div>
@@ -48,6 +52,9 @@ export default async function ConfiguracoesPage() {
             </div>
           </div>
         </div>
+
+        {/* Bot Configuration */}
+        <BotConfigPanel config={botConfig} />
 
         {/* Integrations (live status + WhatsApp QR) */}
         <IntegrationsPanel />

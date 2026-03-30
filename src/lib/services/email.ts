@@ -1,16 +1,20 @@
 /**
  * Email Service for BSWFCC
  *
- * Uses nodemailer-compatible SMTP or direct fetch to a mail API.
- * For now, implements a lightweight SMTP sender without extra deps.
+ * Supports two modes:
+ * 1. Resend API — set SMTP_HOST=resend, SMTP_PASS=re_xxxxx
+ * 2. SMTP (nodemailer) — set SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS
  *
- * Env vars required:
- * - SMTP_HOST (e.g., smtp.gmail.com)
- * - SMTP_PORT (e.g., 587)
- * - SMTP_USER (e.g., bswfcc@gmail.com)
- * - SMTP_PASS (app password)
- * - SMTP_FROM (e.g., "BSWFCC <bswfcc@gmail.com>")
+ * Env vars:
+ * - SMTP_HOST (e.g., smtp.gmail.com or "resend")
+ * - SMTP_PORT (default 587)
+ * - SMTP_USER
+ * - SMTP_PASS (SMTP password or Resend API key)
+ * - SMTP_FROM (e.g., "BSWFCC <noreply@bswfcc.com>")
+ * - NEXT_PUBLIC_APP_URL (for links in emails)
  */
+
+import nodemailer from "nodemailer";
 
 interface EmailOptions {
   to: string | string[];
@@ -24,31 +28,54 @@ const SMTP_PORT = parseInt(process.env.SMTP_PORT || "587");
 const SMTP_USER = process.env.SMTP_USER || "";
 const SMTP_PASS = process.env.SMTP_PASS || "";
 const SMTP_FROM = process.env.SMTP_FROM || "BSWFCC <noreply@bswfcc.com>";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://bswfcc.quantrexnow.io";
 
-export function isEmailConfigured(): boolean {
-  return !!(SMTP_HOST && SMTP_USER && SMTP_PASS);
+let transporter: nodemailer.Transporter | null = null;
+
+function getTransporter(): nodemailer.Transporter {
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: SMTP_PORT,
+      secure: SMTP_PORT === 465,
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
+    });
+  }
+  return transporter;
 }
 
-/**
- * Send email using fetch-based API (Resend, Mailgun, etc.)
- * Falls back to a pending state if not configured.
- */
+export function isEmailConfigured(): boolean {
+  return !!(SMTP_HOST && SMTP_PASS);
+}
+
 export async function sendEmail(options: EmailOptions): Promise<{ success: boolean; error?: string }> {
   if (!isEmailConfigured()) {
-    console.log("[Email] SMTP not configured. Email queued:", options.subject);
-    return { success: false, error: "SMTP not configured" };
+    console.log("[Email] Not configured. Skipped:", options.subject);
+    return { success: false, error: "Email not configured" };
   }
 
-  // Use Resend API if SMTP_HOST is "resend"
   if (SMTP_HOST === "resend") {
     return sendViaResend(options);
   }
 
-  // For SMTP, install nodemailer separately: npm install nodemailer @types/nodemailer
-  // Then update this function to use it. For now, log the intent.
-  console.log("[Email] SMTP sending not yet configured. Install nodemailer for SMTP support.");
-  console.log("[Email] To:", options.to, "Subject:", options.subject);
-  return { success: false, error: "SMTP not yet configured. Use Resend or install nodemailer." };
+  return sendViaSMTP(options);
+}
+
+async function sendViaSMTP(options: EmailOptions): Promise<{ success: boolean; error?: string }> {
+  try {
+    const transport = getTransporter();
+    await transport.sendMail({
+      from: SMTP_FROM,
+      to: Array.isArray(options.to) ? options.to.join(", ") : options.to,
+      subject: options.subject,
+      html: options.html,
+      text: options.text || stripHtml(options.html),
+    });
+    return { success: true };
+  } catch (err) {
+    console.error("[Email] SMTP error:", err);
+    return { success: false, error: String(err) };
+  }
 }
 
 async function sendViaResend(options: EmailOptions): Promise<{ success: boolean; error?: string }> {
@@ -92,7 +119,7 @@ export function buildWelcomeEmail(memberName: string): EmailOptions {
         <li>Eventos exclusivos da câmara</li>
         <li>Relatórios de inteligência de mercado</li>
       </ul>
-      <p><a href="https://bswfcc.quantrexnow.io" style="display:inline-block;padding:12px 24px;background:#C9A84C;color:#0A1628;text-decoration:none;border-radius:8px;font-weight:600;">Acessar Plataforma</a></p>
+      <p><a href="${APP_URL}" style="display:inline-block;padding:12px 24px;background:#C9A84C;color:#0A1628;text-decoration:none;border-radius:8px;font-weight:600;">Acessar Plataforma</a></p>
     `),
   };
 }
@@ -107,7 +134,7 @@ export function buildEventEmail(title: string, date: string, time: string | null
       <p><strong>Data:</strong> ${date}</p>
       ${time ? `<p><strong>Horário:</strong> ${time}</p>` : ""}
       ${location ? `<p><strong>Local:</strong> ${location}</p>` : ""}
-      <p><a href="https://bswfcc.quantrexnow.io/eventos" style="display:inline-block;padding:12px 24px;background:#C9A84C;color:#0A1628;text-decoration:none;border-radius:8px;font-weight:600;">Ver Evento</a></p>
+      <p><a href="${APP_URL}/eventos" style="display:inline-block;padding:12px 24px;background:#C9A84C;color:#0A1628;text-decoration:none;border-radius:8px;font-weight:600;">Ver Evento</a></p>
     `),
   };
 }
@@ -128,27 +155,25 @@ export function buildReminderEmail(title: string, date: string, time: string | n
 }
 
 function emailLayout(content: string): string {
-  return `
-    <!DOCTYPE html>
-    <html>
-    <head><meta charset="utf-8"></head>
-    <body style="margin:0;padding:0;background:#0A1628;font-family:Inter,system-ui,sans-serif;">
-      <div style="max-width:560px;margin:0 auto;padding:40px 20px;">
-        <div style="text-align:center;margin-bottom:24px;">
-          <span style="font-size:20px;font-weight:700;color:#C9A84C;">BSWFCC</span>
-          <p style="color:#64748b;font-size:11px;margin:4px 0 0;">Brazilian SouthWest Florida Chamber of Commerce</p>
-        </div>
-        <div style="background:#1B2A4A;border:1px solid rgba(148,163,184,0.15);border-radius:12px;padding:32px;color:#e2e8f0;font-size:14px;line-height:1.6;">
-          ${content}
-        </div>
-        <p style="text-align:center;color:#475569;font-size:11px;margin-top:24px;">
-          BSWFCC | 501(c)(6) | EIN 99-4852466<br>
-          Fort Myers, FL | bswfcc.quantrexnow.io
-        </p>
-      </div>
-    </body>
-    </html>
-  `;
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#0A1628;font-family:Inter,system-ui,sans-serif;">
+  <div style="max-width:560px;margin:0 auto;padding:40px 20px;">
+    <div style="text-align:center;margin-bottom:24px;">
+      <span style="font-size:20px;font-weight:700;color:#C9A84C;">BSWFCC</span>
+      <p style="color:#64748b;font-size:11px;margin:4px 0 0;">Brazilian SouthWest Florida Chamber of Commerce</p>
+    </div>
+    <div style="background:#1B2A4A;border:1px solid rgba(148,163,184,0.15);border-radius:12px;padding:32px;color:#e2e8f0;font-size:14px;line-height:1.6;">
+      ${content}
+    </div>
+    <p style="text-align:center;color:#475569;font-size:11px;margin-top:24px;">
+      BSWFCC | 501(c)(6) | EIN 99-4852466<br>
+      Fort Myers, FL | bswfcc.quantrexnow.io
+    </p>
+  </div>
+</body>
+</html>`;
 }
 
 function stripHtml(html: string): string {
