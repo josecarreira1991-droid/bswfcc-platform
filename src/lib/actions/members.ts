@@ -37,10 +37,14 @@ export async function getAllMembers() {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("members")
-    .select("*")
+    .select("*, referrer:members!members_referred_by_fkey(full_name, company)")
     .order("created_at", { ascending: false });
   if (error) throw error;
-  return data as Member[];
+  return (data || []).map((m) => ({
+    ...m,
+    referrer_name: (m.referrer as { full_name: string } | null)?.full_name || null,
+    referrer_company: (m.referrer as { company: string | null } | null)?.company || null,
+  }));
 }
 
 export async function getMembersByRole(role: string) {

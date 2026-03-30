@@ -15,11 +15,13 @@ import Modal from "@/components/ui/Modal";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import type { Member, MemberRole, MemberStatus } from "@/types/database";
 
+type MemberWithReferrer = Member & { referrer_name?: string | null; referrer_company?: string | null };
+
 type SortKey = "full_name" | "company" | "role" | "status" | "created_at";
 type SortDir = "asc" | "desc";
 
 interface MembersTableProps {
-  members: Member[];
+  members: MemberWithReferrer[];
   currentMember: Member;
 }
 
@@ -39,7 +41,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
   const [page, setPage] = useState(0);
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
   const [editMember, setEditMember] = useState<Member | null>(null);
-  const [confirmAction, setConfirmAction] = useState<{ id: string; name: string; action: "approve" | "reject" } | null>(null);
+  const [confirmAction, setConfirmAction] = useState<{ id: string; name: string; action: "approve" | "reject"; referrer?: string | null } | null>(null);
   const [loading, setLoading] = useState(false);
   const perPage = 15;
 
@@ -256,7 +258,10 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                       </div>
                       <div className="min-w-0">
                         <p className="font-medium text-white truncate">{m.full_name}</p>
-                        <p className="text-[11px] text-slate-500 truncate">{m.email}</p>
+                        <p className="text-[11px] text-slate-500 truncate">
+                          {m.email}
+                          {m.referrer_name && <span className="ml-2 text-gold/60">via {m.referrer_name}</span>}
+                        </p>
                       </div>
                     </div>
                   </td>
@@ -294,14 +299,14 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                         {m.status === "pendente" && (
                           <>
                             <button
-                              onClick={() => setConfirmAction({ id: m.id, name: m.full_name, action: "approve" })}
+                              onClick={() => setConfirmAction({ id: m.id, name: m.full_name, action: "approve", referrer: m.referrer_name })}
                               className="p-1.5 rounded-md text-emerald-500/70 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"
                               title="Aprovar"
                             >
                               <Check size={14} />
                             </button>
                             <button
-                              onClick={() => setConfirmAction({ id: m.id, name: m.full_name, action: "reject" })}
+                              onClick={() => setConfirmAction({ id: m.id, name: m.full_name, action: "reject", referrer: m.referrer_name })}
                               className="p-1.5 rounded-md text-red-500/70 hover:text-red-400 hover:bg-red-500/10 transition-colors"
                               title="Rejeitar"
                             >
@@ -371,6 +376,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                 { label: "LinkedIn", value: selectedMember.linkedin },
                 { label: "Cargo", value: ROLE_LABELS[selectedMember.role] },
                 { label: "Status", value: selectedMember.status },
+                { label: "Indicado por", value: (selectedMember as MemberWithReferrer).referrer_name || "—" },
                 { label: "Membro desde", value: formatDate(selectedMember.created_at) },
               ].map((field) => (
                 <div key={field.label}>
@@ -452,8 +458,8 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
         title={confirmAction?.action === "approve" ? "Aprovar Membro" : "Rejeitar Membro"}
         message={
           confirmAction?.action === "approve"
-            ? `Confirma a aprovação de ${confirmAction?.name}? O membro terá acesso completo à plataforma.`
-            : `Confirma a rejeição de ${confirmAction?.name}? O membro será inativado.`
+            ? `Confirma a aprovação de ${confirmAction?.name}?${confirmAction?.referrer ? ` Indicado por: ${confirmAction.referrer}.` : ""} O membro terá acesso completo à plataforma.`
+            : `Confirma a rejeição de ${confirmAction?.name}?${confirmAction?.referrer ? ` Indicado por: ${confirmAction.referrer}.` : ""} O membro será inativado.`
         }
         confirmLabel={confirmAction?.action === "approve" ? "Aprovar" : "Rejeitar"}
         variant={confirmAction?.action === "approve" ? "default" : "danger"}
