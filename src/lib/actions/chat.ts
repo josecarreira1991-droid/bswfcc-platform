@@ -37,20 +37,25 @@ export async function getMyConversations(): Promise<DirectConversation[]> {
     (members || []).map((m: { id: string; full_name: string; company: string | null; role: string }) => [m.id, m])
   );
 
-  // Fetch unread counts for each conversation
-  const result: DirectConversation[] = [];
+  // Fetch all unread messages in a single batch query
+  const convIds = conversations.map((c) => c.id);
 
-  for (const conv of conversations) {
+  const { data: unreadMessages } = await supabase
+    .from("direct_messages")
+    .select("conversation_id")
+    .in("conversation_id", convIds)
+    .neq("sender_id", member.id)
+    .is("read_at", null);
+
+  // Build a map of convId → unread count
+  const unreadMap = new Map<string, number>();
+  for (const msg of unreadMessages || []) {
+    unreadMap.set(msg.conversation_id, (unreadMap.get(msg.conversation_id) || 0) + 1);
+  }
+
+  return conversations.map((conv) => {
     const otherId = conv.participant_1 === member.id ? conv.participant_2 : conv.participant_1;
-
-    const { count } = await supabase
-      .from("direct_messages")
-      .select("*", { count: "exact", head: true })
-      .eq("conversation_id", conv.id)
-      .neq("sender_id", member.id)
-      .is("read_at", null);
-
-    result.push({
+    return {
       ...conv,
       other_member: memberMap.get(otherId) || {
         id: otherId,
@@ -58,11 +63,9 @@ export async function getMyConversations(): Promise<DirectConversation[]> {
         company: null,
         role: "membro",
       },
-      unread_count: count || 0,
-    });
-  }
-
-  return result;
+      unread_count: unreadMap.get(conv.id) || 0,
+    };
+  });
 }
 
 export async function getOrCreateConversation(otherMemberId: string): Promise<DirectConversation> {
@@ -143,14 +146,6 @@ export async function getMessages(conversationId: string, limit = 100): Promise<
     throw new Error("Forbidden");
   }
 
-  // Mark unread messages from OTHER person as read
-  await supabase
-    .from("direct_messages")
-    .update({ read_at: new Date().toISOString() })
-    .eq("conversation_id", conversationId)
-    .neq("sender_id", member.id)
-    .is("read_at", null);
-
   // Get messages with sender info
   const { data: messages, error } = await supabase
     .from("direct_messages")
@@ -177,6 +172,32 @@ export async function getMessages(conversationId: string, limit = 100): Promise<
     ...msg,
     sender: senderMap.get(msg.sender_id) || { full_name: "Membro", company: null },
   }));
+}
+
+export async function markConversationAsRead(conversationId: string): Promise<void> {
+  const member = await getCurrentMember();
+  if (!member) throw new Error("Unauthorized");
+
+  const supabase = createClient();
+
+  // Verify the member is a participant of this conversation
+  const { data: conv } = await supabase
+    .from("direct_conversations")
+    .select("participant_1, participant_2")
+    .eq("id", conversationId)
+    .single();
+
+  if (!conv || (conv.participant_1 !== member.id && conv.participant_2 !== member.id)) {
+    throw new Error("Forbidden");
+  }
+
+  // Mark unread messages from OTHER person as read
+  await supabase
+    .from("direct_messages")
+    .update({ read_at: new Date().toISOString() })
+    .eq("conversation_id", conversationId)
+    .neq("sender_id", member.id)
+    .is("read_at", null);
 }
 
 export async function sendMessage(

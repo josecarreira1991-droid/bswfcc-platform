@@ -62,6 +62,16 @@ export function isAdmin(role: string): boolean {
   return (ADMIN_ROLES as readonly string[]).includes(role);
 }
 
+export function formatTime(ts: string): string {
+  if (!ts) return "";
+  return new Date(ts).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+}
+
+export function getInitials(name: string): string {
+  if (!name) return "?";
+  return name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+}
+
 export function calculateMatchScore(
   profileA: { services_offered: string[]; services_needed: string[]; target_industries: string[]; languages: string[]; tags: string[] },
   profileB: { services_offered: string[]; services_needed: string[]; target_industries: string[]; languages: string[]; tags: string[] }

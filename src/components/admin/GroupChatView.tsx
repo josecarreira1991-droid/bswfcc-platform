@@ -28,7 +28,7 @@ import {
   updateChannel,
   deleteChannel,
 } from "@/lib/actions/group-chat";
-import { cn, ROLE_LABELS, ADMIN_ROLES } from "@/lib/utils";
+import { cn, ROLE_LABELS, ADMIN_ROLES, formatTime, getInitials } from "@/lib/utils";
 import type { ChatChannel, ChatMessage } from "@/types/database";
 
 interface GroupChatViewProps {
@@ -108,13 +108,18 @@ export default function GroupChatView({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Poll for new messages every 5 seconds
+  // Poll for new messages every 15 seconds
   useEffect(() => {
     if (!selected) return;
     const interval = setInterval(async () => {
       try {
         const msgs = await getChannelMessages(selected.id);
-        setMessages(msgs);
+        setMessages((prev) => {
+          if (prev.length === msgs.length && prev[prev.length - 1]?.id === msgs[msgs.length - 1]?.id) {
+            return prev;
+          }
+          return msgs;
+        });
       } catch {
         /* silent */
       }
@@ -172,27 +177,17 @@ export default function GroupChatView({
       // Upload file client-side directly to Supabase Storage
       if (attachment) {
         setUploading(true);
-        try {
-          const { createClient: createBrowserClient } = await import("@/lib/supabase/client");
-          const supabase = createBrowserClient();
-          const path = `${Date.now()}-${attachment.file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-          const { error: uploadError } = await supabase.storage
-            .from("chat-media")
-            .upload(path, attachment.file, { upsert: true });
-          if (uploadError) throw uploadError;
-          const { data: urlData } = supabase.storage.from("chat-media").getPublicUrl(path);
-          mediaUrl = urlData.publicUrl;
-          mediaType = attachment.mediaType;
-          mediaName = attachment.file.name;
-        } catch (err) {
-          toast.error(
-            `Erro no upload: ${err instanceof Error ? err.message : "Falha no envio"}`
-          );
-          setSending(false);
-          setUploading(false);
-          return;
-        }
-        setUploading(false);
+        const { createClient: createBrowserClient } = await import("@/lib/supabase/client");
+        const supabase = createBrowserClient();
+        const path = `${Date.now()}-${attachment.file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+        const { error: uploadError } = await supabase.storage
+          .from("chat-media")
+          .upload(path, attachment.file, { upsert: true });
+        if (uploadError) throw uploadError;
+        const { data: urlData } = supabase.storage.from("chat-media").getPublicUrl(path);
+        mediaUrl = urlData.publicUrl;
+        mediaType = attachment.mediaType;
+        mediaName = attachment.file.name;
       }
 
       await sendChannelMessage(
@@ -204,15 +199,17 @@ export default function GroupChatView({
       );
 
       setNewMessage("");
-      clearAttachment();
 
       // Refresh messages
       const msgs = await getChannelMessages(selected.id);
       setMessages(msgs);
     } catch {
       toast.error("Erro ao enviar mensagem");
+    } finally {
+      setSending(false);
+      setUploading(false);
+      clearAttachment();
     }
-    setSending(false);
   }
 
   async function handleCreateChannel() {
@@ -285,22 +282,6 @@ export default function GroupChatView({
       toast.error(err instanceof Error ? err.message : "Erro ao excluir canal");
     }
   }
-
-  const formatTime = (ts: string) => {
-    const d = new Date(ts);
-    return d.toLocaleTimeString("pt-BR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
 
   function renderMedia(msg: ChatMessage) {
     if (!msg.media_url) return null;

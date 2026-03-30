@@ -23,8 +23,9 @@ import {
   getOrCreateConversation,
   getAvailableMembers,
   deleteDirectMessage,
+  markConversationAsRead,
 } from "@/lib/actions/chat";
-import { cn, ROLE_LABELS } from "@/lib/utils";
+import { cn, ROLE_LABELS, formatTime, getInitials } from "@/lib/utils";
 import type { DirectConversation, DirectMessage } from "@/types/database";
 
 interface DirectChatViewProps {
@@ -65,7 +66,10 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
     setMobileShowChat(true);
     setLoading(true);
     try {
-      const msgs = await getMessages(conv.id);
+      const [msgs] = await Promise.all([
+        getMessages(conv.id),
+        markConversationAsRead(conv.id),
+      ]);
       setMessages(msgs);
       // Clear unread count locally
       setConvList((prev) =>
@@ -88,7 +92,12 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
     const interval = setInterval(async () => {
       try {
         const msgs = await getMessages(selected.id);
-        setMessages(msgs);
+        setMessages((prev) => {
+          if (prev.length === msgs.length && prev[prev.length - 1]?.id === msgs[msgs.length - 1]?.id) {
+            return prev;
+          }
+          return msgs;
+        });
       } catch {
         /* silent */
       }
@@ -143,31 +152,22 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
 
       if (attachment) {
         setUploading(true);
-        try {
-          const { createClient: createBrowserClient } = await import("@/lib/supabase/client");
-          const supabase = createBrowserClient();
-          const path = `${Date.now()}-${attachment.file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-          const { error: uploadError } = await supabase.storage
-            .from("chat-media")
-            .upload(path, attachment.file, { upsert: true });
-          if (uploadError) throw uploadError;
-          const { data: urlData } = supabase.storage.from("chat-media").getPublicUrl(path);
-          mediaUrl = urlData.publicUrl;
-          mediaType = attachment.mediaType;
-          mediaName = attachment.file.name;
-        } catch (err) {
-          toast.error(`Erro no upload: ${err instanceof Error ? err.message : "Falha"}`);
-          setSending(false);
-          setUploading(false);
-          return;
-        }
-        setUploading(false);
+        const { createClient: createBrowserClient } = await import("@/lib/supabase/client");
+        const supabase = createBrowserClient();
+        const path = `${Date.now()}-${attachment.file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+        const { error: uploadError } = await supabase.storage
+          .from("chat-media")
+          .upload(path, attachment.file, { upsert: true });
+        if (uploadError) throw uploadError;
+        const { data: urlData } = supabase.storage.from("chat-media").getPublicUrl(path);
+        mediaUrl = urlData.publicUrl;
+        mediaType = attachment.mediaType;
+        mediaName = attachment.file.name;
       }
 
       await sendMessage(selected.id, newMessage.trim() || "", mediaUrl, mediaType, mediaName);
       const msgText = newMessage.trim();
       setNewMessage("");
-      clearAttachment();
       // Refresh messages
       const msgs = await getMessages(selected.id);
       setMessages(msgs);
@@ -181,8 +181,11 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
       );
     } catch {
       toast.error("Erro ao enviar mensagem");
+    } finally {
+      setSending(false);
+      setUploading(false);
+      clearAttachment();
     }
-    setSending(false);
   }
 
   async function handleDeleteMessage(messageId: string) {
@@ -229,11 +232,6 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
     }
   }
 
-  const formatTime = (ts: string) => {
-    const d = new Date(ts);
-    return d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-  };
-
   const formatConvTime = (ts: string) => {
     const d = new Date(ts);
     const now = new Date();
@@ -242,14 +240,6 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
     if (diff < 172800000) return "Ontem";
     return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
   };
-
-  const getInitials = (name: string) =>
-    name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
 
   const filteredConversations = convList.filter((conv) => {
     if (!searchTerm) return true;

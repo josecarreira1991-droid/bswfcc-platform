@@ -7,13 +7,7 @@ export default async function GrupoPage() {
   const member = await getCurrentMember();
   if (!member) redirect("/login");
 
-  let channels: Awaited<ReturnType<typeof getChannels>> = [];
-
-  try {
-    channels = await getChannels().catch(() => []);
-  } catch {
-    // Tables might not exist yet
-  }
+  const channels = await getChannels().catch(() => []);
 
   return (
     <div>

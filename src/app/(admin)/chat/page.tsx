@@ -7,13 +7,7 @@ export default async function ChatPage() {
   const member = await getCurrentMember();
   if (!member) redirect("/login");
 
-  let conversations: Awaited<ReturnType<typeof getMyConversations>> = [];
-
-  try {
-    conversations = await getMyConversations().catch(() => []);
-  } catch {
-    // Tables might not exist yet
-  }
+  const conversations = await getMyConversations().catch(() => []);
 
   return (
     <div>
