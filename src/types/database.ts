@@ -70,6 +70,94 @@ export interface Director {
   order_index: number;
 }
 
+// Phase 3: Messaging & Notifications
+
+export type ConversationStatus = "open" | "closed" | "archived";
+export type MessageDirection = "inbound" | "outbound";
+export type MessageContentType = "text" | "image" | "document" | "audio" | "video" | "location" | "system";
+export type MessageStatus = "pending" | "sent" | "delivered" | "read" | "failed";
+export type NotificationChannel = "whatsapp" | "email" | "both";
+export type TemplateCategory = "welcome" | "event" | "reminder" | "billing" | "general" | "broadcast";
+export type WahaSessionStatus = "connected" | "disconnected" | "qr_pending" | "error";
+
+export interface Conversation {
+  id: string;
+  member_id: string | null;
+  whatsapp_number: string;
+  member_name: string | null;
+  last_message: string | null;
+  last_message_at: string;
+  unread_count: number;
+  status: ConversationStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Message {
+  id: string;
+  conversation_id: string;
+  direction: MessageDirection;
+  content: string;
+  content_type: MessageContentType;
+  whatsapp_message_id: string | null;
+  sender_name: string | null;
+  is_from_bot: boolean;
+  metadata: Record<string, unknown>;
+  status: MessageStatus;
+  created_at: string;
+}
+
+export interface MessageTemplate {
+  id: string;
+  name: string;
+  category: TemplateCategory;
+  content: string;
+  variables: string[];
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NotificationLog {
+  id: string;
+  member_id: string | null;
+  channel: NotificationChannel;
+  template_id: string | null;
+  subject: string | null;
+  content: string;
+  status: string;
+  error_message: string | null;
+  metadata: Record<string, unknown>;
+  sent_at: string | null;
+  created_at: string;
+}
+
+export interface WahaSession {
+  id: string;
+  session_name: string;
+  status: WahaSessionStatus;
+  phone_number: string | null;
+  qr_code: string | null;
+  last_ping: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BotConfig {
+  id: string;
+  is_active: boolean;
+  model: string;
+  system_prompt: string;
+  max_tokens: number;
+  temperature: number;
+  auto_reply_enabled: boolean;
+  auto_reply_delay_ms: number;
+  working_hours_only: boolean;
+  working_hours_start: string;
+  working_hours_end: string;
+  updated_at: string;
+}
+
 export type Database = {
   public: {
     Tables: {
