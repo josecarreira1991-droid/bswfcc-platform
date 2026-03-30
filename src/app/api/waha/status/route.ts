@@ -10,6 +10,15 @@ export async function GET() {
   const status = await getSessionStatus();
   let qrCode = null;
 
+  // If Waha is unreachable, return friendly disconnected status
+  if (status.status === "error") {
+    return NextResponse.json({
+      status: "disconnected",
+      error: "Servidor WhatsApp (Waha) não está acessível. Verifique se o container está rodando.",
+      qrCode: null,
+    });
+  }
+
   if (status.status === "qr_pending" || status.status === "disconnected") {
     qrCode = await getQRCode();
   }
