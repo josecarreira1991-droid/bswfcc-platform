@@ -179,10 +179,16 @@ export async function getMessages(conversationId: string, limit = 100): Promise<
   }));
 }
 
-export async function sendMessage(conversationId: string, content: string): Promise<DirectMessage> {
+export async function sendMessage(
+  conversationId: string,
+  content: string,
+  mediaUrl?: string,
+  mediaType?: string,
+  mediaName?: string
+): Promise<DirectMessage> {
   const member = await getCurrentMember();
   if (!member) throw new Error("Unauthorized");
-  if (!content.trim()) throw new Error("Message cannot be empty");
+  if (!content.trim() && !mediaUrl) throw new Error("Message cannot be empty");
 
   const supabase = createClient();
 
@@ -197,13 +203,21 @@ export async function sendMessage(conversationId: string, content: string): Prom
     throw new Error("Forbidden");
   }
 
+  const insertData: Record<string, unknown> = {
+    conversation_id: conversationId,
+    sender_id: member.id,
+    content: content.trim() || null,
+  };
+
+  if (mediaUrl) {
+    insertData.media_url = mediaUrl;
+    insertData.media_type = mediaType || null;
+    insertData.media_name = mediaName || null;
+  }
+
   const { data, error } = await supabase
     .from("direct_messages")
-    .insert({
-      conversation_id: conversationId,
-      sender_id: member.id,
-      content: content.trim(),
-    })
+    .insert(insertData)
     .select()
     .single();
 

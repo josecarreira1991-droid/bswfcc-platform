@@ -11,6 +11,10 @@ import {
   Plus,
   ChevronLeft,
   X,
+  Paperclip,
+  Film,
+  FileText,
+  Download,
 } from "lucide-react";
 import {
   getMessages,
@@ -18,6 +22,7 @@ import {
   getOrCreateConversation,
   getAvailableMembers,
 } from "@/lib/actions/chat";
+import { uploadMedia } from "@/lib/actions/group-chat";
 import { cn, ROLE_LABELS } from "@/lib/utils";
 import type { DirectConversation, DirectMessage } from "@/types/database";
 
@@ -47,7 +52,11 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
   const [availableMembers, setAvailableMembers] = useState<AvailableMember[]>([]);
   const [memberSearch, setMemberSearch] = useState("");
   const [loadingMembers, setLoadingMembers] = useState(false);
+  const [attachment, setAttachment] = useState<{ file: File; preview: string | null; mediaType: "image" | "video" | "file" } | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const selectConversation = useCallback(async (conv: DirectConversation) => {
     setSelected(conv);
@@ -98,12 +107,59 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
     setConvList(conversations);
   }, [conversations]);
 
+  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Arquivo muito grande. Limite: 10MB");
+      return;
+    }
+    let mediaType: "image" | "video" | "file" = "file";
+    let preview: string | null = null;
+    if (file.type.startsWith("image/")) {
+      mediaType = "image";
+      preview = URL.createObjectURL(file);
+    } else if (file.type.startsWith("video/")) {
+      mediaType = "video";
+    }
+    setAttachment({ file, preview, mediaType });
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
+
+  function clearAttachment() {
+    if (attachment?.preview) URL.revokeObjectURL(attachment.preview);
+    setAttachment(null);
+  }
+
   async function handleSend() {
-    if (!newMessage.trim() || !selected || sending) return;
+    if ((!newMessage.trim() && !attachment) || !selected || sending) return;
     setSending(true);
     try {
-      await sendMessage(selected.id, newMessage.trim());
+      let mediaUrl: string | undefined;
+      let mediaType: string | undefined;
+      let mediaName: string | undefined;
+
+      if (attachment) {
+        setUploading(true);
+        const formData = new FormData();
+        formData.append("file", attachment.file);
+        try {
+          mediaUrl = await uploadMedia(formData);
+          mediaType = attachment.mediaType;
+          mediaName = attachment.file.name;
+        } catch (err) {
+          toast.error(`Erro no upload: ${err instanceof Error ? err.message : "Falha"}`);
+          setSending(false);
+          setUploading(false);
+          return;
+        }
+        setUploading(false);
+      }
+
+      await sendMessage(selected.id, newMessage.trim() || "", mediaUrl, mediaType, mediaName);
+      const msgText = newMessage.trim();
       setNewMessage("");
+      clearAttachment();
       // Refresh messages
       const msgs = await getMessages(selected.id);
       setMessages(msgs);
@@ -111,7 +167,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
       setConvList((prev) =>
         prev.map((c) =>
           c.id === selected.id
-            ? { ...c, last_message: newMessage.trim(), last_message_at: new Date().toISOString() }
+            ? { ...c, last_message: msgText || (mediaName ? `[${mediaType === "image" ? "Imagem" : mediaType === "video" ? "Video" : "Arquivo"}]` : ""), last_message_at: new Date().toISOString() }
             : c
         )
       );
@@ -363,9 +419,27 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                               {msg.sender.full_name}
                             </p>
                           )}
-                          <p className="text-sm text-white whitespace-pre-wrap break-words">
-                            {msg.content}
-                          </p>
+                          {/* Media rendering */}
+                          {msg.media_url && msg.media_type === "image" && (
+                            <button onClick={() => setFullscreenImage(msg.media_url)} className="mt-1 block">
+                              <img src={msg.media_url} alt={msg.media_name || "Imagem"} className="max-w-sm w-full rounded-lg border border-slate-700/30 hover:opacity-90 transition-opacity cursor-pointer" />
+                            </button>
+                          )}
+                          {msg.media_url && msg.media_type === "video" && (
+                            <video src={msg.media_url} controls className="max-w-sm w-full rounded-lg border border-slate-700/30 mt-1" />
+                          )}
+                          {msg.media_url && msg.media_type === "file" && (
+                            <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 mt-1 px-3 py-2 bg-slate-800/50 border border-slate-700/30 rounded-lg hover:bg-slate-800/80 transition-colors max-w-sm">
+                              <FileText size={16} className="text-gold flex-shrink-0" />
+                              <span className="text-xs text-slate-300 truncate">{msg.media_name || "Arquivo"}</span>
+                              <Download size={14} className="text-slate-500 flex-shrink-0 ml-auto" />
+                            </a>
+                          )}
+                          {msg.content && (
+                            <p className="text-sm text-white whitespace-pre-wrap break-words">
+                              {msg.content}
+                            </p>
+                          )}
                           <p
                             className={cn(
                               "text-[10px] mt-1",
@@ -386,9 +460,47 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                 <div ref={messagesEndRef} />
               </div>
 
+              {/* Attachment preview */}
+              {attachment && (
+                <div className="px-4 py-2 border-t border-slate-700/30 bg-slate-800/30">
+                  <div className="flex items-center gap-3">
+                    {attachment.mediaType === "image" && attachment.preview ? (
+                      <img src={attachment.preview} alt="Preview" className="h-16 rounded-lg border border-slate-700/30 object-cover" />
+                    ) : attachment.mediaType === "video" ? (
+                      <div className="flex items-center gap-2 px-3 py-2 bg-slate-700/30 rounded-lg">
+                        <Film size={16} className="text-gold" />
+                        <span className="text-xs text-slate-300 truncate max-w-[200px]">{attachment.file.name}</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 px-3 py-2 bg-slate-700/30 rounded-lg">
+                        <FileText size={16} className="text-gold" />
+                        <span className="text-xs text-slate-300 truncate max-w-[200px]">{attachment.file.name}</span>
+                      </div>
+                    )}
+                    <button onClick={clearAttachment} className="p-1 text-slate-400 hover:text-red-400 transition-colors">
+                      <X size={16} />
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Message Input */}
               <div className="px-4 py-3 border-t border-slate-700/50">
                 <div className="flex items-end gap-2">
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="p-2.5 text-slate-400 hover:text-gold transition-colors"
+                    title="Anexar arquivo"
+                  >
+                    <Paperclip size={18} />
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*,video/mp4,video/quicktime,.pdf"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
                   <textarea
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
@@ -404,10 +516,14 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                   />
                   <button
                     onClick={handleSend}
-                    disabled={!newMessage.trim() || sending}
+                    disabled={(!newMessage.trim() && !attachment) || sending}
                     className="p-2.5 bg-gold text-navy rounded-xl hover:bg-light-gold transition-colors disabled:opacity-30"
                   >
-                    <Send size={16} />
+                    {uploading ? (
+                      <div className="animate-spin w-4 h-4 border-2 border-navy/30 border-t-navy rounded-full" />
+                    ) : (
+                      <Send size={16} />
+                    )}
                   </button>
                 </div>
               </div>
@@ -502,6 +618,27 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
               )}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Fullscreen Image Viewer */}
+      {fullscreenImage && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+          onClick={() => setFullscreenImage(null)}
+        >
+          <button
+            onClick={() => setFullscreenImage(null)}
+            className="absolute top-4 right-4 text-white/60 hover:text-white p-2"
+          >
+            <X size={24} />
+          </button>
+          <img
+            src={fullscreenImage}
+            alt="Imagem completa"
+            className="max-w-full max-h-full object-contain rounded-lg"
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
     </>

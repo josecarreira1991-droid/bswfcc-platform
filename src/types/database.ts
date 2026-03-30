@@ -433,10 +433,40 @@ export interface DirectMessage {
   sender_id: string;
   content: string;
   read_at: string | null;
+  media_url: string | null;
+  media_type: string | null;
+  media_name: string | null;
   created_at: string;
   sender?: {
     full_name: string;
     company: string | null;
+  };
+}
+
+// Phase 7: Group Chat
+
+export interface ChatChannel {
+  id: string;
+  name: string;
+  description: string | null;
+  is_default: boolean;
+  created_by: string | null;
+  created_at: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  channel_id: string;
+  sender_id: string;
+  content: string | null;
+  media_url: string | null;
+  media_type: string | null;
+  media_name: string | null;
+  created_at: string;
+  sender?: {
+    full_name: string;
+    company: string | null;
+    role: string;
   };
 }
 
