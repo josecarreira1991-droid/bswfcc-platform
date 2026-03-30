@@ -125,6 +125,7 @@ function formatRoleName(role: string): string {
     tesoureiro: "Tesoureiro",
     diretor_marketing: "Dir. Mkt",
     diretor_tecnologia: "Dir. Tech",
+    head_automation: "Head Autom.",
     diretor_inovacao: "Dir. Inov.",
     diretor: "Diretor",
     membro: "Membro",

@@ -188,11 +188,11 @@ CREATE INDEX IF NOT EXISTS idx_directors_order ON public.directors(order_index);
 -- SEED DATA: DIRECTORS
 -- ============================================
 INSERT INTO public.directors (name, role, profile, linkedin, company, order_index) VALUES
-  ('Carlo Barbieri', 'Presidente', 'CEO Oxford Group. Formação FGV, Sorbonne, Harvard, MIT. Apresentador Focus Brasil. Conselho Consular Miami.', 'linkedin.com/in/carlobarbieri', 'Oxford Group', 1),
+  ('Carlo Barbieri', 'Presidente', 'CEO Oxford Group. Formação FGV, Sorbonne, Harvard, MIT. Apresentador Focus Brasil. Conselho Consular Miami.', NULL, 'Oxford Group', 1),
   ('Andre O. Carvalho', 'Presidente Honorário', 'Consul-Geral do Brasil em Miami. Diplomata com passagens por Buenos Aires, Moscou, Londres e Bruxelas.', NULL, 'Consulado do Brasil em Miami', 2),
   ('Bruno Rogers', 'Vice-Presidente', '4 empresas ativas na Florida. Liderança comunitária em Sarasota.', NULL, NULL, 3),
   ('Sidney Bezerra', 'Secretário', 'Engenheiro elétrico com mais de 10 anos na AT&T.', NULL, 'AT&T', 4),
-  ('Andrea Schossler', 'Tesoureira', 'Gestão financeira. Baseada em Lakewood Ranch, FL.', 'linkedin.com/in/andreaschossler', NULL, 5),
+  ('Andrea Schossler', 'Tesoureira', 'Gestão financeira. Baseada em Lakewood Ranch, FL.', NULL, NULL, 5),
   ('Isabelle Nepomuceno', 'Diretora de Marketing', 'Head de Operações na Seven Ophthalmic.', NULL, 'Seven Ophthalmic', 6),
   ('Ricardo Padovan', 'Diretor de Tecnologia', 'Fundador RPM Digital. Ex-IBM, Nokia, Intel.', NULL, 'RPM Digital', 7),
   ('Brenno Dias', 'Diretor de Inovação Financeira', 'CEO TB Financial Services. Formado pelo ITA. Contador.', NULL, 'TB Financial Services', 8),
