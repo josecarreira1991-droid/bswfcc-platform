@@ -80,7 +80,8 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
   const [expandedTree, setExpandedTree] = useState<Set<string>>(new Set());
   const [generatingCode, setGeneratingCode] = useState(false);
 
-  const shareUrl = myCode ? `https://bswfcc.quantrexnow.io/convite/${myCode}` : null;
+  const appUrl = typeof window !== "undefined" ? window.location.origin : "https://bswfcc.quantrexnow.io";
+  const shareUrl = myCode ? `${appUrl}/convite/${myCode}` : null;
 
   function copyCode() {
     if (shareUrl) {
@@ -154,15 +155,13 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
             <Link2 size={16} className="text-gold" />
             Seu Código de Indicação
           </h2>
-          {!myCode && (
-            <button
-              onClick={handleGenerateCode}
-              disabled={generatingCode}
-              className="px-3 py-1.5 text-xs font-medium bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/20 transition-colors disabled:opacity-50"
-            >
-              {generatingCode ? "Gerando..." : "Gerar Código"}
-            </button>
-          )}
+          <button
+            onClick={handleGenerateCode}
+            disabled={generatingCode}
+            className="px-3 py-1.5 text-xs font-medium bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/20 transition-colors disabled:opacity-50"
+          >
+            {generatingCode ? "Gerando..." : myCode ? "Gerar Novo" : "Gerar Código"}
+          </button>
         </div>
 
         {myCode ? (
