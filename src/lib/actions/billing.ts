@@ -1,12 +1,13 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { requireAuth, requireAdmin } from "./auth-helpers";
 import type { MembershipTier, Subscription, Payment } from "@/types/database";
 
-// ─── Tiers ───
+// ─── Tiers (public read for authenticated users) ───
 
 export async function getTiers() {
-  const supabase = createClient();
+  const { supabase } = await requireAuth();
   const { data, error } = await supabase
     .from("membership_tiers")
     .select("*")
@@ -19,18 +20,23 @@ export async function getTiers() {
 // ─── Subscriptions ───
 
 export async function getSubscription(memberId: string) {
-  const supabase = createClient();
+  const { supabase, memberId: callerId } = await requireAuth();
+  // Members can only view their own subscription
+  if (memberId !== callerId) {
+    const { callerRole } = await requireAdmin();
+    void callerRole; // admin check passed
+  }
   const { data, error } = await supabase
     .from("subscriptions")
     .select("*, membership_tiers(*)")
     .eq("member_id", memberId)
     .single();
-  if (error && error.code !== "PGRST116") throw error; // PGRST116 = no rows
+  if (error && error.code !== "PGRST116") throw error;
   return data as (Subscription & { membership_tiers: MembershipTier }) | null;
 }
 
 export async function getAllSubscriptions() {
-  const supabase = createClient();
+  const { supabase } = await requireAdmin();
   const { data, error } = await supabase
     .from("subscriptions")
     .select("*, members(full_name, email, company), membership_tiers(name, slug, price_monthly)")
@@ -50,7 +56,7 @@ export async function upsertSubscription(
     periodEnd?: string;
   }
 ) {
-  const supabase = createClient();
+  const { supabase } = await requireAdmin();
   const { error } = await supabase
     .from("subscriptions")
     .upsert({
@@ -71,7 +77,7 @@ export async function upsertSubscription(
 // ─── Payments ───
 
 export async function getPayments(limit = 50) {
-  const supabase = createClient();
+  const { supabase } = await requireAdmin();
   const { data, error } = await supabase
     .from("payments")
     .select("*, members(full_name, email)")
@@ -82,7 +88,11 @@ export async function getPayments(limit = 50) {
 }
 
 export async function getMemberPayments(memberId: string) {
-  const supabase = createClient();
+  const { supabase, memberId: callerId } = await requireAuth();
+  // Members can only view their own payments
+  if (memberId !== callerId) {
+    await requireAdmin();
+  }
   const { data, error } = await supabase
     .from("payments")
     .select("*")
@@ -103,7 +113,7 @@ export async function recordPayment(
     description?: string;
   }
 ) {
-  const supabase = createClient();
+  const { supabase } = await requireAdmin();
   const { error } = await supabase.from("payments").insert({
     member_id: memberId,
     subscription_id: stripeData?.subscriptionId || null,
@@ -120,7 +130,7 @@ export async function recordPayment(
 // ─── Financial Stats ───
 
 export async function getFinancialStats() {
-  const supabase = createClient();
+  const { supabase } = await requireAdmin();
 
   const [subsResult, paymentsResult, tiersResult] = await Promise.all([
     supabase.from("subscriptions").select("status, tier_id"),

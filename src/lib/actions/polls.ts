@@ -1,11 +1,11 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { requireAdmin } from "./auth-helpers";
+import { requireAuth, requireAdmin } from "./auth-helpers";
 import type { Poll, PollOption } from "@/types/database";
 
 export async function getPolls(status?: string) {
-  const supabase = createClient();
+  const { supabase } = await requireAuth();
   let query = supabase.from("polls").select("*").order("created_at", { ascending: false });
   if (status && status !== "all") query = query.eq("status", status);
   const { data, error } = await query;
@@ -14,7 +14,7 @@ export async function getPolls(status?: string) {
 }
 
 export async function getPollWithOptions(pollId: string) {
-  const supabase = createClient();
+  const { supabase } = await requireAuth();
   const [pollResult, optionsResult] = await Promise.all([
     supabase.from("polls").select("*").eq("id", pollId).single(),
     supabase.from("poll_options").select("*").eq("poll_id", pollId).order("sort_order"),
@@ -24,7 +24,7 @@ export async function getPollWithOptions(pollId: string) {
 }
 
 export async function getPollResults(pollId: string) {
-  const supabase = createClient();
+  const { supabase } = await requireAuth();
   const { data, error } = await supabase
     .from("poll_votes")
     .select("option_id, member_id")
@@ -74,8 +74,9 @@ export async function createPoll(formData: FormData) {
   return { success: true, pollId: poll.id };
 }
 
-export async function vote(pollId: string, optionId: string, memberId: string) {
-  const supabase = createClient();
+export async function vote(pollId: string, optionId: string, _memberId?: string) {
+  // Force use of authenticated member — ignore client-provided memberId
+  const { supabase, memberId } = await requireAuth();
 
   const [{ data: poll }, { data: existing }] = await Promise.all([
     supabase.from("polls").select("type").eq("id", pollId).single(),

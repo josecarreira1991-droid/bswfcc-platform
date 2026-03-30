@@ -1,11 +1,16 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import { APP_URL } from "@/lib/utils";
+import { requireAuth } from "./auth-helpers";
+import { APP_URL, ADMIN_ROLES } from "@/lib/utils";
 import type { EventCheckin } from "@/types/database";
 
 export async function checkInToEvent(eventId: string, memberId: string, method: "qr" | "manual" = "qr") {
-  const supabase = createClient();
+  const { supabase, memberId: callerId, memberRole } = await requireAuth();
+  // Only allow checking in yourself, or admins checking in others
+  if (memberId !== callerId && !(ADMIN_ROLES as readonly string[]).includes(memberRole)) {
+    return { error: "Sem permissão para fazer check-in de outro membro" };
+  }
   const { error } = await supabase.from("event_checkins").insert({
     event_id: eventId,
     member_id: memberId,
@@ -20,7 +25,7 @@ export async function checkInToEvent(eventId: string, memberId: string, method: 
 }
 
 export async function getEventCheckins(eventId: string) {
-  const supabase = createClient();
+  const { supabase } = await requireAuth();
   const { data, error } = await supabase
     .from("event_checkins")
     .select("*, members(full_name, company, email)")
@@ -31,7 +36,7 @@ export async function getEventCheckins(eventId: string) {
 }
 
 export async function getCheckinCount(eventId: string) {
-  const supabase = createClient();
+  const { supabase } = await requireAuth();
   const { count } = await supabase
     .from("event_checkins")
     .select("*", { count: "exact", head: true })

@@ -51,7 +51,7 @@ export default async function DashboardPage() {
           { label: "Total de Membros", value: stats.total, icon: Users, color: "text-gold" },
           { label: "Membros Ativos", value: stats.ativos, icon: UserCheck, color: "text-emerald-400" },
           { label: "Pendentes", value: stats.pendentes, icon: Clock, color: "text-amber-400" },
-          { label: "Comércio FL-Brasil", value: tradeData?.value || "$25.6B", icon: TrendingUp, color: "text-blue-400" },
+          { label: "Comércio FL-Brasil", value: tradeData?.value || "—", icon: TrendingUp, color: "text-blue-400" },
         ].map((stat) => (
           <div
             key={stat.label}

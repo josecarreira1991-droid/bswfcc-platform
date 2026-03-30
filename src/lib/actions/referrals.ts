@@ -144,18 +144,8 @@ export async function useReferralCode(code: string, newMemberId: string): Promis
 
   if (updateError) return { success: false, error: updateError.message };
 
-  // Increment referral_count on the referring member
-  const { data: referrer } = await supabase
-    .from("members")
-    .select("referral_count")
-    .eq("id", codeData.member_id)
-    .single();
-
-  const currentCount = referrer?.referral_count || 0;
-  await supabase
-    .from("members")
-    .update({ referral_count: currentCount + 1 })
-    .eq("id", codeData.member_id);
+  // Increment referral_count atomically (avoids race condition with concurrent registrations)
+  await supabase.rpc("increment_referral_count", { member_uuid: codeData.member_id });
 
   // Set referred_by on the new member
   await supabase

@@ -101,6 +101,14 @@ export async function deleteEvent(id: string) {
 
 export async function registerForEvent(eventId: string, memberId: string) {
   const supabase = createClient();
+  // Verify authenticated user matches memberId (prevent registering others)
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user?.email) return { error: "Unauthorized" };
+  const { data: caller } = await supabase.from("members").select("id, role").eq("email", user.email).single();
+  if (!caller) return { error: "Membro não encontrado" };
+  if (caller.id !== memberId && !(ADMIN_ROLES as readonly string[]).includes(caller.role)) {
+    return { error: "Sem permissão para inscrever outro membro" };
+  }
   const { error } = await supabase.from("event_registrations").insert({
     event_id: eventId,
     member_id: memberId,

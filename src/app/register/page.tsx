@@ -7,10 +7,10 @@ import { useState, useEffect, Suspense } from "react";
 import { UserCheck, ShieldAlert, X } from "lucide-react";
 
 const tiers = [
-  { value: "membro", label: "Community", price: "$50/mês ($600/ano)", desc: "Mixers mensais, diretório de membros, newsletter, introduções básicas" },
-  { value: "membro", label: "Business", price: "$150/mês ($1.800/ano)", desc: "Tudo do Community + workshops trimestrais, tours SeaPort, seminários jurídicos/fiscais" },
-  { value: "membro", label: "Executive", price: "$500/mês ($6.000/ano)", desc: "Tudo do Business + consultoria 1:1, suporte para entrada no mercado brasileiro" },
-  { value: "membro", label: "Trustee", price: "$1.500/mês ($18.000/ano)", desc: "Tudo do Executive + acesso ao conselho, missões comerciais, gerente dedicado" },
+  { value: "membro", slug: "community", label: "Community", price: "$50/mês ($600/ano)", desc: "Mixers mensais, diretório de membros, newsletter, introduções básicas" },
+  { value: "membro", slug: "business", label: "Business", price: "$150/mês ($1.800/ano)", desc: "Tudo do Community + workshops trimestrais, tours SeaPort, seminários jurídicos/fiscais" },
+  { value: "membro", slug: "executive", label: "Executive", price: "$500/mês ($6.000/ano)", desc: "Tudo do Business + consultoria 1:1, suporte para entrada no mercado brasileiro" },
+  { value: "membro", slug: "trustee", label: "Trustee", price: "$1.500/mês ($18.000/ano)", desc: "Tudo do Executive + acesso ao conselho, missões comerciais, gerente dedicado" },
 ];
 
 const industries = [
@@ -76,9 +76,14 @@ function RegisterForm() {
     if (serviceTags.length > 0) {
       formData.set("services_offered", serviceTags.join(","));
     }
-    const result = await register(formData);
-    if (result?.error) {
-      setError(result.error);
+    try {
+      const result = await register(formData);
+      if (result?.error) {
+        setError(result.error);
+        setLoading(false);
+      }
+    } catch {
+      setError("Erro de conexão com o servidor. Tente novamente.");
       setLoading(false);
     }
   }
@@ -242,8 +247,9 @@ function RegisterForm() {
           )}
 
           <form action={handleSubmit} className="space-y-4">
-            {/* Hidden role */}
+            {/* Hidden role + tier slug for admin to see which plan was selected */}
             <input type="hidden" name="role" value={tiers[selectedTier].value} />
+            <input type="hidden" name="tier_slug" value={tiers[selectedTier].slug} />
 
             {/* Basic Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

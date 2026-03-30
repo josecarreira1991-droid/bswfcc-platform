@@ -50,6 +50,7 @@ export async function register(formData: FormData) {
   const servicesOffered = servicesRaw
     ? servicesRaw.split(",").map((s) => s.trim()).filter(Boolean)
     : null;
+  const tierSlug = (formData.get("tier_slug") as string) || "community";
   const referralCode = formData.get("referral_code") as string;
 
   const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -81,6 +82,7 @@ export async function register(formData: FormData) {
       ein: ein || undefined,
       bio: bio || undefined,
       services_offered: servicesOffered || undefined,
+      tier_slug: tierSlug,
     }).select("id").single();
 
     if (profileError) {
