@@ -25,6 +25,7 @@ import {
   deleteDirectMessage,
   markConversationAsRead,
 } from "@/lib/actions/chat";
+import { uploadChatMedia } from "@/lib/actions/upload";
 import { cn, ROLE_LABELS, formatTime, getInitials } from "@/lib/utils";
 import type { DirectConversation, DirectMessage } from "@/types/database";
 
@@ -150,17 +151,14 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
       let mediaType: string | undefined;
       let mediaName: string | undefined;
 
+      // Upload file via server action (avoids HTTPS→HTTP mixed content blocking)
       if (attachment) {
         setUploading(true);
-        const { createClient: createBrowserClient } = await import("@/lib/supabase/client");
-        const supabase = createBrowserClient();
-        const path = `${Date.now()}-${attachment.file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-        const { error: uploadError } = await supabase.storage
-          .from("chat-media")
-          .upload(path, attachment.file, { upsert: true });
-        if (uploadError) throw uploadError;
-        const { data: urlData } = supabase.storage.from("chat-media").getPublicUrl(path);
-        mediaUrl = urlData.publicUrl;
+        const fd = new FormData();
+        fd.append("file", attachment.file);
+        const result = await uploadChatMedia(fd);
+        if (result.error) throw new Error(result.error);
+        mediaUrl = result.url;
         mediaType = attachment.mediaType;
         mediaName = attachment.file.name;
       }

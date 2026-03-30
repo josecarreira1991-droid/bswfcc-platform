@@ -62,14 +62,20 @@ export async function upsertBusinessProfile(memberId: string, formData: FormData
 export async function sendMatchRequest(fromId: string, toId: string, message?: string, score?: number, reason?: string) {
   const { supabase, memberId: callerId } = await requireAuth();
   if (fromId !== callerId) return { error: "Sem permissão" };
-  const { error } = await supabase.from("match_requests").insert({
-    from_member_id: fromId,
-    to_member_id: toId,
-    message: message || null,
-    match_score: score || null,
-    match_reason: reason || null,
-    status: "pending",
-  });
+
+  // Use upsert to handle re-sending to the same member (e.g., after declined)
+  const { error } = await supabase.from("match_requests").upsert(
+    {
+      from_member_id: fromId,
+      to_member_id: toId,
+      message: message || null,
+      match_score: score || null,
+      match_reason: reason || null,
+      status: "pending",
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "from_member_id,to_member_id" }
+  );
   if (error) return { error: error.message };
   revalidatePath("/matchmaking");
   return { success: true };
