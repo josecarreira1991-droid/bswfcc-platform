@@ -2,9 +2,9 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { FileText, Download, Trash2, Pin, Plus, Search, Filter, FolderOpen } from "lucide-react";
 import { createDocument, deleteDocument } from "@/lib/actions/documents";
+import { safeAction } from "@/lib/safe-action";
 import { cn, isAdmin as checkAdmin } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
@@ -56,39 +56,22 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    try {
-      const result = await createDocument(form);
-      if (result?.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Documento adicionado");
-        setShowForm(false);
-        router.refresh();
-      }
-    } catch {
-      toast.error("Erro de conexão. Tente novamente.");
-    } finally {
-      setLoading(false);
-    }
+    await safeAction(() => createDocument(form), {
+      successMsg: "Documento adicionado",
+      onSuccess: () => { setShowForm(false); router.refresh(); },
+    });
+    setLoading(false);
   }
 
   async function handleDelete() {
     if (!deleteTarget) return;
     setLoading(true);
-    try {
-      const result = await deleteDocument(deleteTarget.id);
-      if (result?.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Documento removido");
-        router.refresh();
-      }
-    } catch {
-      toast.error("Erro de conexão. Tente novamente.");
-    } finally {
-      setDeleteTarget(null);
-      setLoading(false);
-    }
+    await safeAction(() => deleteDocument(deleteTarget.id), {
+      successMsg: "Documento removido",
+      onSuccess: () => router.refresh(),
+    });
+    setDeleteTarget(null);
+    setLoading(false);
   }
 
   return (

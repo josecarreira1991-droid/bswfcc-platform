@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse, type NextRequest } from "next/server";
+import { isAdmin } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
   const supabase = createClient();
@@ -21,7 +22,6 @@ export async function GET(request: NextRequest) {
 }
 
 const ALLOWED_MEMBER_UPDATE_FIELDS = ["full_name", "phone", "company", "industry", "city", "linkedin", "bio", "avatar_url"] as const;
-const ADMIN_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro", "diretor_tecnologia"];
 
 export async function PATCH(request: NextRequest) {
   const supabase = createClient();
@@ -39,7 +39,7 @@ export async function PATCH(request: NextRequest) {
     .eq("email", user.email!)
     .single();
 
-  if (!caller || !ADMIN_ROLES.includes(caller.role)) {
+  if (!caller || !isAdmin(caller.role)) {
     return NextResponse.json({ error: "Forbidden: admin role required" }, { status: 403 });
   }
 

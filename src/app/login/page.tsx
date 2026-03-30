@@ -1,8 +1,11 @@
 "use client";
 import Link from "next/link";
-import { login } from "@/lib/actions/auth";
 import { useSearchParams } from "next/navigation";
+import { login } from "@/lib/actions/auth";
 import { useState, Suspense } from "react";
+
+const INPUT_CLASS =
+  "w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -46,7 +49,7 @@ function LoginForm() {
                 name="email"
                 type="email"
                 required
-                className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                className={INPUT_CLASS}
                 placeholder="seu@email.com"
               />
             </div>
@@ -58,7 +61,7 @@ function LoginForm() {
                 type="password"
                 required
                 minLength={6}
-                className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                className={INPUT_CLASS}
                 placeholder="Mínimo 6 caracteres"
               />
             </div>

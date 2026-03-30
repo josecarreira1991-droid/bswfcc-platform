@@ -3,23 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
 import { ADMIN_ROLES } from "@/lib/utils";
-
-async function requireAdmin() {
-  const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
-
-  const { data: caller } = await supabase
-    .from("members")
-    .select("role")
-    .eq("email", user.email!)
-    .single();
-
-  if (!caller || !(ADMIN_ROLES as readonly string[]).includes(caller.role)) {
-    throw new Error("Forbidden: admin role required");
-  }
-  return { supabase, caller };
-}
+import { requireAdmin } from "@/lib/actions/auth-helpers";
 
 export async function getEvents() {
   const supabase = createClient();

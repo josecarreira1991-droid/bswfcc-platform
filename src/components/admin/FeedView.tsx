@@ -23,6 +23,7 @@ import {
   X,
 } from "lucide-react";
 import { createPost, deletePost, togglePin, addComment, deleteComment, toggleLike } from "@/lib/actions/feed";
+import { safeAction } from "@/lib/safe-action";
 import { cn, ROLE_LABELS, ADMIN_ROLES } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
@@ -66,48 +67,26 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    try {
-      const result = await createPost(form);
-      if (result?.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Post publicado!");
-        setShowNewPost(false);
-        router.refresh();
-      }
-    } catch {
-      toast.error("Erro de conexão. Tente novamente.");
-    }
+    await safeAction(() => createPost(form), {
+      successMsg: "Post publicado!",
+      onSuccess: () => { setShowNewPost(false); router.refresh(); },
+    });
     setLoading(false);
   }
 
   async function handleDelete(postId: string) {
     if (!confirm("Tem certeza que deseja excluir este post?")) return;
-    try {
-      const result = await deletePost(postId);
-      if (result?.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Post excluído");
-        router.refresh();
-      }
-    } catch {
-      toast.error("Erro de conexão. Tente novamente.");
-    }
+    await safeAction(() => deletePost(postId), {
+      successMsg: "Post excluído",
+      onSuccess: () => router.refresh(),
+    });
   }
 
   async function handlePin(postId: string) {
-    try {
-      const result = await togglePin(postId);
-      if (result?.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Post atualizado");
-        router.refresh();
-      }
-    } catch {
-      toast.error("Erro de conexão. Tente novamente.");
-    }
+    await safeAction(() => togglePin(postId), {
+      successMsg: "Post atualizado",
+      onSuccess: () => router.refresh(),
+    });
   }
 
   async function handleLike(postId: string) {
@@ -147,17 +126,10 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
   }
 
   async function handleDeleteComment(commentId: string) {
-    try {
-      const result = await deleteComment(commentId);
-      if (result?.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Comentário removido");
-        router.refresh();
-      }
-    } catch {
-      toast.error("Erro de conexão. Tente novamente.");
-    }
+    await safeAction(() => deleteComment(commentId), {
+      successMsg: "Comentário removido",
+      onSuccess: () => router.refresh(),
+    });
   }
 
   function toggleExpand(postId: string) {

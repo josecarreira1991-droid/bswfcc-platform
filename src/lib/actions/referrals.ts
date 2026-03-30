@@ -4,11 +4,43 @@ import { revalidatePath } from "next/cache";
 import type { Referral, ReferralReward, ReferralRewardType } from "@/types/database";
 import { ADMIN_ROLES } from "@/lib/utils";
 
-// ── Legacy referral functions (keep for backwards compat) ──────────────
+// ── Helpers ──────────────────────────────────────────────────────────
+
+const CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const CODE_LENGTH = 8;
+const MAX_CODE_ATTEMPTS = 10;
+
+function generateCode(): string {
+  let code = "";
+  for (let i = 0; i < CODE_LENGTH; i++) {
+    code += CODE_CHARS.charAt(Math.floor(Math.random() * CODE_CHARS.length));
+  }
+  return code;
+}
+
+async function requireAdmin(): Promise<{ supabase: ReturnType<typeof createClient>; callerId: string } | null> {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user?.email) return null;
+
+  const { data: caller } = await supabase
+    .from("members")
+    .select("id, role")
+    .eq("email", user.email)
+    .single();
+
+  if (!caller || !(ADMIN_ROLES as readonly string[]).includes(caller.role)) return null;
+  return { supabase, callerId: caller.id };
+}
+
+// ── Legacy referral functions (used by ReferralsView) ────────────────
 
 export async function getReferrals(memberId?: string) {
   const supabase = createClient();
-  let query = supabase.from("referrals").select("*, members!referrals_referrer_id_fkey(full_name, company)").order("created_at", { ascending: false });
+  let query = supabase
+    .from("referrals")
+    .select("*, members!referrals_referrer_id_fkey(full_name, company)")
+    .order("created_at", { ascending: false });
   if (memberId) query = query.eq("referrer_id", memberId);
   const { data, error } = await query;
   if (error) throw error;
@@ -42,27 +74,14 @@ export async function updateReferralStatus(id: string, status: Referral["status"
   return { success: true };
 }
 
-// ── New referral CODE system ───────────────────────────────────────────
-
-function generateCode(): string {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let code = "";
-  for (let i = 0; i < 8; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return code;
-}
+// ── Referral CODE system ─────────────────────────────────────────────
 
 export async function generateReferralCode(memberId: string): Promise<{ code: string } | { error: string }> {
   const supabase = createClient();
 
-  // Keep existing active codes alive — only deactivate when used, not when generating new ones
-  // This way previously shared links remain valid
-
-  // Generate a unique code with retry
   let code = generateCode();
   let attempts = 0;
-  while (attempts < 10) {
+  while (attempts < MAX_CODE_ATTEMPTS) {
     const { data: existing } = await supabase
       .from("referral_codes")
       .select("id")
@@ -74,7 +93,7 @@ export async function generateReferralCode(memberId: string): Promise<{ code: st
     attempts++;
   }
 
-  if (attempts >= 10) {
+  if (attempts >= MAX_CODE_ATTEMPTS) {
     return { error: "Não foi possível gerar um código único. Tente novamente." };
   }
 
@@ -120,7 +139,6 @@ export async function validateReferralCode(code: string): Promise<{
 export async function useReferralCode(code: string, newMemberId: string): Promise<{ success: boolean; error?: string }> {
   const supabase = createClient();
 
-  // Mark the code as used
   const { data: codeData, error: fetchError } = await supabase
     .from("referral_codes")
     .select("id, member_id")
@@ -132,28 +150,18 @@ export async function useReferralCode(code: string, newMemberId: string): Promis
     return { success: false, error: "Código inválido ou já utilizado." };
   }
 
-  // Deactivate the code
   const { error: updateError } = await supabase
     .from("referral_codes")
-    .update({
-      is_active: false,
-      used_by: newMemberId,
-      used_at: new Date().toISOString(),
-    })
+    .update({ is_active: false, used_by: newMemberId, used_at: new Date().toISOString() })
     .eq("id", codeData.id);
 
   if (updateError) return { success: false, error: updateError.message };
 
-  // Increment referral_count atomically (avoids race condition with concurrent registrations)
-  await supabase.rpc("increment_referral_count", { member_uuid: codeData.member_id });
+  await Promise.all([
+    supabase.rpc("increment_referral_count", { member_uuid: codeData.member_id }),
+    supabase.from("members").update({ referred_by: codeData.member_id }).eq("id", newMemberId),
+  ]);
 
-  // Set referred_by on the new member
-  await supabase
-    .from("members")
-    .update({ referred_by: codeData.member_id })
-    .eq("id", newMemberId);
-
-  // Generate a new code for the referring member (code rotation)
   await generateReferralCode(codeData.member_id);
 
   revalidatePath("/referrals");
@@ -177,17 +185,16 @@ export async function getMyReferralCode(memberId: string): Promise<string | null
 export async function getReferralStats() {
   const supabase = createClient();
 
-  // Get all used referral codes with member info
-  const { data: codes } = await supabase
-    .from("referral_codes")
-    .select("id, member_id, code, is_active, used_by, used_at, created_at")
-    .order("created_at", { ascending: false });
-
-  // Get all members with referral info
-  const { data: members } = await supabase
-    .from("members")
-    .select("id, full_name, company, referred_by, referral_count, created_at")
-    .order("referral_count", { ascending: false });
+  const [{ data: codes }, { data: members }] = await Promise.all([
+    supabase
+      .from("referral_codes")
+      .select("id, member_id, code, is_active, used_by, used_at, created_at")
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("members")
+      .select("id, full_name, company, referred_by, referral_count, created_at")
+      .order("referral_count", { ascending: false }),
+  ]);
 
   if (!codes || !members) {
     return {
@@ -206,7 +213,6 @@ export async function getReferralStats() {
 
   const topReferrers = members
     .filter((m) => m.referral_count > 0)
-    .sort((a, b) => b.referral_count - a.referral_count)
     .slice(0, 10)
     .map((m) => ({
       id: m.id,
@@ -300,17 +306,11 @@ export async function getRewardTiers() {
   return REWARD_TIERS;
 }
 
-// Called by approveMember — requires authenticated admin caller
 export async function checkAndGrantRewards(referrerId: string): Promise<ReferralReward | null> {
-  const supabase = createClient();
+  const auth = await requireAdmin();
+  if (!auth) return null;
+  const { supabase } = auth;
 
-  // Auth guard: only admin/diretoria can trigger reward checks
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user?.email) return null;
-  const { data: caller } = await supabase.from("members").select("role").eq("email", user.email).single();
-  if (!caller || !(ADMIN_ROLES as readonly string[]).includes(caller.role)) return null;
-
-  // Count approved referrals (status = 'ativo') for this referrer
   const { count } = await supabase
     .from("members")
     .select("id", { count: "exact", head: true })
@@ -319,14 +319,12 @@ export async function checkAndGrantRewards(referrerId: string): Promise<Referral
 
   const approvedCount = count || 0;
 
-  // Find the highest tier they qualify for
   const qualifiedTier = [...REWARD_TIERS]
     .reverse()
     .find((t) => approvedCount >= t.milestone);
 
   if (!qualifiedTier) return null;
 
-  // Check if they already have this reward (or higher)
   const { data: existingRewards } = await supabase
     .from("referral_rewards")
     .select("reward_type, milestone")
@@ -338,7 +336,6 @@ export async function checkAndGrantRewards(referrerId: string): Promise<Referral
 
   if (alreadyHas) return null;
 
-  // Grant the reward
   const { data: reward, error } = await supabase
     .from("referral_rewards")
     .insert({
@@ -392,28 +389,16 @@ export async function getAllRewards(): Promise<
 }
 
 export async function redeemReward(rewardId: string): Promise<{ success: boolean; error?: string }> {
-  const supabase = createClient();
-
-  // Verify caller is admin
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user?.email) return { success: false, error: "Unauthorized" };
-
-  const { data: caller } = await supabase
-    .from("members")
-    .select("id, role")
-    .eq("email", user.email)
-    .single();
-
-  if (!caller || !(ADMIN_ROLES as readonly string[]).includes(caller.role)) {
-    return { success: false, error: "Apenas diretoria pode resgatar bonificações" };
-  }
+  const auth = await requireAdmin();
+  if (!auth) return { success: false, error: "Apenas diretoria pode resgatar bonificações" };
+  const { supabase, callerId } = auth;
 
   const { error } = await supabase
     .from("referral_rewards")
     .update({
       status: "redeemed",
       redeemed_at: new Date().toISOString(),
-      redeemed_by: caller.id,
+      redeemed_by: callerId,
     })
     .eq("id", rewardId)
     .eq("status", "earned");
@@ -435,12 +420,17 @@ export async function getRewardSummary(): Promise<{
     .select("status, discount_pct");
 
   const rewards = data || [];
-  return {
-    totalEarned: rewards.length,
-    totalRedeemed: rewards.filter((r) => r.status === "redeemed").length,
-    totalPending: rewards.filter((r) => r.status === "earned").length,
-    totalDiscountValue: rewards
-      .filter((r) => r.status === "earned")
-      .reduce((sum, r) => sum + r.discount_pct, 0),
-  };
+  const summary = rewards.reduce(
+    (acc, r) => {
+      if (r.status === "redeemed") acc.totalRedeemed++;
+      if (r.status === "earned") {
+        acc.totalPending++;
+        acc.totalDiscountValue += r.discount_pct;
+      }
+      return acc;
+    },
+    { totalRedeemed: 0, totalPending: 0, totalDiscountValue: 0 },
+  );
+
+  return { totalEarned: rewards.length, ...summary };
 }

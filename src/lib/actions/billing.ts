@@ -1,5 +1,4 @@
 "use server";
-import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { requireAuth, requireAdmin } from "./auth-helpers";
 import type { MembershipTier, Subscription, Payment } from "@/types/database";
@@ -142,34 +141,46 @@ export async function getFinancialStats() {
   const payments = paymentsResult.data || [];
   const tiers = tiersResult.data || [];
 
-  // Active subs
-  const activeSubs = subscriptions.filter((s) => s.status === "active" || s.status === "trialing");
-  const canceledSubs = subscriptions.filter((s) => s.status === "canceled");
-  const freeSubs = subscriptions.filter((s) => s.status === "free");
+  // Build tier lookup for O(1) access
+  const tierById = new Map<string, { id: string; name: string; slug: string; price_monthly: number }>(
+    tiers.map((t) => [t.id, t])
+  );
 
-  // MRR calculation
+  // Single pass over subscriptions: counts, MRR, and tier breakdown
+  let activeCount = 0;
+  let canceledCount = 0;
+  let freeCount = 0;
   let mrr = 0;
-  for (const sub of activeSubs) {
-    const tier = tiers.find((t) => t.id === sub.tier_id);
-    if (tier) mrr += tier.price_monthly;
+  const byTier: Record<string, number> = {};
+
+  for (const sub of subscriptions) {
+    if (sub.status === "active" || sub.status === "trialing") {
+      activeCount++;
+      const tier = tierById.get(sub.tier_id);
+      if (tier) {
+        mrr += tier.price_monthly;
+        byTier[tier.name] = (byTier[tier.name] || 0) + 1;
+      } else {
+        byTier["Unknown"] = (byTier["Unknown"] || 0) + 1;
+      }
+    } else if (sub.status === "canceled") {
+      canceledCount++;
+    } else if (sub.status === "free") {
+      freeCount++;
+    }
   }
 
-  // Revenue this month
+  // Single pass over payments: total and this-month revenue
   const now = new Date();
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
-  const revenueThisMonth = payments
-    .filter((p) => p.created_at >= monthStart)
-    .reduce((sum, p) => sum + p.amount, 0);
+  let revenueTotal = 0;
+  let revenueThisMonth = 0;
 
-  // Revenue all time
-  const revenueTotal = payments.reduce((sum, p) => sum + p.amount, 0);
-
-  // Subs by tier
-  const byTier: Record<string, number> = {};
-  for (const sub of activeSubs) {
-    const tier = tiers.find((t) => t.id === sub.tier_id);
-    const name = tier?.name || "Unknown";
-    byTier[name] = (byTier[name] || 0) + 1;
+  for (const p of payments) {
+    revenueTotal += p.amount;
+    if (p.created_at >= monthStart) {
+      revenueThisMonth += p.amount;
+    }
   }
 
   return {
@@ -177,12 +188,12 @@ export async function getFinancialStats() {
     revenueThisMonth,
     revenueTotal,
     totalSubscriptions: subscriptions.length,
-    activeSubscriptions: activeSubs.length,
-    canceledSubscriptions: canceledSubs.length,
-    freeMembers: freeSubs.length,
+    activeSubscriptions: activeCount,
+    canceledSubscriptions: canceledCount,
+    freeMembers: freeCount,
     byTier,
     churnRate: subscriptions.length > 0
-      ? Math.round((canceledSubs.length / subscriptions.length) * 100)
+      ? Math.round((canceledCount / subscriptions.length) * 100)
       : 0,
   };
 }

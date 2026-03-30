@@ -8,6 +8,8 @@ import {
 
 const COLORS = ["#C9A84C", "#2D5F8A", "#6366f1", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"];
 
+const TOOLTIP_CLASS = "bg-[#1B2A4A] border border-slate-600/50 rounded-lg px-3 py-2 text-xs text-white shadow-xl";
+
 interface ChartCardProps {
   title: string;
   children: React.ReactNode;
@@ -22,15 +24,37 @@ function ChartCard({ title, children }: ChartCardProps) {
   );
 }
 
-const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) => {
+function formatRoleName(role: string): string {
+  return ROLE_LABELS[role] || role;
+}
+
+function EmptyChart() {
+  return (
+    <div className="flex items-center justify-center h-[220px] text-sm text-slate-500">
+      Dados insuficientes
+    </div>
+  );
+}
+
+function PieTooltip({ active, payload }: { active?: boolean; payload?: Array<{ name: string; value: number }> }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="bg-[#1B2A4A] border border-slate-600/50 rounded-lg px-3 py-2 text-xs text-white shadow-xl">
+    <div className={TOOLTIP_CLASS}>
+      <p className="text-slate-400">{payload[0].name}</p>
+      <p className="font-semibold">{payload[0].value} membros</p>
+    </div>
+  );
+}
+
+function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className={TOOLTIP_CLASS}>
       <p className="text-slate-400">{label}</p>
       <p className="font-semibold">{payload[0].value}</p>
     </div>
   );
-};
+}
 
 export function RoleDistributionChart({ data }: { data: Record<string, number> }) {
   const chartData = Object.entries(data)
@@ -98,26 +122,4 @@ export function IndustryChart({ data }: { data: Record<string, number> }) {
       </ResponsiveContainer>
     </ChartCard>
   );
-}
-
-function PieTooltip({ active, payload }: { active?: boolean; payload?: Array<{ name: string; value: number }> }) {
-  if (!active || !payload?.length) return null;
-  return (
-    <div className="bg-[#1B2A4A] border border-slate-600/50 rounded-lg px-3 py-2 text-xs text-white shadow-xl">
-      <p className="text-slate-400">{payload[0].name}</p>
-      <p className="font-semibold">{payload[0].value} membros</p>
-    </div>
-  );
-}
-
-function EmptyChart() {
-  return (
-    <div className="flex items-center justify-center h-[220px] text-sm text-slate-500">
-      Dados insuficientes
-    </div>
-  );
-}
-
-function formatRoleName(role: string): string {
-  return ROLE_LABELS[role] || role;
 }

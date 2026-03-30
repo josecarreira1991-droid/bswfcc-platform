@@ -29,10 +29,13 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const protectedPaths = ["/dashboard", "/workspace", "/membros", "/eventos", "/mercado", "/inteligencia", "/billing", "/relatorios", "/matchmaking", "/networking", "/documentos", "/referrals", "/votacoes", "/diretoria-admin", "/configuracoes", "/perfil", "/chat", "/grupo", "/mural", "/ferramentas"];
-  const isProtected = protectedPaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
-  );
+  const publicPaths = ["/", "/login", "/register", "/convite", "/diretoria", "/api"];
+  const isPublic =
+    publicPaths.includes(request.nextUrl.pathname) ||
+    request.nextUrl.pathname.startsWith("/api/") ||
+    request.nextUrl.pathname.startsWith("/convite/") ||
+    request.nextUrl.pathname.startsWith("/diretoria/");
+  const isProtected = !isPublic;
 
   if (isProtected && !user) {
     const url = request.nextUrl.clone();

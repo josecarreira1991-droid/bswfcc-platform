@@ -6,6 +6,10 @@ import { validateReferralCode } from "@/lib/actions/referrals";
 import { useState, useEffect, Suspense } from "react";
 import { UserCheck, ShieldAlert, X } from "lucide-react";
 
+const INPUT_CLASS =
+  "w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors";
+const LABEL_CLASS = "block text-sm text-gray-400 mb-1.5";
+
 const tiers = [
   { value: "membro", slug: "community", label: "Community", price: "$50/mês ($600/ano)", desc: "Mixers mensais, diretório de membros, newsletter, introduções básicas" },
   { value: "membro", slug: "business", label: "Business", price: "$150/mês ($1.800/ano)", desc: "Tudo do Community + workshops trimestrais, tours SeaPort, seminários jurídicos/fiscais" },
@@ -88,8 +92,20 @@ function RegisterForm() {
     }
   }
 
-  // No referral code and not loading
-  if (codeChecked && !refCode) {
+  // Loading — show spinner while validating the referral code
+  if (validatingCode || !codeChecked) {
+    return (
+      <div className="min-h-screen bg-navy flex items-center justify-center px-4">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-400 text-sm">Validando convite...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // No referral code — invite-only gate
+  if (!refCode) {
     return (
       <div className="min-h-screen bg-navy flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-lg text-center">
@@ -107,22 +123,17 @@ function RegisterForm() {
             <div className="bg-navy/60 rounded-xl p-4 border border-white/5 mb-6">
               <p className="text-sm text-gray-300 mb-2 font-medium">Como funciona:</p>
               <ol className="text-sm text-gray-400 space-y-2 text-left">
-                <li className="flex items-start gap-2">
-                  <span className="text-gold font-bold mt-0.5">1.</span>
-                  Um membro ativo gera um link de convite exclusivo
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-gold font-bold mt-0.5">2.</span>
-                  Você acessa o link e preenche o formulário de cadastro
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-gold font-bold mt-0.5">3.</span>
-                  A diretoria revisa e aprova seu perfil
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-gold font-bold mt-0.5">4.</span>
-                  Você recebe acesso completo e seu próprio código de indicação
-                </li>
+                {[
+                  "Um membro ativo gera um link de convite exclusivo",
+                  "Você acessa o link e preenche o formulário de cadastro",
+                  "A diretoria revisa e aprova seu perfil",
+                  "Você recebe acesso completo e seu próprio código de indicação",
+                ].map((step, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className="text-gold font-bold mt-0.5">{i + 1}.</span>
+                    {step}
+                  </li>
+                ))}
               </ol>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -146,7 +157,7 @@ function RegisterForm() {
   }
 
   // Invalid referral code
-  if (codeChecked && refCode && !referrer && !validatingCode) {
+  if (!referrer) {
     return (
       <div className="min-h-screen bg-navy flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-lg text-center">
@@ -168,18 +179,6 @@ function RegisterForm() {
               Voltar ao Site
             </Link>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Loading state
-  if (validatingCode || !codeChecked) {
-    return (
-      <div className="min-h-screen bg-navy flex items-center justify-center px-4">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-400 text-sm">Validando convite...</p>
         </div>
       </div>
     );
@@ -254,57 +253,57 @@ function RegisterForm() {
             {/* Basic Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
-                <label htmlFor="full_name" className="block text-sm text-gray-400 mb-1.5">Nome Completo *</label>
+                <label htmlFor="full_name" className={LABEL_CLASS}>Nome Completo *</label>
                 <input
                   id="full_name"
                   name="full_name"
                   type="text"
                   required
-                  className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                  className={INPUT_CLASS}
                   placeholder="Seu nome completo"
                 />
               </div>
               <div>
-                <label htmlFor="reg_email" className="block text-sm text-gray-400 mb-1.5">Email *</label>
+                <label htmlFor="reg_email" className={LABEL_CLASS}>Email *</label>
                 <input
                   id="reg_email"
                   name="email"
                   type="email"
                   required
-                  className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                  className={INPUT_CLASS}
                   placeholder="seu@email.com"
                 />
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm text-gray-400 mb-1.5">Telefone</label>
+                <label htmlFor="phone" className={LABEL_CLASS}>Telefone</label>
                 <input
                   id="phone"
                   name="phone"
                   type="tel"
-                  className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                  className={INPUT_CLASS}
                   placeholder="(239) 000-0000"
                 />
               </div>
               <div>
-                <label htmlFor="reg_password" className="block text-sm text-gray-400 mb-1.5">Senha *</label>
+                <label htmlFor="reg_password" className={LABEL_CLASS}>Senha *</label>
                 <input
                   id="reg_password"
                   name="password"
                   type="password"
                   required
                   minLength={6}
-                  className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                  className={INPUT_CLASS}
                   placeholder="Mínimo 6 caracteres"
                 />
               </div>
               <div>
-                <label htmlFor="company" className="block text-sm text-gray-400 mb-1.5">Empresa *</label>
+                <label htmlFor="company" className={LABEL_CLASS}>Empresa *</label>
                 <input
                   id="company"
                   name="company"
                   type="text"
                   required
-                  className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                  className={INPUT_CLASS}
                   placeholder="Nome da empresa"
                 />
               </div>
@@ -315,62 +314,62 @@ function RegisterForm() {
               <p className="text-xs font-semibold text-gold uppercase tracking-wider mb-4">Perfil Empresarial</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="website" className="block text-sm text-gray-400 mb-1.5">Website</label>
+                  <label htmlFor="website" className={LABEL_CLASS}>Website</label>
                   <input
                     id="website"
                     name="website"
                     type="url"
-                    className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                    className={INPUT_CLASS}
                     placeholder="https://suaempresa.com"
                   />
                 </div>
                 <div>
-                  <label htmlFor="linkedin_url" className="block text-sm text-gray-400 mb-1.5">LinkedIn URL</label>
+                  <label htmlFor="linkedin_url" className={LABEL_CLASS}>LinkedIn URL</label>
                   <input
                     id="linkedin_url"
                     name="linkedin_url"
                     type="url"
-                    className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                    className={INPUT_CLASS}
                     placeholder="https://linkedin.com/in/..."
                   />
                 </div>
                 <div>
-                  <label htmlFor="instagram" className="block text-sm text-gray-400 mb-1.5">Instagram</label>
+                  <label htmlFor="instagram" className={LABEL_CLASS}>Instagram</label>
                   <input
                     id="instagram"
                     name="instagram"
                     type="text"
-                    className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                    className={INPUT_CLASS}
                     placeholder="@suaempresa"
                   />
                 </div>
                 <div>
-                  <label htmlFor="facebook" className="block text-sm text-gray-400 mb-1.5">Facebook</label>
+                  <label htmlFor="facebook" className={LABEL_CLASS}>Facebook</label>
                   <input
                     id="facebook"
                     name="facebook"
                     type="text"
-                    className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                    className={INPUT_CLASS}
                     placeholder="facebook.com/suaempresa"
                   />
                 </div>
                 <div>
-                  <label htmlFor="ein" className="block text-sm text-gray-400 mb-1.5">EIN (opcional)</label>
+                  <label htmlFor="ein" className={LABEL_CLASS}>EIN (opcional)</label>
                   <input
                     id="ein"
                     name="ein"
                     type="text"
-                    className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                    className={INPUT_CLASS}
                     placeholder="XX-XXXXXXX"
                   />
                 </div>
                 <div>
-                  <label htmlFor="industry" className="block text-sm text-gray-400 mb-1.5">Indústria *</label>
+                  <label htmlFor="industry" className={LABEL_CLASS}>Indústria *</label>
                   <select
                     id="industry"
                     name="industry"
                     required
-                    className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                    className={INPUT_CLASS}
                   >
                     <option value="">Selecione...</option>
                     {industries.map((i) => (
@@ -379,13 +378,13 @@ function RegisterForm() {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="city" className="block text-sm text-gray-400 mb-1.5">Cidade *</label>
+                  <label htmlFor="city" className={LABEL_CLASS}>Cidade *</label>
                   <input
                     id="city"
                     name="city"
                     type="text"
                     required
-                    className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                    className={INPUT_CLASS}
                     placeholder="Fort Myers, Cape Coral..."
                   />
                 </div>
@@ -394,14 +393,14 @@ function RegisterForm() {
 
             {/* Bio */}
             <div>
-              <label htmlFor="bio" className="block text-sm text-gray-400 mb-1.5">Bio / Sobre a empresa</label>
+              <label htmlFor="bio" className={LABEL_CLASS}>Bio / Sobre a empresa</label>
               <textarea
                 id="bio"
                 name="bio"
                 rows={3}
                 maxLength={500}
                 onChange={(e) => setBioLength(e.target.value.length)}
-                className="w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors resize-none"
+                className={`${INPUT_CLASS} resize-none`}
                 placeholder="Descreva brevemente sua empresa e o que ela faz..."
               />
               <p className="text-[10px] text-gray-500 text-right mt-1">{bioLength}/500</p>
@@ -409,14 +408,14 @@ function RegisterForm() {
 
             {/* Services */}
             <div>
-              <label className="block text-sm text-gray-400 mb-1.5">Serviços Oferecidos</label>
+              <label className={LABEL_CLASS}>Serviços Oferecidos</label>
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={serviceInput}
                   onChange={(e) => setServiceInput(e.target.value)}
                   onKeyDown={handleServiceKeyDown}
-                  className="flex-1 px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors"
+                  className={INPUT_CLASS.replace("w-full", "flex-1")}
                   placeholder="Digite e pressione Enter para adicionar"
                 />
                 <button

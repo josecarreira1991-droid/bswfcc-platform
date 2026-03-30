@@ -14,7 +14,6 @@ import {
   User,
   LogOut,
   X,
-  ChevronLeft,
   MessageSquare,
   Users2,
   CreditCard,
@@ -57,6 +56,11 @@ const secondaryMenu = [
   { label: "Meu Perfil", href: "/perfil", icon: User },
 ];
 
+type MenuItem = (typeof mainMenu)[number];
+
+const ACTIVE_CLASS = "bg-gold/10 text-gold border border-gold/20";
+const INACTIVE_CLASS = "text-slate-400 hover:text-white hover:bg-white/5";
+
 interface SidebarProps {
   member: Member;
   open: boolean;
@@ -65,6 +69,27 @@ interface SidebarProps {
 
 export default function Sidebar({ member, open, onClose }: SidebarProps) {
   const pathname = usePathname();
+
+  function renderMenuItems(items: MenuItem[], matchSubRoutes: boolean) {
+    return items.map((item) => {
+      const isActive = pathname === item.href
+        || (matchSubRoutes && pathname.startsWith(item.href + "/"));
+      return (
+        <Link
+          key={item.href}
+          href={item.href}
+          onClick={onClose}
+          className={cn(
+            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+            isActive ? ACTIVE_CLASS : INACTIVE_CLASS
+          )}
+        >
+          <item.icon size={18} strokeWidth={1.8} />
+          {item.label}
+        </Link>
+      );
+    });
+  }
 
   return (
     <>
@@ -105,50 +130,14 @@ export default function Sidebar({ member, open, onClose }: SidebarProps) {
           <p className="px-3 text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2">
             Principal
           </p>
-          {mainMenu.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-gold/10 text-gold border border-gold/20"
-                    : "text-slate-400 hover:text-white hover:bg-white/5"
-                )}
-              >
-                <item.icon size={18} strokeWidth={1.8} />
-                {item.label}
-              </Link>
-            );
-          })}
+          {renderMenuItems(mainMenu, true)}
 
           <div className="my-4 border-t border-slate-700/50" />
 
           <p className="px-3 text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-2">
             Sistema
           </p>
-          {secondaryMenu.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-gold/10 text-gold border border-gold/20"
-                    : "text-slate-400 hover:text-white hover:bg-white/5"
-                )}
-              >
-                <item.icon size={18} strokeWidth={1.8} />
-                {item.label}
-              </Link>
-            );
-          })}
+          {renderMenuItems(secondaryMenu, false)}
         </nav>
 
         {/* User footer */}

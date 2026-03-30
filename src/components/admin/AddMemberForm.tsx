@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { addMember } from "@/lib/actions/members";
+import { safeAction } from "@/lib/safe-action";
 import Modal from "@/components/ui/Modal";
 import { ROLE_LABELS } from "@/lib/utils";
 import { Plus } from "lucide-react";
@@ -17,18 +17,10 @@ export default function AddMemberForm() {
     e.preventDefault();
     setLoading(true);
     const form = new FormData(e.currentTarget);
-    try {
-      const result = await addMember(form);
-      if (result?.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Membro adicionado com sucesso");
-        setOpen(false);
-        router.refresh();
-      }
-    } catch {
-      toast.error("Erro de conexão. Tente novamente.");
-    }
+    await safeAction(() => addMember(form), {
+      successMsg: "Membro adicionado com sucesso",
+      onSuccess: () => { setOpen(false); router.refresh(); },
+    });
     setLoading(false);
   }
 

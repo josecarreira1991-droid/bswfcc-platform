@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
-  Plus, Search, Edit2, Trash2, Eye, Users as UsersIcon,
+  Plus, Search, Edit2, Trash2, Eye,
   Calendar, MapPin, Clock,
 } from "lucide-react";
 import { createEvent, updateEvent, deleteEvent } from "@/lib/actions/events";
@@ -12,25 +12,52 @@ import { cn, EVENT_TYPE_LABELS, formatDate, isAdmin } from "@/lib/utils";
 import Badge from "@/components/ui/Badge";
 import Modal from "@/components/ui/Modal";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
-import type { Event } from "@/types/database";
-import type { Member } from "@/types/database";
+import type { Event, Member } from "@/types/database";
 
 interface EventsManagerProps {
   events: Event[];
   currentMember: Member;
 }
 
-const typeVariant = (t: string) => {
-  const map: Record<string, "info" | "gold" | "success" | "warning" | "default"> = {
-    networking: "info",
-    palestra: "default",
-    workshop: "success",
-    gala: "gold",
-    almoco: "warning",
-    outro: "default",
-  };
-  return map[t] || "default";
+type BadgeVariant = "info" | "gold" | "success" | "warning" | "default";
+
+const TYPE_VARIANTS: Record<string, BadgeVariant> = {
+  networking: "info",
+  palestra: "default",
+  workshop: "success",
+  gala: "gold",
+  almoco: "warning",
+  outro: "default",
 };
+
+function typeVariant(t: string): BadgeVariant {
+  return TYPE_VARIANTS[t] || "default";
+}
+
+const INPUT_CLASS =
+  "w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none";
+const LABEL_CLASS = "block text-[11px] text-slate-500 uppercase tracking-wider mb-1";
+const TH_CLASS = "px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider";
+const SELECT_CLASS =
+  "px-3 py-2 text-xs bg-slate-800/50 border border-slate-700/50 rounded-lg text-slate-300 focus:border-gold/40 focus:outline-none";
+
+interface FormFieldProps {
+  label: string;
+  required?: boolean;
+  span?: boolean;
+  children: React.ReactNode;
+}
+
+function FormField({ label, required, span, children }: FormFieldProps): React.ReactElement {
+  return (
+    <div className={span ? "sm:col-span-2" : undefined}>
+      <label className={LABEL_CLASS}>
+        {label}{required && " *"}
+      </label>
+      {children}
+    </div>
+  );
+}
 
 export default function EventsManager({ events, currentMember }: EventsManagerProps) {
   const router = useRouter();
@@ -50,8 +77,12 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
   const filtered = useMemo(() => {
     let result = [...events];
 
-    if (filterTime === "upcoming") result = result.filter((e) => e.date >= today);
-    else if (filterTime === "past") result = result.filter((e) => e.date < today);
+    if (filterTime === "upcoming") {
+      result = result.filter((e) => e.date >= today);
+    } else if (filterTime === "past") {
+      result = result.filter((e) => e.date < today);
+    }
+    // "all" — no date filter applied
 
     if (filterType !== "all") result = result.filter((e) => e.type === filterType);
 
@@ -74,12 +105,9 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
     const form = new FormData(e.currentTarget);
 
     try {
-      let result;
-      if (editingEvent) {
-        result = await updateEvent(editingEvent.id, form);
-      } else {
-        result = await createEvent(form);
-      }
+      const result = editingEvent
+        ? await updateEvent(editingEvent.id, form)
+        : await createEvent(form);
 
       if (result?.error) {
         toast.error(result.error);
@@ -151,7 +179,7 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
           <select
             value={filterTime}
             onChange={(e) => setFilterTime(e.target.value)}
-            className="px-3 py-2 text-xs bg-slate-800/50 border border-slate-700/50 rounded-lg text-slate-300 focus:border-gold/40 focus:outline-none"
+            className={SELECT_CLASS}
           >
             <option value="upcoming">Próximos</option>
             <option value="past">Passados</option>
@@ -160,7 +188,7 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="px-3 py-2 text-xs bg-slate-800/50 border border-slate-700/50 rounded-lg text-slate-300 focus:border-gold/40 focus:outline-none"
+            className={SELECT_CLASS}
           >
             <option value="all">Todos os tipos</option>
             {Object.entries(EVENT_TYPE_LABELS).map(([k, v]) => (
@@ -176,13 +204,13 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-700/50">
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Evento</th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Data</th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Tipo</th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Local</th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Capacidade</th>
+                <th className={TH_CLASS}>Evento</th>
+                <th className={TH_CLASS}>Data</th>
+                <th className={TH_CLASS}>Tipo</th>
+                <th className={TH_CLASS}>Local</th>
+                <th className={TH_CLASS}>Capacidade</th>
                 {admin && (
-                  <th className="px-4 py-3 text-right text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Ações</th>
+                  <th className={cn(TH_CLASS, "text-right")}>Ações</th>
                 )}
               </tr>
             </thead>
@@ -270,38 +298,31 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
       >
         <form key={editingEvent?.id || "new"} onSubmit={handleSubmit} className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
-            <div className="sm:col-span-2">
-              <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Título *</label>
-              <input name="title" defaultValue={editingEvent?.title || ""} required className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
-            </div>
-            <div>
-              <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Data *</label>
-              <input name="date" type="date" defaultValue={editingEvent?.date || ""} required className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
-            </div>
-            <div>
-              <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Horário</label>
-              <input name="time" type="time" defaultValue={editingEvent?.time || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
-            </div>
-            <div>
-              <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Tipo *</label>
-              <select name="type" defaultValue={editingEvent?.type || "networking"} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none">
+            <FormField label="Título" required span>
+              <input name="title" defaultValue={editingEvent?.title || ""} required className={INPUT_CLASS} />
+            </FormField>
+            <FormField label="Data" required>
+              <input name="date" type="date" defaultValue={editingEvent?.date || ""} required className={INPUT_CLASS} />
+            </FormField>
+            <FormField label="Horário">
+              <input name="time" type="time" defaultValue={editingEvent?.time || ""} className={INPUT_CLASS} />
+            </FormField>
+            <FormField label="Tipo" required>
+              <select name="type" defaultValue={editingEvent?.type || "networking"} className={INPUT_CLASS}>
                 {Object.entries(EVENT_TYPE_LABELS).map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
                 ))}
               </select>
-            </div>
-            <div>
-              <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Capacidade</label>
-              <input name="max_attendees" type="number" min="1" defaultValue={editingEvent?.max_attendees ?? ""} placeholder="Ilimitado" className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Local</label>
-              <input name="location" defaultValue={editingEvent?.location || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Descrição</label>
-              <textarea name="description" rows={3} defaultValue={editingEvent?.description || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none resize-none" />
-            </div>
+            </FormField>
+            <FormField label="Capacidade">
+              <input name="max_attendees" type="number" min="1" defaultValue={editingEvent?.max_attendees ?? ""} placeholder="Ilimitado" className={INPUT_CLASS} />
+            </FormField>
+            <FormField label="Local" span>
+              <input name="location" defaultValue={editingEvent?.location || ""} className={INPUT_CLASS} />
+            </FormField>
+            <FormField label="Descrição" span>
+              <textarea name="description" rows={3} defaultValue={editingEvent?.description || ""} className={cn(INPUT_CLASS, "resize-none")} />
+            </FormField>
             <div className="flex items-center gap-2">
               <input type="hidden" name="is_public" defaultValue={editingEvent ? String(editingEvent.is_public) : "true"} />
               <label className="flex items-center gap-2 cursor-pointer">
@@ -341,29 +362,29 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Data</p>
+                <p className={LABEL_CLASS}>Data</p>
                 <p className="text-sm text-white flex items-center gap-1.5"><Calendar size={13} className="text-slate-500" />{formatDate(viewEvent.date)}</p>
               </div>
               <div>
-                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Horário</p>
+                <p className={LABEL_CLASS}>Horário</p>
                 <p className="text-sm text-white flex items-center gap-1.5"><Clock size={13} className="text-slate-500" />{viewEvent.time || "—"}</p>
               </div>
               <div>
-                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Tipo</p>
+                <p className={LABEL_CLASS}>Tipo</p>
                 <Badge variant={typeVariant(viewEvent.type)}>{EVENT_TYPE_LABELS[viewEvent.type]}</Badge>
               </div>
               <div>
-                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Capacidade</p>
+                <p className={LABEL_CLASS}>Capacidade</p>
                 <p className="text-sm text-white">{viewEvent.max_attendees || "Ilimitado"}</p>
               </div>
               <div className="col-span-2">
-                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Local</p>
+                <p className={LABEL_CLASS}>Local</p>
                 <p className="text-sm text-white flex items-center gap-1.5"><MapPin size={13} className="text-slate-500" />{viewEvent.location || "—"}</p>
               </div>
             </div>
             {viewEvent.description && (
               <div>
-                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Descrição</p>
+                <p className={LABEL_CLASS}>Descrição</p>
                 <p className="text-sm text-slate-300 whitespace-pre-wrap">{viewEvent.description}</p>
               </div>
             )}

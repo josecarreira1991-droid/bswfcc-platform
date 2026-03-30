@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { startSession, stopSession } from "@/lib/services/waha";
-
-const ADMIN_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro", "diretor_tecnologia"];
+import { isAdmin } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
   const supabase = createClient();
@@ -15,7 +14,7 @@ export async function POST(request: NextRequest) {
     .eq("email", user.email!)
     .single();
 
-  if (!caller || !ADMIN_ROLES.includes(caller.role)) {
+  if (!caller || !isAdmin(caller.role)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

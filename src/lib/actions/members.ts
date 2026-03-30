@@ -3,25 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import type { Member, MemberRole, MemberStatus } from "@/types/database";
 
-import { ADMIN_ROLES } from "@/lib/utils";
 import { checkAndGrantRewards } from "@/lib/actions/referrals";
-
-async function requireAdmin() {
-  const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || !user.email) throw new Error("Unauthorized");
-
-  const { data: caller } = await supabase
-    .from("members")
-    .select("role")
-    .eq("email", user.email)
-    .single();
-
-  if (!caller || !(ADMIN_ROLES as readonly string[]).includes(caller.role)) {
-    throw new Error("Forbidden: admin role required");
-  }
-  return { supabase, caller };
-}
+import { requireAdmin } from "@/lib/actions/auth-helpers";
 
 export async function getMembers() {
   const supabase = createClient();
@@ -84,7 +67,7 @@ export async function getMemberStats() {
 }
 
 export async function updateMember(id: string, updates: Partial<Member>) {
-  const { supabase, caller } = await requireAdmin();
+  const { supabase, callerRole } = await requireAdmin();
 
   const ALLOWED_FIELDS = ["full_name", "phone", "company", "industry", "city", "linkedin", "bio", "avatar_url", "status", "role"];
   const PROTECTED_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro"];
@@ -94,7 +77,7 @@ export async function updateMember(id: string, updates: Partial<Member>) {
   }
 
   if ("role" in sanitized && PROTECTED_ROLES.includes(sanitized.role as string)) {
-    if (caller.role !== "presidente") {
+    if (callerRole !== "presidente") {
       throw new Error("Only the presidente can assign executive roles");
     }
   }
