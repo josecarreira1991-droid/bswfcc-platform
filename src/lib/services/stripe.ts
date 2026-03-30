@@ -86,7 +86,9 @@ export async function cancelSubscription(subscriptionId: string, atPeriodEnd = t
       cancel_at_period_end: "true",
     });
   }
-  return stripeRequest(`/subscriptions/${subscriptionId}`, "DELETE");
+  return stripeRequest(`/subscriptions/${subscriptionId}`, "POST", {
+    prorate: "true",
+  });
 }
 
 // ─── Invoices ───

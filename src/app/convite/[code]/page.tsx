@@ -191,7 +191,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
           <div className="inline-flex items-center gap-3 bg-[#1B2A4A]/60 border border-slate-700/50 rounded-xl px-6 py-3 mb-8">
             <div className="w-10 h-10 rounded-full bg-[#C9A84C]/20 flex items-center justify-center flex-shrink-0">
               <span className="text-[#C9A84C] font-bold text-sm">
-                {referrer.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
+                {(referrer.full_name || "").split(" ").filter(Boolean).map((n) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
               </span>
             </div>
             <div className="text-left">

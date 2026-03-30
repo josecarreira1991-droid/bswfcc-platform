@@ -104,9 +104,9 @@ export default async function InteligenciaPage() {
         ))}
       </div>
 
-      <div className="mt-6 bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5 text-center">
-        <p className="text-sm text-slate-400 mb-1">Novos relatórios são publicados mensalmente</p>
-        <p className="text-xs text-slate-500">Relatórios disponíveis exclusivamente para membros ativos da BSWFCC</p>
+      <div className="mt-6 bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 text-center">
+        <p className="text-sm text-amber-400 mb-1">Dados ilustrativos — relatórios reais em breve</p>
+        <p className="text-xs text-slate-500">Os relatórios acima são exemplos do formato que será entregue. Dados reais serão integrados via APIs de mercado (Enterprise Florida, Census Bureau, etc).</p>
       </div>
     </div>
   );

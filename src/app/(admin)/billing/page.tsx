@@ -37,7 +37,10 @@ export default async function BillingPage() {
       <BillingDashboard
         tiers={tiers}
         stats={stats}
-        payments={payments as any}
+        payments={payments as Array<{
+          id: string; amount: number; status: string; created_at: string;
+          description: string | null; members: { full_name: string; email: string } | null;
+        }>}
         isAdmin={admin}
         stripeConfigured={stripeOk}
       />

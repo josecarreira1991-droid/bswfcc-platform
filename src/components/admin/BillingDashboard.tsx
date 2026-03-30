@@ -134,10 +134,10 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
               key={tier.id}
               className={cn(
                 "bg-[#0D1B2A] border rounded-xl p-5 relative",
-                tier.slug === "business_partner" ? "border-gold/40" : "border-slate-700/50"
+                tier.slug === "business" ? "border-gold/40" : "border-slate-700/50"
               )}
             >
-              {tier.slug === "business_partner" && (
+              {tier.slug === "business" && (
                 <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
                   <Badge variant="gold">Popular</Badge>
                 </div>

@@ -115,16 +115,16 @@ ALTER TABLE public.members ADD COLUMN IF NOT EXISTS tier_slug TEXT DEFAULT 'comm
 -- SEED: MEMBERSHIP TIERS
 -- ============================================
 INSERT INTO public.membership_tiers (name, slug, description, price_monthly, price_yearly, features, sort_order) VALUES
-  ('Community', 'community', 'Acesso básico à plataforma', 0, 0,
-   ARRAY['Acesso ao dashboard', 'Diretório de membros', 'Eventos públicos', 'Dados de mercado básicos'],
+  ('Community', 'community', 'Acesso básico à plataforma e networking', 5000, 60000,
+   ARRAY['Mixers mensais de networking', 'Diretório de membros', 'Newsletter semanal', 'Introduções básicas entre membros'],
    1),
-  ('Member', 'member', 'Acesso completo + networking', 1000, 10000,
-   ARRAY['Tudo do Community', 'Eventos exclusivos', 'Networking premium', 'Relatórios de mercado completos', 'Inbox WhatsApp direto'],
+  ('Business', 'business', 'Networking avançado + workshops + diretório completo', 15000, 180000,
+   ARRAY['Tudo do Community', 'Workshops trimestrais', 'Tours SeaPort Manatee', 'Seminários jurídicos e fiscais', 'Diretório completo BR-FL (500+ empresas)', 'Match Score inteligente'],
    2),
-  ('Business Partner', 'business_partner', 'Destaque + relatórios exclusivos', 2500, 25000,
-   ARRAY['Tudo do Member', 'Destaque no diretório', 'Relatório mensal exclusivo', 'Prioridade em eventos', 'Logo no site'],
+  ('Executive', 'executive', 'Consultoria 1:1 + relatórios exclusivos + prioridade', 50000, 600000,
+   ARRAY['Tudo do Business', 'Consultoria 1:1 personalizada', 'Suporte para entrada no mercado brasileiro', 'Relatórios de inteligência exclusivos', 'Prioridade em eventos e workshops'],
    3),
-  ('Executive', 'executive', 'Acesso total + diretoria', 5000, 50000,
-   ARRAY['Tudo do Business Partner', 'Acesso à diretoria', 'Priority networking', 'Convites VIP', 'Mentorias exclusivas', 'Relatório semanal'],
+  ('Trustee', 'trustee', 'Acesso total + conselho consultivo + missões internacionais', 150000, 1800000,
+   ARRAY['Tudo do Executive', 'Acesso ao conselho consultivo', 'Missões comerciais internacionais', 'Gerente de conta dedicado', 'Voto em decisões estratégicas', 'Logo em materiais oficiais'],
    4)
 ON CONFLICT (slug) DO NOTHING;

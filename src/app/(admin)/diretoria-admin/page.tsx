@@ -28,7 +28,7 @@ export default async function DiretoriaAdminPage() {
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-11 h-11 rounded-full bg-gold/15 flex items-center justify-center flex-shrink-0">
                   <span className="text-gold font-semibold text-sm">
-                    {d.name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                    {(d.name || "").split(" ").filter(Boolean).map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
                   </span>
                 </div>
                 <div className="min-w-0">
@@ -43,7 +43,7 @@ export default async function DiretoriaAdminPage() {
                 )}
                 {d.linkedin && (
                   <a
-                    href={d.linkedin!.startsWith("http") ? d.linkedin! : `https://${d.linkedin}`}
+                    href={d.linkedin.startsWith("http") ? d.linkedin : `https://${d.linkedin}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1 text-blue-400 hover:text-blue-300"

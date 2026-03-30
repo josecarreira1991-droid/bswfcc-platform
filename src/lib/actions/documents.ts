@@ -43,13 +43,15 @@ export async function deleteDocument(id: string) {
 
 export async function incrementDownload(id: string) {
   const supabase = createClient();
-  const { data: doc } = await supabase
+  const { data: doc, error: fetchErr } = await supabase
     .from("documents")
     .select("download_count")
     .eq("id", id)
     .single();
-  await supabase
+  if (fetchErr || !doc) return;
+  const { error } = await supabase
     .from("documents")
-    .update({ download_count: (doc?.download_count || 0) + 1 })
+    .update({ download_count: (doc.download_count || 0) + 1 })
     .eq("id", id);
+  if (error) console.error("incrementDownload error:", error.message);
 }

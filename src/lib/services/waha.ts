@@ -57,6 +57,7 @@ export async function startSession() {
       },
     }),
   });
+  if (!res.ok) throw new Error(`Waha startSession failed: HTTP ${res.status}`);
   return res.json();
 }
 
@@ -65,6 +66,7 @@ export async function stopSession() {
     method: "POST",
     headers: headers(),
   });
+  if (!res.ok) throw new Error(`Waha stopSession failed: HTTP ${res.status}`);
   return res.json();
 }
 

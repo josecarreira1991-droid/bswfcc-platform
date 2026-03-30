@@ -91,7 +91,7 @@ function buildSystemPrompt(context: BotContext, customPrompt?: string): string {
     });
   }
 
-  contextParts.push("\n\nSite: https://bswfcc.quantrexnow.io");
+  contextParts.push(`\n\nSite: ${process.env.NEXT_PUBLIC_APP_URL || "https://bswfcc.quantrexnow.io"}`);
   contextParts.push("EIN: 99-4852466 | 501(c)(6) | Registrada em Set 2024");
 
   return contextParts.join("\n");

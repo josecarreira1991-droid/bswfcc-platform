@@ -2,7 +2,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-const ADMIN_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro", "diretor_tecnologia", "diretor_marketing"];
+import { ADMIN_ROLES } from "@/lib/utils";
 
 async function requireAdmin() {
   const supabase = createClient();
@@ -15,7 +15,7 @@ async function requireAdmin() {
     .eq("email", user.email!)
     .single();
 
-  if (!caller || !ADMIN_ROLES.includes(caller.role)) {
+  if (!caller || !(ADMIN_ROLES as readonly string[]).includes(caller.role)) {
     throw new Error("Forbidden: admin role required");
   }
   return { supabase, caller };

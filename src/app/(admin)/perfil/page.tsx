@@ -27,7 +27,7 @@ export default async function PerfilPage() {
           <div className="flex items-center gap-4 mb-4">
             <div className="w-16 h-16 rounded-full bg-gold/15 flex items-center justify-center">
               <span className="text-gold font-bold text-xl">
-                {member.full_name.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase()}
+                {(member.full_name || "").split(" ").filter(Boolean).map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
               </span>
             </div>
             <div>

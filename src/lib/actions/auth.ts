@@ -130,12 +130,12 @@ export async function getSession() {
 export async function getCurrentMember() {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+  if (!user || !user.email) return null;
 
   const { data: member } = await supabase
     .from("members")
     .select("*")
-    .eq("email", user.email!)
+    .eq("email", user.email)
     .single();
 
   return member;

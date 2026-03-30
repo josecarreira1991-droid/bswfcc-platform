@@ -3,20 +3,20 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import type { Member, MemberRole, MemberStatus } from "@/types/database";
 
-const ADMIN_ROLES = ["presidente", "vice_presidente", "secretario", "tesoureiro", "diretor_tecnologia"];
+import { ADMIN_ROLES } from "@/lib/utils";
 
 async function requireAdmin() {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
+  if (!user || !user.email) throw new Error("Unauthorized");
 
   const { data: caller } = await supabase
     .from("members")
     .select("role")
-    .eq("email", user.email!)
+    .eq("email", user.email)
     .single();
 
-  if (!caller || !ADMIN_ROLES.includes(caller.role)) {
+  if (!caller || !(ADMIN_ROLES as readonly string[]).includes(caller.role)) {
     throw new Error("Forbidden: admin role required");
   }
   return { supabase, caller };
@@ -108,12 +108,12 @@ export async function rejectMember(id: string) {
 export async function updateMyProfile(updates: Record<string, unknown>) {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
+  if (!user || !user.email) throw new Error("Unauthorized");
 
   const { data: member } = await supabase
     .from("members")
     .select("id")
-    .eq("email", user.email!)
+    .eq("email", user.email)
     .single();
 
   if (!member) throw new Error("Member not found");
