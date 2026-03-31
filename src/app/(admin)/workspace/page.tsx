@@ -14,7 +14,7 @@ export default async function WorkspacePage() {
   if (!isAdmin(member.role)) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
-        <Lock size={32} className="text-slate-600 mb-3" />
+        <Lock size={32} className="text-corp-muted mb-3" />
         <h2 className="text-lg font-medium text-corp-text mb-1">Acesso Restrito</h2>
         <p className="text-sm text-corp-muted">Workspace disponível para administradores.</p>
       </div>

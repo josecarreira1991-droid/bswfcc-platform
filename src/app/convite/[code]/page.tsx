@@ -122,10 +122,10 @@ export default async function ConvitePage({ params }: { params: { code: string }
 
   if (!result.valid || !result.referrer) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-corp-bg flex items-center justify-center px-4">
         <div className="max-w-md text-center">
-          <div className="w-16 h-16 rounded-full bg-red-50 border border-red-500/20 flex items-center justify-center mx-auto mb-6">
-            <span className="text-red-700 text-2xl">!</span>
+          <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/15 flex items-center justify-center mx-auto mb-6">
+            <span className="text-red-400 text-2xl">!</span>
           </div>
           <h1 className="text-2xl font-bold text-corp-text mb-3">Convite Inválido</h1>
           <p className="text-corp-muted mb-8">
@@ -134,7 +134,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/"
-              className="px-6 py-3 bg-navy text-white font-semibold rounded-xl hover:bg-light-navy transition-colors"
+              className="px-6 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent/90 transition-colors"
             >
               Ir para o Site
             </Link>
@@ -142,7 +142,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
               href="https://bswfcc.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 border border-corp-border text-slate-600 rounded-xl hover:bg-slate-50 transition-colors"
+              className="px-6 py-3 border border-corp-border text-corp-muted rounded-xl hover:bg-white/[0.03] transition-colors"
             >
               bswfcc.com
             </a>
@@ -155,41 +155,41 @@ export default async function ConvitePage({ params }: { params: { code: string }
   const referrer = result.referrer;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-corp-bg">
       {/* Hero */}
-      <header className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-navy/3 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-navy/3 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+      <header className="relative overflow-hidden bg-gradient-to-br from-corp-bg via-corp-card to-corp-bg">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <nav className="relative z-10 flex items-center justify-between max-w-7xl mx-auto px-6 py-6">
           <div>
-            <Link href="/" className="text-3xl font-bold text-navy">
+            <Link href="/" className="text-3xl font-bold text-accent">
               BSWFCC
             </Link>
             <p className="text-xs text-corp-muted mt-1">Brazilian Southwest Florida Chamber of Commerce</p>
           </div>
           <Link
             href={`/register?ref=${params.code}`}
-            className="px-5 py-2.5 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors"
+            className="px-5 py-2.5 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors"
           >
             Cadastrar Agora
           </Link>
         </nav>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 pt-20 pb-28 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-navy/5 border border-navy/15 rounded-full text-navy text-sm font-medium mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent/15 rounded-full text-accent text-sm font-medium mb-8">
             <Star size={14} />
             Convite Exclusivo
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-bold leading-tight text-corp-text mb-6">
             Você foi convidado para a{" "}
-            <span className="text-navy">BSWFCC</span>
+            <span className="text-accent">BSWFCC</span>
           </h1>
 
-          <div className="inline-flex items-center gap-3 bg-white border border-corp-border rounded-xl px-6 py-3 mb-8 shadow-card">
-            <div className="w-10 h-10 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0">
-              <span className="text-navy font-bold text-sm">
+          <div className="inline-flex items-center gap-3 bg-corp-card border border-corp-border rounded-xl px-6 py-3 mb-8">
+            <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <span className="text-accent font-bold text-sm">
                 {(referrer.full_name || "").split(" ").filter(Boolean).map((n) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
               </span>
             </div>
@@ -205,7 +205,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
 
           <Link
             href={`/register?ref=${params.code}`}
-            className="inline-flex items-center gap-2 px-10 py-4 bg-navy text-white font-bold rounded-xl hover:bg-light-navy transition-all shadow-lg shadow-navy/20 text-lg"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-xl hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 text-lg"
           >
             Cadastrar Agora
             <ArrowRight size={20} />
@@ -217,7 +217,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
       <section className="max-w-7xl mx-auto px-6 py-24">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-corp-text mb-4">
-            Por que se tornar <span className="text-navy">membro</span>?
+            Por que se tornar <span className="text-accent">membro</span>?
           </h2>
           <p className="text-corp-muted max-w-2xl mx-auto">
             A BSWFCC conecta empresários brasileiros a oportunidades reais no mercado americano, com ferramentas inteligentes e uma comunidade ativa.
@@ -228,10 +228,10 @@ export default async function ConvitePage({ params }: { params: { code: string }
           {benefits.map((b) => (
             <div
               key={b.title}
-              className="bg-white shadow-card border border-corp-border rounded-xl p-6 hover:border-navy/30 transition-colors group"
+              className="bg-corp-card border border-corp-border rounded-xl p-6 hover:border-accent/30 transition-colors group"
             >
-              <div className="w-11 h-11 rounded-lg bg-navy/5 flex items-center justify-center mb-4 group-hover:bg-navy/10 transition-colors">
-                <b.icon size={20} className="text-navy" />
+              <div className="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
+                <b.icon size={20} className="text-accent" />
               </div>
               <h3 className="text-corp-text font-semibold mb-2">{b.title}</h3>
               <p className="text-sm text-corp-muted leading-relaxed">{b.desc}</p>
@@ -241,11 +241,11 @@ export default async function ConvitePage({ params }: { params: { code: string }
       </section>
 
       {/* Tiers */}
-      <section className="bg-slate-50 py-24">
+      <section className="bg-corp-card/50 py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-corp-text mb-4">
-              Planos de <span className="text-navy">Membership</span>
+              Planos de <span className="text-accent">Membership</span>
             </h2>
             <p className="text-corp-muted max-w-2xl mx-auto">
               Escolha o plano que mais se encaixa nas necessidades da sua empresa. Todos os planos incluem acesso à rede de membros da BSWFCC.
@@ -258,25 +258,25 @@ export default async function ConvitePage({ params }: { params: { code: string }
                 key={tier.name}
                 className={`rounded-xl p-6 border transition-all ${
                   tier.highlight
-                    ? "border-navy/30 bg-navy/5 ring-1 ring-navy/15"
-                    : "border-corp-border bg-white shadow-card"
+                    ? "border-accent/30 bg-accent/10 ring-1 ring-accent/15"
+                    : "border-corp-border bg-corp-card"
                 }`}
               >
                 {tier.highlight && (
-                  <div className="text-[10px] font-bold uppercase tracking-widest text-navy mb-3">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-accent mb-3">
                     Mais Popular
                   </div>
                 )}
                 <h3 className="text-xl font-bold text-corp-text mb-1">{tier.name}</h3>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-3xl font-bold text-navy">{tier.price}</span>
+                  <span className="text-3xl font-bold text-accent">{tier.price}</span>
                   <span className="text-corp-muted text-sm">{tier.period}</span>
                 </div>
                 <p className="text-xs text-corp-muted mb-5">{tier.annual}</p>
                 <ul className="space-y-2.5">
                   {tier.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
-                      <CheckCircle2 size={15} className="text-navy flex-shrink-0 mt-0.5" />
+                    <li key={f} className="flex items-start gap-2 text-sm text-corp-muted">
+                      <CheckCircle2 size={15} className="text-accent flex-shrink-0 mt-0.5" />
                       {f}
                     </li>
                   ))}
@@ -288,17 +288,17 @@ export default async function ConvitePage({ params }: { params: { code: string }
       </section>
 
       {/* CTA */}
-      <section className="bg-white border-y border-corp-border">
+      <section className="bg-corp-bg border-y border-corp-border">
         <div className="max-w-4xl mx-auto px-6 py-20 text-center">
           <h2 className="text-3xl font-bold text-corp-text mb-4">
-            Pronto para fazer parte da <span className="text-navy">câmara que conecta</span>?
+            Pronto para fazer parte da <span className="text-accent">câmara que conecta</span>?
           </h2>
           <p className="text-corp-muted mb-8 max-w-2xl mx-auto">
             {referrer.full_name} já faz parte da rede. Cadastre-se agora e comece a acessar networking exclusivo, eventos, inteligência de mercado e a maior rede de empresários brasileiros do SWFL.
           </p>
           <Link
             href={`/register?ref=${params.code}`}
-            className="inline-flex items-center gap-2 px-10 py-4 bg-navy text-white font-bold rounded-xl hover:bg-light-navy transition-all shadow-lg shadow-navy/20 text-lg"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-xl hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 text-lg"
           >
             Cadastrar Agora
             <ArrowRight size={20} />
@@ -310,18 +310,18 @@ export default async function ConvitePage({ params }: { params: { code: string }
       <footer className="max-w-7xl mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <span className="text-xl font-bold text-navy">BSWFCC</span>
+            <span className="text-xl font-bold text-accent">BSWFCC</span>
             <p className="text-xs text-corp-muted mt-1">Brazilian Southwest Florida Chamber of Commerce, Inc.</p>
-            <p className="text-[10px] text-slate-400 mt-1">EIN: 99-4852466 | SunBiz: N24000010828 | Florida Not For Profit 501(c)(6)</p>
+            <p className="text-[10px] text-corp-muted/50 mt-1">EIN: 99-4852466 | SunBiz: N24000010828 | Florida Not For Profit 501(c)(6)</p>
           </div>
           <div className="flex gap-6 text-sm text-corp-muted">
-            <Link href="/" className="hover:text-navy transition-colors">Home</Link>
-            <Link href="/diretoria" className="hover:text-navy transition-colors">Diretoria</Link>
-            <a href="https://bswfcc.com" target="_blank" rel="noopener noreferrer" className="hover:text-navy transition-colors">bswfcc.com</a>
+            <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+            <Link href="/diretoria" className="hover:text-accent transition-colors">Diretoria</Link>
+            <a href="https://bswfcc.com" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">bswfcc.com</a>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-corp-muted/50">
             Plataforma desenvolvida por{" "}
-            <a href="https://quantrexnow.io" target="_blank" rel="noopener noreferrer" className="text-navy/60 hover:text-navy">
+            <a href="https://quantrexnow.io" target="_blank" rel="noopener noreferrer" className="text-accent/60 hover:text-accent">
               Quantrex LLC
             </a>
           </p>

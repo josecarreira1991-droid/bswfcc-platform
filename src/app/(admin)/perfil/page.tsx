@@ -23,10 +23,10 @@ export default async function PerfilPage() {
 
       <div className="max-w-2xl space-y-6">
         {/* Profile header */}
-        <div className="bg-white shadow-card border border-corp-border rounded-xl p-6">
+        <div className="bg-corp-card border border-corp-border rounded-2xl p-6">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 rounded-full bg-navy/10 flex items-center justify-center">
-              <span className="text-navy font-bold text-xl">
+            <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center">
+              <span className="text-accent font-bold text-xl">
                 {(member.full_name || "").split(" ").filter(Boolean).map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
               </span>
             </div>
@@ -46,8 +46,8 @@ export default async function PerfilPage() {
         </div>
 
         {/* Details */}
-        <div className="bg-white shadow-card border border-corp-border rounded-xl p-6">
-          <h3 className="text-sm font-medium text-slate-600 mb-4">Informações de Contato</h3>
+        <div className="bg-corp-card border border-corp-border rounded-2xl p-6">
+          <h3 className="text-sm font-medium text-corp-muted mb-4">Informações de Contato</h3>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
               { icon: Mail, label: "Email", value: member.email },
@@ -58,7 +58,7 @@ export default async function PerfilPage() {
               { icon: Calendar, label: "Membro desde", value: formatDate(member.created_at) },
             ].map((field) => (
               <div key={field.label} className="flex items-start gap-3">
-                <field.icon size={16} className="text-slate-400 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
+                <field.icon size={16} className="text-corp-muted mt-0.5 flex-shrink-0" strokeWidth={1.5} />
                 <div>
                   <p className="text-[11px] text-corp-muted uppercase tracking-wider">{field.label}</p>
                   {field.isLink && field.value ? (
@@ -66,7 +66,7 @@ export default async function PerfilPage() {
                       href={field.value.startsWith("http") ? field.value : `https://${field.value}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-blue-700 hover:text-blue-600 hover:underline"
+                      className="text-sm text-blue-400 hover:text-blue-300 hover:underline"
                     >
                       {field.value}
                     </a>
@@ -80,8 +80,8 @@ export default async function PerfilPage() {
         </div>
 
         {member.industry && (
-          <div className="bg-white shadow-card border border-corp-border rounded-xl p-6">
-            <h3 className="text-sm font-medium text-slate-600 mb-2">Indústria</h3>
+          <div className="bg-corp-card border border-corp-border rounded-2xl p-6">
+            <h3 className="text-sm font-medium text-corp-muted mb-2">Indústria</h3>
             <p className="text-sm text-corp-text">{member.industry}</p>
           </div>
         )}

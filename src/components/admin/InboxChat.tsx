@@ -133,10 +133,10 @@ export default function InboxChat({ conversations }: InboxChatProps) {
   };
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] bg-white shadow-card border border-corp-border rounded-xl overflow-hidden">
-      {/* Conversation List */}
+    <div className="flex h-[calc(100vh-8rem)] bg-corp-card border border-corp-border rounded-xl overflow-hidden">
+      {/* Conversation List — sidebar */}
       <div className={cn(
-        "w-full sm:w-80 border-r border-corp-border flex flex-col flex-shrink-0",
+        "w-full sm:w-80 bg-dark-navy border-r border-corp-border flex flex-col flex-shrink-0",
         mobileShowChat ? "hidden sm:flex" : "flex"
       )}>
         <div className="px-4 py-3 border-b border-corp-border">
@@ -151,12 +151,12 @@ export default function InboxChat({ conversations }: InboxChatProps) {
                 key={conv.id}
                 onClick={() => selectConversation(conv)}
                 className={cn(
-                  "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-slate-50 transition-colors",
-                  selected?.id === conv.id && "bg-slate-100"
+                  "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-white/[0.03] transition-colors",
+                  selected?.id === conv.id && "bg-white/[0.05]"
                 )}
               >
-                <div className="w-10 h-10 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0">
-                  <span className="text-navy text-xs font-semibold">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-accent text-xs font-semibold">
                     {(conv.member_name || conv.whatsapp_number)?.[0]?.toUpperCase() || "?"}
                   </span>
                 </div>
@@ -172,7 +172,7 @@ export default function InboxChat({ conversations }: InboxChatProps) {
                   <div className="flex items-center justify-between mt-0.5">
                     <p className="text-[11px] text-corp-muted truncate">{conv.last_message || "Nova conversa"}</p>
                     {conv.unread_count > 0 && (
-                      <span className="ml-1 w-5 h-5 bg-navy rounded-full text-[10px] font-bold text-white flex items-center justify-center flex-shrink-0">
+                      <span className="ml-1 w-5 h-5 bg-accent rounded-full text-[10px] font-bold text-white flex items-center justify-center flex-shrink-0">
                         {conv.unread_count > 9 ? "9+" : conv.unread_count}
                       </span>
                     )}
@@ -182,9 +182,9 @@ export default function InboxChat({ conversations }: InboxChatProps) {
             ))
           ) : (
             <div className="flex flex-col items-center justify-center py-12 px-4">
-              <MessageCircle size={32} className="text-slate-300 mb-3" />
+              <MessageCircle size={32} className="text-corp-muted mb-3" />
               <p className="text-sm text-corp-muted">Nenhuma conversa</p>
-              <p className="text-[11px] text-slate-400 text-center mt-1">
+              <p className="text-[11px] text-corp-muted text-center mt-1">
                 Conversas aparecerão aqui quando membros enviarem mensagens via WhatsApp.
               </p>
             </div>
@@ -208,8 +208,8 @@ export default function InboxChat({ conversations }: InboxChatProps) {
                 >
                   <ChevronLeft size={18} />
                 </button>
-                <div className="w-9 h-9 rounded-full bg-navy/10 flex items-center justify-center">
-                  <span className="text-navy text-xs font-semibold">
+                <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center">
+                  <span className="text-accent text-xs font-semibold">
                     {(selected.member_name || "?")?.[0]?.toUpperCase()}
                   </span>
                 </div>
@@ -224,11 +224,11 @@ export default function InboxChat({ conversations }: InboxChatProps) {
               </div>
               <div className="flex items-center gap-1">
                 {selected.status === "open" ? (
-                  <button onClick={handleArchive} className="p-2 text-corp-muted hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors" title="Arquivar">
+                  <button onClick={handleArchive} className="p-2 text-corp-muted hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-colors" title="Arquivar">
                     <Archive size={16} />
                   </button>
                 ) : (
-                  <button onClick={handleReopen} className="p-2 text-corp-muted hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors" title="Reabrir">
+                  <button onClick={handleReopen} className="p-2 text-corp-muted hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors" title="Reabrir">
                     <RotateCcw size={16} />
                   </button>
                 )}
@@ -239,7 +239,7 @@ export default function InboxChat({ conversations }: InboxChatProps) {
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
               {loading ? (
                 <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin w-5 h-5 border-2 border-navy/30 border-t-navy rounded-full" />
+                  <div className="animate-spin w-5 h-5 border-2 border-accent/30 border-t-accent rounded-full" />
                 </div>
               ) : messages.length > 0 ? (
                 messages.map((msg) => (
@@ -254,14 +254,14 @@ export default function InboxChat({ conversations }: InboxChatProps) {
                       className={cn(
                         "max-w-[75%] rounded-xl px-3.5 py-2.5",
                         msg.direction === "outbound"
-                          ? "bg-navy text-white"
-                          : "bg-slate-100 text-corp-text"
+                          ? "bg-accent text-white"
+                          : "bg-white/[0.05] text-corp-text"
                       )}
                     >
                       {msg.is_from_bot && (
                         <div className="flex items-center gap-1 mb-1">
-                          <Bot size={10} className="text-blue-700" />
-                          <span className="text-[9px] text-blue-700 font-medium">BOT</span>
+                          <Bot size={10} className="text-blue-400" />
+                          <span className="text-[9px] text-blue-400 font-medium">BOT</span>
                         </div>
                       )}
                       {msg.sender_name && msg.direction === "outbound" && !msg.is_from_bot && (
@@ -270,7 +270,7 @@ export default function InboxChat({ conversations }: InboxChatProps) {
                       <p className={cn("text-sm whitespace-pre-wrap break-words", msg.direction === "outbound" ? "text-white" : "text-corp-text")}>{msg.content}</p>
                       <p className={cn(
                         "text-[10px] mt-1",
-                        msg.direction === "outbound" ? "text-white/50 text-right" : "text-slate-400"
+                        msg.direction === "outbound" ? "text-white/50 text-right" : "text-corp-muted"
                       )}>
                         {formatTime(msg.created_at)}
                       </p>
@@ -286,7 +286,7 @@ export default function InboxChat({ conversations }: InboxChatProps) {
             </div>
 
             {/* Message Input */}
-            <div className="px-4 py-3 border-t border-corp-border bg-white">
+            <div className="px-4 py-3 border-t border-corp-border bg-corp-card">
               <div className="flex items-end gap-2">
                 <textarea
                   value={newMessage}
@@ -299,12 +299,12 @@ export default function InboxChat({ conversations }: InboxChatProps) {
                   }}
                   placeholder="Escreva uma mensagem..."
                   rows={1}
-                  className="flex-1 px-3 py-2.5 text-sm bg-slate-50 border border-corp-border rounded-xl text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none resize-none"
+                  className="flex-1 px-3 py-2.5 text-sm bg-white/[0.03] border border-corp-border rounded-xl text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none"
                 />
                 <button
                   onClick={handleSend}
                   disabled={!newMessage.trim() || sending}
-                  className="p-2.5 bg-navy text-white rounded-xl hover:bg-light-navy transition-colors disabled:opacity-30"
+                  className="p-2.5 bg-accent text-white rounded-xl hover:bg-accent-dim transition-colors disabled:opacity-30"
                 >
                   <Send size={16} />
                 </button>
@@ -313,9 +313,9 @@ export default function InboxChat({ conversations }: InboxChatProps) {
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center">
-            <MessageCircle size={40} className="text-slate-300 mb-3" />
+            <MessageCircle size={40} className="text-corp-muted mb-3" />
             <p className="text-sm text-corp-muted">Selecione uma conversa</p>
-            <p className="text-[11px] text-slate-400 mt-1">ou aguarde novas mensagens via WhatsApp</p>
+            <p className="text-[11px] text-corp-muted mt-1">ou aguarde novas mensagens via WhatsApp</p>
           </div>
         )}
       </div>

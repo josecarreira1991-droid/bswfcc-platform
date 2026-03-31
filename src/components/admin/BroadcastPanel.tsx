@@ -55,7 +55,7 @@ export default function BroadcastPanel({ templates }: BroadcastPanelProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 py-2 text-xs font-medium bg-navy/5 text-navy border border-navy/15 rounded-lg hover:bg-navy/10 transition-colors"
+        className="flex items-center gap-2 px-3 py-2 text-xs font-medium bg-accent/10 text-accent border border-accent/15 rounded-lg hover:bg-accent/20 transition-colors"
       >
         <Send size={13} /> Broadcast
       </button>
@@ -77,7 +77,7 @@ export default function BroadcastPanel({ templates }: BroadcastPanelProps) {
                   <button
                     key={t.id}
                     onClick={() => applyTemplate(t)}
-                    className="px-2.5 py-1 text-[11px] bg-slate-50 text-slate-600 border border-corp-border rounded-md hover:border-navy/30 transition-colors"
+                    className="px-2.5 py-1 text-[11px] bg-white/[0.03] text-corp-muted border border-corp-border rounded-md hover:border-accent/30 transition-colors"
                   >
                     {t.name.replace(/_/g, " ")}
                   </button>
@@ -96,7 +96,7 @@ export default function BroadcastPanel({ templates }: BroadcastPanelProps) {
                 value={filterRole}
                 onChange={(e) => setFilterRole(e.target.value)}
                 placeholder="Ex: membro, parceiro_estrategico"
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none"
+                className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
               />
             </div>
             <div>
@@ -107,7 +107,7 @@ export default function BroadcastPanel({ templates }: BroadcastPanelProps) {
                 value={filterIndustry}
                 onChange={(e) => setFilterIndustry(e.target.value)}
                 placeholder="Ex: Construção, Tecnologia"
-                className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none"
+                className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
               />
             </div>
           </div>
@@ -120,16 +120,16 @@ export default function BroadcastPanel({ templates }: BroadcastPanelProps) {
               onChange={(e) => setMessage(e.target.value)}
               rows={6}
               placeholder="Escreva a mensagem do broadcast..."
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none resize-none"
+              className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none"
             />
           </div>
 
           {/* Result */}
           {result && (
-            <div className="bg-emerald-50 border border-emerald-500/20 rounded-lg p-3">
-              <p className="text-sm text-emerald-700">
+            <div className="bg-emerald-500/10 border border-emerald-500/15 rounded-lg p-3">
+              <p className="text-sm text-emerald-400">
                 Enviado para {result.sent} de {result.total} membros
-                {result.failed > 0 && <span className="text-red-700"> ({result.failed} falhas)</span>}
+                {result.failed > 0 && <span className="text-red-400"> ({result.failed} falhas)</span>}
               </p>
             </div>
           )}
@@ -138,14 +138,14 @@ export default function BroadcastPanel({ templates }: BroadcastPanelProps) {
           <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
             <button
               onClick={() => { setOpen(false); setResult(null); }}
-              className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.03] rounded-lg transition-colors"
             >
               Fechar
             </button>
             <button
               onClick={handleBroadcast}
               disabled={!message.trim() || sending}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-50"
             >
               {sending ? (
                 <>

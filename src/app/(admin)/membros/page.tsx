@@ -31,15 +31,15 @@ export default async function MembrosPage() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {[
-          { label: "Total", value: stats.total, icon: Users, color: "text-navy" },
-          { label: "Ativos", value: stats.ativos, icon: UserCheck, color: "text-emerald-700" },
-          { label: "Pendentes", value: stats.pendentes, icon: Clock, color: "text-amber-700" },
-          { label: "Inativos", value: stats.inativos, icon: UserX, color: "text-red-700" },
+          { label: "Total", value: stats.total, icon: Users, color: "text-accent" },
+          { label: "Ativos", value: stats.ativos, icon: UserCheck, color: "text-emerald-400" },
+          { label: "Pendentes", value: stats.pendentes, icon: Clock, color: "text-amber-400" },
+          { label: "Inativos", value: stats.inativos, icon: UserX, color: "text-red-400" },
         ].map((stat) => (
-          <div key={stat.label} className="bg-white shadow-card border border-corp-border rounded-xl p-4">
+          <div key={stat.label} className="bg-corp-card border border-corp-border rounded-2xl p-4">
             <div className="flex items-center justify-between mb-1">
               <span className="text-[11px] text-corp-muted uppercase tracking-wider">{stat.label}</span>
-              <stat.icon size={14} className="text-slate-400" strokeWidth={1.5} />
+              <stat.icon size={14} className="text-corp-muted" strokeWidth={1.5} />
             </div>
             <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
           </div>

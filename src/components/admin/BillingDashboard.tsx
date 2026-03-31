@@ -77,11 +77,11 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
     <div className="space-y-6">
       {/* Stripe Status */}
       {!stripeConfigured && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
-          <AlertTriangle size={18} className="text-amber-700 mt-0.5 flex-shrink-0" />
+        <div className="bg-amber-500/10 border border-amber-500/15 rounded-xl p-4 flex items-start gap-3">
+          <AlertTriangle size={18} className="text-amber-400 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="text-sm font-medium text-amber-700">Stripe não configurado</p>
-            <p className="text-xs text-slate-600 mt-1">
+            <p className="text-sm font-medium text-amber-400">Stripe não configurado</p>
+            <p className="text-xs text-corp-muted mt-1">
               Configure STRIPE_SECRET_KEY e STRIPE_WEBHOOK_SECRET nas env vars. A conta Stripe deve ser criada pela diretoria da BSWFCC (501(c)(6) nonprofit).
             </p>
           </div>
@@ -93,15 +93,15 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
-              { label: "MRR", value: formatCurrency(stats.mrr), icon: TrendingUp, color: "text-navy" },
-              { label: "Receita Mês", value: formatCurrency(stats.revenueThisMonth), icon: CreditCard, color: "text-emerald-700" },
-              { label: "Assinantes Ativos", value: stats.activeSubscriptions, icon: Users, color: "text-blue-700" },
-              { label: "Churn Rate", value: `${stats.churnRate}%`, icon: AlertTriangle, color: stats.churnRate > 10 ? "text-red-700" : "text-corp-muted" },
+              { label: "MRR", value: formatCurrency(stats.mrr), icon: TrendingUp, color: "text-accent" },
+              { label: "Receita Mês", value: formatCurrency(stats.revenueThisMonth), icon: CreditCard, color: "text-emerald-400" },
+              { label: "Assinantes Ativos", value: stats.activeSubscriptions, icon: Users, color: "text-blue-400" },
+              { label: "Churn Rate", value: `${stats.churnRate}%`, icon: AlertTriangle, color: stats.churnRate > 10 ? "text-red-400" : "text-corp-muted" },
             ].map((stat) => (
-              <div key={stat.label} className="bg-white shadow-card border border-corp-border rounded-xl p-4">
+              <div key={stat.label} className="bg-corp-card border border-corp-border rounded-xl p-4">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] text-corp-muted uppercase tracking-wider">{stat.label}</span>
-                  <stat.icon size={14} className="text-slate-300" strokeWidth={1.5} />
+                  <stat.icon size={14} className="text-corp-muted/40" strokeWidth={1.5} />
                 </div>
                 <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
               </div>
@@ -110,8 +110,8 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
 
           {/* Subs by Tier */}
           {Object.keys(stats.byTier).length > 0 && (
-            <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
-              <h3 className="text-sm font-medium text-slate-600 mb-3">Assinantes por Plano</h3>
+            <div className="bg-corp-card border border-corp-border rounded-xl p-5">
+              <h3 className="text-sm font-medium text-corp-muted mb-3">Assinantes por Plano</h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {Object.entries(stats.byTier).map(([tier, count]) => (
                   <div key={tier} className="text-center">
@@ -127,14 +127,14 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
 
       {/* Membership Tiers */}
       <div>
-        <h2 className="text-sm font-medium text-slate-600 mb-3">Planos de Membership</h2>
+        <h2 className="text-sm font-medium text-corp-muted mb-3">Planos de Membership</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {tiers.map((tier) => (
             <div
               key={tier.id}
               className={cn(
-                "bg-white shadow-card border rounded-xl p-5 relative",
-                tier.slug === "business" ? "border-navy/30" : "border-corp-border"
+                "bg-corp-card border rounded-xl p-5 relative",
+                tier.slug === "business" ? "border-accent/30" : "border-corp-border"
               )}
             >
               {tier.slug === "business" && (
@@ -147,7 +147,7 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
                 <p className="text-[11px] text-corp-muted mt-0.5">{tier.description}</p>
               </div>
               <div className="mb-4">
-                <span className="text-2xl font-bold text-navy">
+                <span className="text-2xl font-bold text-accent">
                   {tier.price_monthly === 0 ? "Free" : formatCurrency(tier.price_monthly)}
                 </span>
                 {tier.price_monthly > 0 && (
@@ -157,7 +157,7 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
               <ul className="space-y-2 mb-5">
                 {tier.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-xs text-corp-muted">
-                    <Check size={12} className="text-emerald-700 mt-0.5 flex-shrink-0" />
+                    <Check size={12} className="text-emerald-400 mt-0.5 flex-shrink-0" />
                     {f}
                   </li>
                 ))}
@@ -166,7 +166,7 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
                 <button
                   onClick={() => handleCheckout(tier.stripe_price_id_monthly!)}
                   disabled={checkoutLoading === tier.stripe_price_id_monthly}
-                  className="w-full px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50"
+                  className="w-full px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-50"
                 >
                   {checkoutLoading === tier.stripe_price_id_monthly ? "Processando..." : "Assinar"}
                 </button>
@@ -183,9 +183,9 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
 
       {/* Recent Payments (Admin) */}
       {isAdmin && payments.length > 0 && (
-        <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden">
+        <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden">
           <div className="px-5 py-3 border-b border-corp-border">
-            <h3 className="text-sm font-medium text-slate-600">Últimos Pagamentos</h3>
+            <h3 className="text-sm font-medium text-corp-muted">Últimos Pagamentos</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -203,11 +203,11 @@ export default function BillingDashboard({ tiers, stats, payments, isAdmin, stri
                     key={p.id}
                     className={cn(
                       "border-b border-corp-border",
-                      i % 2 === 0 ? "bg-transparent" : "bg-slate-50/50"
+                      i % 2 === 0 ? "bg-transparent" : "bg-white/[0.03]"
                     )}
                   >
                     <td className="px-4 py-2.5 text-corp-text">{p.members?.full_name || "—"}</td>
-                    <td className="px-4 py-2.5 text-navy font-medium">{formatCurrency(p.amount)}</td>
+                    <td className="px-4 py-2.5 text-accent font-medium">{formatCurrency(p.amount)}</td>
                     <td className="px-4 py-2.5">
                       <Badge variant={p.status === "succeeded" ? "success" : p.status === "failed" ? "danger" : "warning"}>
                         {p.status}

@@ -50,10 +50,10 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
   }
 
   return (
-    <div className="bg-white shadow-card border border-corp-border rounded-xl p-5 space-y-5">
+    <div className="bg-corp-card border border-corp-border rounded-xl p-5 space-y-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Bot size={18} className="text-navy" />
+          <Bot size={18} className="text-accent" />
           <h3 className="text-sm font-medium text-corp-text">Assistente Virtual (WhatsApp Bot)</h3>
         </div>
         <button
@@ -61,8 +61,8 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
             form.is_active
-              ? "bg-emerald-50 text-emerald-700 border border-emerald-500/20"
-              : "bg-slate-50 text-corp-muted border border-corp-border"
+              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/15"
+              : "bg-white/[0.03] text-corp-muted border border-corp-border"
           )}
         >
           <Power size={12} />
@@ -84,8 +84,8 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
               className={cn(
                 "p-3 rounded-lg text-left border transition-colors",
                 form.model === opt.value
-                  ? "border-navy/30 bg-navy/10"
-                  : "border-corp-border hover:border-slate-400"
+                  ? "border-accent/30 bg-accent/10"
+                  : "border-corp-border hover:border-corp-muted/50"
               )}
             >
               <p className="text-xs font-medium text-corp-text">{opt.label}</p>
@@ -104,7 +104,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
           value={form.system_prompt}
           onChange={(e) => updateField("system_prompt", e.target.value)}
           rows={5}
-          className="w-full bg-slate-50 border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none resize-y"
+          className="w-full bg-white/[0.03] border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-y"
           placeholder="Você é o assistente virtual da BSWFCC..."
         />
         <p className="text-[10px] text-corp-muted mt-1">{form.system_prompt.length} caracteres</p>
@@ -123,7 +123,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
             step={50}
             value={form.max_tokens}
             onChange={(e) => updateField("max_tokens", parseInt(e.target.value) || 500)}
-            className="w-full bg-slate-50 border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-navy/30 focus:outline-none"
+            className="w-full bg-white/[0.03] border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
           />
           <p className="text-[10px] text-corp-muted mt-1">Tamanho max da resposta</p>
         </div>
@@ -139,7 +139,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
               step={0.1}
               value={form.temperature}
               onChange={(e) => updateField("temperature", parseFloat(e.target.value))}
-              className="flex-1 accent-navy"
+              className="flex-1 accent-accent"
             />
             <span className="text-sm text-corp-text font-mono w-8">{form.temperature}</span>
           </div>
@@ -152,7 +152,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
           <select
             value={form.auto_reply_delay_ms}
             onChange={(e) => updateField("auto_reply_delay_ms", parseInt(e.target.value))}
-            className="w-full bg-slate-50 border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-navy/30 focus:outline-none"
+            className="w-full bg-white/[0.03] border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
           >
             <option value={0}>Imediato</option>
             <option value={1000}>1 segundo</option>
@@ -171,9 +171,9 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
             type="checkbox"
             checked={form.auto_reply_enabled}
             onChange={(e) => updateField("auto_reply_enabled", e.target.checked)}
-            className="accent-navy w-4 h-4 rounded"
+            className="accent-accent w-4 h-4 rounded"
           />
-          <span className="text-sm text-slate-600 flex items-center gap-1">
+          <span className="text-sm text-corp-muted flex items-center gap-1">
             <Zap size={12} /> Auto-resposta ativa
           </span>
         </label>
@@ -182,9 +182,9 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
             type="checkbox"
             checked={form.working_hours_only}
             onChange={(e) => updateField("working_hours_only", e.target.checked)}
-            className="accent-navy w-4 h-4 rounded"
+            className="accent-accent w-4 h-4 rounded"
           />
-          <span className="text-sm text-slate-600 flex items-center gap-1">
+          <span className="text-sm text-corp-muted flex items-center gap-1">
             <Clock size={12} /> Só horário comercial
           </span>
         </label>
@@ -198,7 +198,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
               type="time"
               value={form.working_hours_start}
               onChange={(e) => updateField("working_hours_start", e.target.value)}
-              className="bg-slate-50 border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-navy/30 focus:outline-none"
+              className="bg-white/[0.03] border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
             />
           </div>
           <span className="text-corp-muted mt-4">até</span>
@@ -208,7 +208,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
               type="time"
               value={form.working_hours_end}
               onChange={(e) => updateField("working_hours_end", e.target.value)}
-              className="bg-slate-50 border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-navy/30 focus:outline-none"
+              className="bg-white/[0.03] border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
             />
           </div>
         </div>
@@ -219,7 +219,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-50"
         >
           <Save size={14} />
           {saving ? "Salvando..." : "Salvar Configuração"}

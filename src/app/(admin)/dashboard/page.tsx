@@ -34,7 +34,7 @@ export default async function DashboardPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-xl font-semibold text-corp-text">
-            Bem-vindo, <span className="text-navy">{member.full_name.split(" ")[0]}</span>
+            Bem-vindo, <span className="text-accent">{member.full_name.split(" ")[0]}</span>
           </h1>
           <p className="text-sm text-corp-muted mt-0.5">
             {ROLE_LABELS[member.role]} &middot; Painel da BSWFCC
@@ -48,18 +48,18 @@ export default async function DashboardPage() {
       {/* Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {[
-          { label: "Total de Membros", value: stats.total, icon: Users, color: "text-navy", border: "border-l-navy" },
-          { label: "Membros Ativos", value: stats.ativos, icon: UserCheck, color: "text-emerald-600", border: "border-l-emerald-500" },
-          { label: "Pendentes", value: stats.pendentes, icon: Clock, color: "text-amber-600", border: "border-l-amber-500" },
-          { label: "Comércio FL-Brasil", value: tradeData?.value || "—", icon: TrendingUp, color: "text-blue-600", border: "border-l-blue-500" },
+          { label: "Total de Membros", value: stats.total, icon: Users, color: "text-accent", border: "border-l-accent" },
+          { label: "Membros Ativos", value: stats.ativos, icon: UserCheck, color: "text-emerald-400", border: "border-l-emerald-500" },
+          { label: "Pendentes", value: stats.pendentes, icon: Clock, color: "text-amber-400", border: "border-l-amber-500" },
+          { label: "Comércio FL-Brasil", value: tradeData?.value || "—", icon: TrendingUp, color: "text-blue-400", border: "border-l-blue-500" },
         ].map((stat) => (
           <div
             key={stat.label}
-            className={`bg-white border border-corp-border border-l-4 ${stat.border} rounded-xl p-4 shadow-card`}
+            className={`bg-corp-card border border-corp-border border-l-4 ${stat.border} rounded-2xl p-4`}
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] text-corp-muted uppercase tracking-wider">{stat.label}</span>
-              <stat.icon size={16} className="text-slate-400" strokeWidth={1.5} />
+              <stat.icon size={16} className="text-corp-muted" strokeWidth={1.5} />
             </div>
             <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
           </div>
@@ -77,13 +77,13 @@ export default async function DashboardPage() {
 
           {/* Quick Actions */}
           {admin && (
-            <div className="bg-white border border-corp-border rounded-xl p-5 shadow-card">
+            <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
               <h3 className="text-sm font-medium text-corp-text mb-3">Ações Rápidas</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {[
-                  { label: "Novo Evento", href: "/eventos", icon: Plus, style: "bg-navy/5 text-navy hover:bg-navy/10 border-navy/15" },
-                  { label: "Ver Membros", href: "/membros", icon: Users, style: "bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200" },
-                  { label: "Dados de Mercado", href: "/mercado", icon: BarChart3, style: "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200" },
+                  { label: "Novo Evento", href: "/eventos", icon: Plus, style: "bg-accent/10 text-accent hover:bg-accent/15 border-accent/15" },
+                  { label: "Ver Membros", href: "/membros", icon: Users, style: "bg-blue-500/10 text-blue-400 hover:bg-blue-500/15 border-blue-500/15" },
+                  { label: "Dados de Mercado", href: "/mercado", icon: BarChart3, style: "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/15 border-emerald-500/15" },
                 ].map((action) => (
                   <Link
                     key={action.label}
@@ -103,17 +103,17 @@ export default async function DashboardPage() {
         <div className="space-y-6">
           {/* Pending Approvals */}
           {admin && (
-            <div className="bg-white border border-corp-border rounded-xl p-5 shadow-card">
+            <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-medium text-corp-text">
                   Pendentes
                   {stats.pendentes > 0 && (
-                    <span className="ml-2 px-1.5 py-0.5 text-[10px] bg-amber-50 text-amber-700 rounded-md border border-amber-200">
+                    <span className="ml-2 px-1.5 py-0.5 text-[10px] bg-amber-500/10 text-amber-400 rounded-md border border-amber-500/15">
                       {stats.pendentes}
                     </span>
                   )}
                 </h3>
-                <Link href="/membros" className="text-[11px] text-navy hover:text-light-navy flex items-center gap-1">
+                <Link href="/membros" className="text-[11px] text-accent hover:text-accent-light flex items-center gap-1">
                   Ver todos <ArrowRight size={10} />
                 </Link>
               </div>
@@ -122,10 +122,10 @@ export default async function DashboardPage() {
           )}
 
           {/* Upcoming Events */}
-          <div className="bg-white border border-corp-border rounded-xl p-5 shadow-card">
+          <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-medium text-corp-text">Próximos Eventos</h3>
-              <Link href="/eventos" className="text-[11px] text-navy hover:text-light-navy flex items-center gap-1">
+              <Link href="/eventos" className="text-[11px] text-accent hover:text-accent-light flex items-center gap-1">
                 Ver todos <ArrowRight size={10} />
               </Link>
             </div>
@@ -134,10 +134,10 @@ export default async function DashboardPage() {
                 {events.slice(0, 4).map((event) => (
                   <div
                     key={event.id}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-slate-50 border border-corp-border"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/[0.03] border border-corp-border"
                   >
                     <div className="flex flex-col items-center w-10 flex-shrink-0">
-                      <span className="text-lg font-bold text-navy leading-none">
+                      <span className="text-lg font-bold text-accent leading-none">
                         {new Date(event.date + "T00:00:00").getDate()}
                       </span>
                       <span className="text-[10px] text-corp-muted uppercase">
@@ -160,8 +160,8 @@ export default async function DashboardPage() {
           </div>
 
           {/* BSWFCC Info */}
-          <div className="bg-white border border-corp-border rounded-xl p-5 shadow-card">
-            <h3 className="text-sm font-medium text-navy mb-3">BSWFCC</h3>
+          <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+            <h3 className="text-sm font-medium text-accent mb-3">BSWFCC</h3>
             <div className="space-y-1.5 text-[11px] text-corp-muted">
               <p>Primeira câmara brasileira formalmente constituída no SWFL.</p>
               <p>Registro: Set 2024 | Fort Myers: Fev 2026</p>

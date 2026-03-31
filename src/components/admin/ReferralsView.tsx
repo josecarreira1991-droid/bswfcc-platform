@@ -207,22 +207,22 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
           <h1 className="text-xl font-semibold text-corp-text">Indicações</h1>
           <p className="text-sm text-corp-muted mt-0.5">Sistema de convite e referral da BSWFCC</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors">
+        <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors">
           <UserPlus size={16} /> Indicar Membro
         </button>
       </div>
 
       {/* My Referral Code Section — for all members */}
-      <div className="bg-white shadow-card border border-corp-border rounded-xl p-6 mb-6">
+      <div className="bg-corp-card border border-corp-border rounded-xl p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
-            <Link2 size={16} className="text-navy" />
+            <Link2 size={16} className="text-accent" />
             Seu Código de Indicação
           </h2>
           <button
             onClick={handleGenerateCode}
             disabled={generatingCode}
-            className="px-3 py-1.5 text-xs font-medium bg-navy/5 text-navy border border-navy/15 rounded-lg hover:bg-navy/10 transition-colors disabled:opacity-50"
+            className="px-3 py-1.5 text-xs font-medium bg-accent/10 text-accent border border-accent/20 rounded-lg hover:bg-accent/20 transition-colors disabled:opacity-50"
           >
             {generatingCode ? "Gerando..." : myCode ? "Gerar Novo" : "Gerar Código"}
           </button>
@@ -231,12 +231,12 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
         {myCode ? (
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="flex-1 bg-slate-50 border border-navy/15 rounded-lg px-4 py-3 font-mono text-lg text-navy tracking-widest text-center">
+              <div className="flex-1 bg-white/[0.03] border border-accent/20 rounded-lg px-4 py-3 font-mono text-lg text-accent tracking-widest text-center">
                 {myCode}
               </div>
               <button
                 onClick={copyCodeOnly}
-                className="px-3 py-3 bg-navy/5 text-navy border border-navy/15 rounded-lg hover:bg-navy/10 transition-colors"
+                className="px-3 py-3 bg-accent/10 text-accent border border-accent/20 rounded-lg hover:bg-accent/20 transition-colors"
                 title="Copiar código"
               >
                 <Copy size={18} />
@@ -247,11 +247,11 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                 type="text"
                 readOnly
                 value={shareUrl || ""}
-                className="flex-1 px-3 py-2 text-xs bg-slate-50 border border-corp-border rounded-lg text-corp-muted truncate"
+                className="flex-1 px-3 py-2 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-muted truncate"
               />
               <button
                 onClick={copyCode}
-                className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors"
               >
                 {copied ? <Check size={14} /> : <Copy size={14} />}
                 {copied ? "Copiado!" : "Copiar Link"}
@@ -270,10 +270,10 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
       {/* My Referrals Section */}
       {myReferrals && myReferrals.length > 0 && (
-        <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden mb-6">
+        <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
           <div className="px-4 py-3 border-b border-corp-border">
             <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
-              <Users size={16} className="text-navy" />
+              <Users size={16} className="text-accent" />
               Suas Indicações ({myReferrals.length})
             </h2>
           </div>
@@ -299,10 +299,10 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
       )}
 
       {/* My Rewards / Bonificações Section — for all members */}
-      <div className="bg-white shadow-card border border-corp-border rounded-xl p-6 mb-6">
+      <div className="bg-corp-card border border-corp-border rounded-xl p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
-            <Gift size={16} className="text-navy" />
+            <Gift size={16} className="text-accent" />
             Suas Bonificações
           </h2>
           {currentTier && (
@@ -317,16 +317,16 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
               {approvedReferralCount} indicação{approvedReferralCount !== 1 ? "ões" : ""} aprovada{approvedReferralCount !== 1 ? "s" : ""}
             </span>
             {nextTier ? (
-              <span className="text-navy">
+              <span className="text-accent">
                 Próximo: {nextTier.label} ({nextTier.milestone - approvedReferralCount} faltando)
               </span>
             ) : (
-              <span className="text-navy">Nível máximo atingido!</span>
+              <span className="text-accent">Nível máximo atingido!</span>
             )}
           </div>
-          <div className="w-full bg-slate-100 rounded-full h-2.5">
+          <div className="w-full bg-white/[0.05] rounded-full h-2.5">
             <div
-              className="bg-gradient-to-r from-navy to-blue-500 h-2.5 rounded-full transition-all duration-500"
+              className="bg-gradient-to-r from-accent to-purple-400 h-2.5 rounded-full transition-all duration-500"
               style={{
                 width: `${Math.min(100, nextTier ? (approvedReferralCount / nextTier.milestone) * 100 : 100)}%`,
               }}
@@ -344,24 +344,24 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                 className={cn(
                   "border rounded-lg p-3 text-center transition-all",
                   achieved
-                    ? "bg-navy/5 border-navy/30"
-                    : "bg-slate-50 border-corp-border opacity-60"
+                    ? "bg-accent/10 border-accent/30"
+                    : "bg-white/[0.03] border-corp-border opacity-60"
                 )}
               >
                 <div className="flex justify-center mb-1.5">
-                  {tier.milestone === 1 && <Star size={18} className={achieved ? "text-navy" : "text-slate-400"} />}
-                  {tier.milestone === 3 && <Sparkles size={18} className={achieved ? "text-navy" : "text-slate-400"} />}
-                  {tier.milestone === 5 && <Trophy size={18} className={achieved ? "text-navy" : "text-slate-400"} />}
-                  {tier.milestone === 10 && <Crown size={18} className={achieved ? "text-navy" : "text-slate-400"} />}
+                  {tier.milestone === 1 && <Star size={18} className={achieved ? "text-accent" : "text-corp-muted"} />}
+                  {tier.milestone === 3 && <Sparkles size={18} className={achieved ? "text-accent" : "text-corp-muted"} />}
+                  {tier.milestone === 5 && <Trophy size={18} className={achieved ? "text-accent" : "text-corp-muted"} />}
+                  {tier.milestone === 10 && <Crown size={18} className={achieved ? "text-accent" : "text-corp-muted"} />}
                 </div>
-                <p className={cn("text-xs font-medium", achieved ? "text-navy" : "text-corp-muted")}>
+                <p className={cn("text-xs font-medium", achieved ? "text-accent" : "text-corp-muted")}>
                   {tier.milestone} indicação{tier.milestone !== 1 ? "ões" : ""}
                 </p>
-                <p className={cn("text-[10px] mt-0.5 font-medium", achieved ? "text-slate-600" : "text-corp-muted")}>
+                <p className={cn("text-[10px] mt-0.5 font-medium", achieved ? "text-corp-muted" : "text-corp-muted")}>
                   {tier.shortLabel}
                 </p>
                 {achieved && (
-                  <Check size={12} className="text-emerald-700 mx-auto mt-1" />
+                  <Check size={12} className="text-emerald-400 mx-auto mt-1" />
                 )}
               </div>
             );
@@ -374,9 +374,9 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
             <p className="text-[11px] text-corp-muted uppercase tracking-wider mb-2">Recompensas Conquistadas</p>
             <div className="space-y-2">
               {myRewards.map((r) => (
-                <div key={r.id} className="flex items-center justify-between bg-slate-50 border border-corp-border rounded-lg px-3 py-2">
+                <div key={r.id} className="flex items-center justify-between bg-white/[0.03] border border-corp-border rounded-lg px-3 py-2">
                   <div className="flex items-center gap-2">
-                    <CircleDollarSign size={14} className="text-navy" />
+                    <CircleDollarSign size={14} className="text-accent" />
                     <div>
                       <p className="text-sm text-corp-text">{r.label}</p>
                       <p className="text-[10px] text-corp-muted">
@@ -400,29 +400,29 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
       {/* Admin: Reward Management */}
       {isAdmin && rewardSummary && (
-        <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden mb-6">
+        <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
           <div className="px-4 py-3 border-b border-corp-border">
             <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
-              <Gift size={16} className="text-navy" />
+              <Gift size={16} className="text-accent" />
               Gestão de Bonificações
             </h2>
           </div>
 
           {/* Summary cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4">
-            <div className="bg-slate-50 border border-corp-border rounded-lg p-2.5 text-center">
+            <div className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
               <p className="text-lg font-bold text-corp-text">{rewardSummary.totalEarned}</p>
               <p className="text-[10px] text-corp-muted">Total Conquistadas</p>
             </div>
-            <div className="bg-slate-50 border border-corp-border rounded-lg p-2.5 text-center">
-              <p className="text-lg font-bold text-navy">{rewardSummary.totalPending}</p>
+            <div className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
+              <p className="text-lg font-bold text-accent">{rewardSummary.totalPending}</p>
               <p className="text-[10px] text-corp-muted">Pendentes Resgate</p>
             </div>
-            <div className="bg-slate-50 border border-corp-border rounded-lg p-2.5 text-center">
-              <p className="text-lg font-bold text-emerald-700">{rewardSummary.totalRedeemed}</p>
+            <div className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
+              <p className="text-lg font-bold text-emerald-400">{rewardSummary.totalRedeemed}</p>
               <p className="text-[10px] text-corp-muted">Resgatadas</p>
             </div>
-            <div className="bg-slate-50 border border-corp-border rounded-lg p-2.5 text-center">
+            <div className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
               <p className="text-lg font-bold text-corp-text">{rewardSummary.totalDiscountValue}%</p>
               <p className="text-[10px] text-corp-muted">Descontos Pendentes</p>
             </div>
@@ -442,13 +442,13 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
               </thead>
               <tbody>
                 {allRewards.map((r, i) => (
-                  <tr key={r.id} className={cn("border-b border-corp-border hover:bg-slate-50", i % 2 !== 0 && "bg-slate-50/50")}>
+                  <tr key={r.id} className={cn("border-b border-corp-border hover:bg-white/[0.03]", i % 2 !== 0 && "bg-white/[0.02]")}>
                     <td className="px-4 py-3">
                       <p className="font-medium text-corp-text">{r.member_name}</p>
                       {r.member_company && <p className="text-[10px] text-corp-muted">{r.member_company}</p>}
                     </td>
-                    <td className="px-4 py-3 text-slate-600 text-xs">{r.label}</td>
-                    <td className="px-4 py-3 text-navy font-medium">{r.discount_pct}%</td>
+                    <td className="px-4 py-3 text-corp-muted text-xs">{r.label}</td>
+                    <td className="px-4 py-3 text-accent font-medium">{r.discount_pct}%</td>
                     <td className="px-4 py-3">
                       <Badge variant={r.status === "redeemed" ? "success" : r.status === "expired" ? "danger" : "gold"}>
                         {r.status === "earned" ? "Pendente" : r.status === "redeemed" ? "Resgatada" : "Expirada"}
@@ -458,7 +458,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                       {r.status === "earned" && (
                         <button
                           onClick={() => handleRedeem(r.id)}
-                          className="px-3 py-1.5 text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg hover:bg-emerald-100 transition-colors"
+                          className="px-3 py-1.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 rounded-lg hover:bg-emerald-500/20 transition-colors"
                         >
                           Resgatar
                         </button>
@@ -481,37 +481,37 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
       {isAdmin && stats && (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-            <div className="bg-white shadow-card border border-corp-border rounded-xl p-4">
+            <div className="bg-corp-card border border-corp-border rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-navy/5 flex items-center justify-center">
-                  <Link2 size={16} className="text-navy" />
+                <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <Link2 size={16} className="text-accent" />
                 </div>
               </div>
               <p className="text-2xl font-bold text-corp-text">{stats.totalCodes}</p>
               <p className="text-[10px] text-corp-muted uppercase tracking-wider">Total Códigos</p>
             </div>
-            <div className="bg-white shadow-card border border-corp-border rounded-xl p-4">
+            <div className="bg-corp-card border border-corp-border rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
-                  <Check size={16} className="text-emerald-700" />
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                  <Check size={16} className="text-emerald-400" />
                 </div>
               </div>
               <p className="text-2xl font-bold text-corp-text">{stats.totalUsed}</p>
               <p className="text-[10px] text-corp-muted uppercase tracking-wider">Convertidos</p>
             </div>
-            <div className="bg-white shadow-card border border-corp-border rounded-xl p-4">
+            <div className="bg-corp-card border border-corp-border rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
-                  <TrendingUp size={16} className="text-blue-700" />
+                <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                  <TrendingUp size={16} className="text-blue-400" />
                 </div>
               </div>
               <p className="text-2xl font-bold text-corp-text">{stats.conversionRate}%</p>
               <p className="text-[10px] text-corp-muted uppercase tracking-wider">Taxa Conversão</p>
             </div>
-            <div className="bg-white shadow-card border border-corp-border rounded-xl p-4">
+            <div className="bg-corp-card border border-corp-border rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-navy/5 flex items-center justify-center">
-                  <Crown size={16} className="text-navy" />
+                <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <Crown size={16} className="text-accent" />
                 </div>
               </div>
               <p className="text-2xl font-bold text-corp-text truncate">
@@ -523,10 +523,10 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
           {/* Leaderboard */}
           {stats.topReferrers.length > 0 && (
-            <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
               <div className="px-4 py-3 border-b border-corp-border">
                 <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
-                  <Crown size={16} className="text-navy" />
+                  <Crown size={16} className="text-accent" />
                   Ranking de Indicadores
                 </h2>
               </div>
@@ -538,10 +538,10 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                     <div key={r.id} className="px-4 py-3 flex items-center gap-4">
                       <div className={cn(
                         "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0",
-                        i === 0 ? "bg-navy/10 text-navy" :
-                        i === 1 ? "bg-slate-200 text-slate-600" :
-                        i === 2 ? "bg-amber-100 text-amber-700" :
-                        "bg-slate-100 text-corp-muted"
+                        i === 0 ? "bg-accent/10 text-accent" :
+                        i === 1 ? "bg-white/[0.05] text-corp-muted" :
+                        i === 2 ? "bg-amber-500/10 text-amber-400" :
+                        "bg-white/[0.03] text-corp-muted"
                       )}>
                         {i + 1}
                       </div>
@@ -550,7 +550,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                         {r.company && <p className="text-[10px] text-corp-muted truncate">{r.company}</p>}
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <p className="text-sm font-bold text-navy">{r.count}</p>
+                        <p className="text-sm font-bold text-accent">{r.count}</p>
                         <p className="text-[10px] text-corp-muted">{pct}%</p>
                       </div>
                     </div>
@@ -562,10 +562,10 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
           {/* Referral Tree */}
           {tree && tree.length > 0 && (
-            <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
               <div className="px-4 py-3 border-b border-corp-border">
                 <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
-                  <Users size={16} className="text-navy" />
+                  <Users size={16} className="text-accent" />
                   Árvore de Indicações
                 </h2>
               </div>
@@ -574,7 +574,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                   <div key={node.id}>
                     <button
                       onClick={() => toggleTree(node.id)}
-                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-slate-50 transition-colors text-left"
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-white/[0.03] transition-colors text-left"
                     >
                       {expandedTree.has(node.id) ? (
                         <ChevronDown size={14} className="text-corp-muted flex-shrink-0" />
@@ -588,11 +588,11 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                       <Badge variant="gold">{node.referred.length} indicações</Badge>
                     </button>
                     {expandedTree.has(node.id) && node.referred.length > 0 && (
-                      <div className="bg-slate-50 border-t border-corp-border">
+                      <div className="bg-white/[0.02] border-t border-corp-border">
                         {node.referred.map((ref) => (
                           <div key={ref.id} className="px-4 py-2.5 pl-12 flex items-center gap-2 border-b border-corp-border last:border-0">
-                            <ArrowRight size={12} className="text-navy/30 flex-shrink-0" />
-                            <p className="text-sm text-slate-600">{ref.full_name}</p>
+                            <ArrowRight size={12} className="text-accent/30 flex-shrink-0" />
+                            <p className="text-sm text-corp-muted">{ref.full_name}</p>
                             {ref.company && <span className="text-[10px] text-corp-muted">({ref.company})</span>}
                             <span className="text-[10px] text-corp-muted ml-auto">
                               {new Date(ref.created_at).toLocaleDateString("pt-BR")}
@@ -609,18 +609,18 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
           {/* Recent Timeline */}
           {stats.recentReferrals.length > 0 && (
-            <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
               <div className="px-4 py-3 border-b border-corp-border">
                 <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
-                  <TrendingUp size={16} className="text-navy" />
+                  <TrendingUp size={16} className="text-accent" />
                   Indicações Recentes
                 </h2>
               </div>
               <div className="divide-y divide-corp-border">
                 {stats.recentReferrals.map((r) => (
                   <div key={`${r.referrer}-${r.referred}-${r.date}`} className="px-4 py-3 flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-navy flex-shrink-0" />
-                    <p className="text-sm text-slate-600 flex-1">
+                    <div className="w-2 h-2 rounded-full bg-accent flex-shrink-0" />
+                    <p className="text-sm text-corp-muted flex-1">
                       <span className="text-corp-text font-medium">{r.referrer}</span>
                       <span className="text-corp-muted mx-2">indicou</span>
                       <span className="text-corp-text font-medium">{r.referred}</span>
@@ -637,7 +637,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
       )}
 
       {/* Legacy Referrals Table */}
-      <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden">
+      <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden">
         <div className="px-4 py-3 border-b border-corp-border flex items-center justify-between">
           <h2 className="text-sm font-semibold text-corp-text">Indicações Manuais</h2>
           <p className="text-xs text-corp-muted">{referrals.length} indicações &middot; {activeCount} convertidas</p>
@@ -646,7 +646,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 p-4">
           {Object.entries(statusLabel).filter(([key]) => ["pending", "contacted", "registered", "active", "declined"].includes(key)).map(([key, label]) => (
-            <div key={key} className="bg-slate-50 border border-corp-border rounded-lg p-2.5 text-center">
+            <div key={key} className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
               <p className="text-lg font-bold text-corp-text">{referrals.filter((r) => r.status === key).length}</p>
               <p className="text-[10px] text-corp-muted">{label}</p>
             </div>
@@ -666,7 +666,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
           </thead>
           <tbody>
             {referrals.map((r, i) => (
-              <tr key={r.id} className={cn("border-b border-corp-border hover:bg-slate-50", i % 2 !== 0 && "bg-slate-50/50")}>
+              <tr key={r.id} className={cn("border-b border-corp-border hover:bg-white/[0.03]", i % 2 !== 0 && "bg-white/[0.02]")}>
                 <td className="px-4 py-3">
                   <p className="font-medium text-corp-text">{r.referred_name}</p>
                   <div className="flex items-center gap-2 text-[11px] text-corp-muted">
@@ -681,15 +681,15 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                   <td className="px-4 py-3 text-right">
                     {r.status === "pending" && (
                       <div className="flex justify-end gap-1">
-                        <button onClick={() => handleStatus(r.id, "contacted")} className="px-2 py-1 text-[11px] bg-blue-50 text-blue-700 rounded hover:bg-blue-100">Contactar</button>
-                        <button onClick={() => handleStatus(r.id, "declined")} className="px-2 py-1 text-[11px] bg-red-50 text-red-700 rounded hover:bg-red-100">Recusar</button>
+                        <button onClick={() => handleStatus(r.id, "contacted")} className="px-2 py-1 text-[11px] bg-blue-500/10 text-blue-400 rounded hover:bg-blue-500/20">Contactar</button>
+                        <button onClick={() => handleStatus(r.id, "declined")} className="px-2 py-1 text-[11px] bg-red-500/10 text-red-400 rounded hover:bg-red-500/20">Recusar</button>
                       </div>
                     )}
                     {r.status === "contacted" && (
-                      <button onClick={() => handleStatus(r.id, "registered")} className="px-2 py-1 text-[11px] bg-navy/5 text-navy rounded hover:bg-navy/10">Registrado</button>
+                      <button onClick={() => handleStatus(r.id, "registered")} className="px-2 py-1 text-[11px] bg-accent/10 text-accent rounded hover:bg-accent/20">Registrado</button>
                     )}
                     {r.status === "registered" && (
-                      <button onClick={() => handleStatus(r.id, "active")} className="px-2 py-1 text-[11px] bg-emerald-50 text-emerald-700 rounded hover:bg-emerald-100">Ativar</button>
+                      <button onClick={() => handleStatus(r.id, "active")} className="px-2 py-1 text-[11px] bg-emerald-500/10 text-emerald-400 rounded hover:bg-emerald-500/20">Ativar</button>
                     )}
                   </td>
                 )}
@@ -705,20 +705,20 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
       <Modal open={showForm} onClose={() => setShowForm(false)} title="Indicar Novo Membro">
         <form onSubmit={handleCreate} className="space-y-4">
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Nome *</label>
-            <input name="referred_name" required className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" /></div>
+            <input name="referred_name" required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
           <div className="grid grid-cols-2 gap-4">
             <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Email</label>
-              <input name="referred_email" type="email" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" /></div>
+              <input name="referred_email" type="email" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
             <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Telefone</label>
-              <input name="referred_phone" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" /></div>
+              <input name="referred_phone" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
           </div>
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Empresa</label>
-            <input name="referred_company" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" /></div>
+            <input name="referred_company" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Notas</label>
-            <textarea name="notes" rows={2} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none resize-none" /></div>
+            <textarea name="notes" rows={2} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none resize-none" /></div>
           <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors">Cancelar</button>
-            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
+            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">Cancelar</button>
+            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">
               {loading ? "Enviando..." : "Indicar"}
             </button>
           </div>

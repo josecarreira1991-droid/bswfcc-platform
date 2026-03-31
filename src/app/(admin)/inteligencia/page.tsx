@@ -68,12 +68,12 @@ export default async function InteligenciaPage() {
         {reports.map((report) => (
           <div
             key={report.title}
-            className="bg-white shadow-card border border-corp-border rounded-xl p-5 hover:border-slate-300 transition-colors"
+            className="bg-corp-card border border-corp-border rounded-2xl p-5 hover:border-accent/20 transition-colors"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-4 min-w-0">
-                <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
-                  <FileText size={18} className="text-slate-400" strokeWidth={1.5} />
+                <div className="w-10 h-10 rounded-lg bg-white/[0.05] flex items-center justify-center flex-shrink-0">
+                  <FileText size={18} className="text-corp-muted" strokeWidth={1.5} />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-1">
@@ -88,7 +88,7 @@ export default async function InteligenciaPage() {
                     {report.highlights.map((h) => (
                       <span
                         key={h}
-                        className="px-2 py-0.5 text-[10px] bg-slate-100 text-slate-600 rounded-md"
+                        className="px-2 py-0.5 text-[10px] bg-white/[0.05] text-corp-muted rounded-md"
                       >
                         {h}
                       </span>
@@ -96,7 +96,7 @@ export default async function InteligenciaPage() {
                   </div>
                 </div>
               </div>
-              <span className="p-2 text-slate-400 opacity-40 flex-shrink-0 cursor-not-allowed" title="Relatório em produção — disponível em breve">
+              <span className="p-2 text-corp-muted opacity-40 flex-shrink-0 cursor-not-allowed" title="Relatório em produção — disponível em breve">
                 <Download size={16} />
               </span>
             </div>
@@ -104,8 +104,8 @@ export default async function InteligenciaPage() {
         ))}
       </div>
 
-      <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-5 text-center">
-        <p className="text-sm text-amber-700 mb-1">Dados ilustrativos — relatórios reais em breve</p>
+      <div className="mt-6 bg-amber-500/10 border border-amber-500/15 rounded-2xl p-5 text-center">
+        <p className="text-sm text-amber-400 mb-1">Dados ilustrativos — relatórios reais em breve</p>
         <p className="text-xs text-corp-muted">Os relatórios acima são exemplos do formato que será entregue. Dados reais serão integrados via APIs de mercado (Enterprise Florida, Census Bureau, etc).</p>
       </div>
     </div>

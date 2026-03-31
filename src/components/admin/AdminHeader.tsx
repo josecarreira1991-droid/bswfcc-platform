@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Menu, Bell } from "lucide-react";
+import { Menu, Bell, Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -39,35 +39,40 @@ export default function AdminHeader({ onMenuClick, pendingCount = 0 }: AdminHead
   const pageTitle = BREADCRUMB_MAP[pathname] || "BSWFCC";
 
   return (
-    <header className="h-14 bg-white border-b border-corp-border flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30">
+    <header className="h-14 bg-dark-navy/80 backdrop-blur-xl border-b border-corp-border flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="lg:hidden text-corp-muted hover:text-corp-text p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+          className="lg:hidden text-corp-muted hover:text-corp-text p-1.5 rounded-lg hover:bg-white/[0.03] transition-colors"
         >
           <Menu size={20} />
         </button>
-
-        {/* Breadcrumbs */}
         <nav className="flex items-center gap-1.5 text-sm">
-          <Link href="/dashboard" className="text-corp-muted hover:text-navy transition-colors">
+          <Link href="/dashboard" className="text-corp-muted hover:text-accent transition-colors">
             BSWFCC
           </Link>
-          <span className="text-slate-300">/</span>
+          <span className="text-corp-subtle">/</span>
           <span className="text-corp-text font-medium">{pageTitle}</span>
         </nav>
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* Pending members alert */}
+      <div className="flex items-center gap-3">
+        <div className="relative hidden sm:block">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-muted" />
+          <input
+            type="text"
+            placeholder="Buscar..."
+            className="pl-9 pr-4 py-1.5 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none w-48 transition-colors"
+          />
+        </div>
         <button
           onClick={() => pendingCount > 0 ? router.push("/membros") : null}
-          className={`relative p-2 rounded-lg transition-colors ${pendingCount > 0 ? "text-amber-600 hover:text-amber-700 hover:bg-amber-50 cursor-pointer" : "text-slate-400 cursor-default"}`}
-          title={pendingCount > 0 ? `${pendingCount} membro${pendingCount > 1 ? "s" : ""} pendente${pendingCount > 1 ? "s" : ""} de aprovação` : "Nenhuma notificação"}
+          className={`relative p-2 rounded-lg transition-colors ${pendingCount > 0 ? "text-amber-400 hover:bg-amber-500/10 cursor-pointer" : "text-corp-muted cursor-default"}`}
+          title={pendingCount > 0 ? `${pendingCount} pendente${pendingCount > 1 ? "s" : ""}` : "Nenhuma notificação"}
         >
-          <Bell size={18} strokeWidth={1.8} />
+          <Bell size={16} strokeWidth={1.6} />
           {pendingCount > 0 && (
-            <span className="absolute top-1 right-1 w-4 h-4 bg-amber-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center">
+            <span className="absolute top-1 right-1 w-4 h-4 bg-accent rounded-full text-[9px] font-bold text-white flex items-center justify-center">
               {pendingCount > 9 ? "9+" : pendingCount}
             </span>
           )}

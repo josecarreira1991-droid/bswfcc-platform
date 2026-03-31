@@ -32,7 +32,7 @@ export default async function DiretoriaPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-corp-text">
-            <span className="text-navy">Diretoria</span> BSWFCC
+            <span className="text-accent">Diretoria</span> BSWFCC
           </h1>
           <p className="text-corp-muted mt-3 max-w-2xl mx-auto">
             Conselho de 11 diretores com perfis verificados independentemente. O conselho cobre 8+ setores: tecnologia, finanças, saúde, telecomunicações, diplomacia, imobiliário, marketing e comunidade.
@@ -41,7 +41,7 @@ export default async function DiretoriaPage() {
 
         {/* Presidência */}
         <section className="mb-10">
-          <h2 className="text-lg font-semibold text-navy mb-4 uppercase tracking-wider">Presidência</h2>
+          <h2 className="text-lg font-semibold text-accent mb-4 uppercase tracking-wider">Presidência</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {directors.filter((d) => presidencia.includes(d.role)).map((d) => (
               <DirectorCard key={d.name} name={d.name} role={d.role} profile={d.profile} company={d.company ?? undefined} linkedin={d.linkedin ?? undefined} />
@@ -51,7 +51,7 @@ export default async function DiretoriaPage() {
 
         {/* Conselho Fiscal */}
         <section className="mb-10">
-          <h2 className="text-lg font-semibold text-navy mb-4 uppercase tracking-wider">Conselho Fiscal</h2>
+          <h2 className="text-lg font-semibold text-accent mb-4 uppercase tracking-wider">Conselho Fiscal</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {directors.filter((d) => conselho.includes(d.role)).map((d) => (
               <DirectorCard key={d.name} name={d.name} role={d.role} profile={d.profile} company={d.company ?? undefined} linkedin={d.linkedin ?? undefined} />
@@ -61,7 +61,7 @@ export default async function DiretoriaPage() {
 
         {/* Diretores */}
         <section>
-          <h2 className="text-lg font-semibold text-navy mb-4 uppercase tracking-wider">Diretoria Executiva</h2>
+          <h2 className="text-lg font-semibold text-accent mb-4 uppercase tracking-wider">Diretoria Executiva</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {directors.filter((d) => !presidencia.includes(d.role) && !conselho.includes(d.role)).map((d) => (
               <DirectorCard key={d.name} name={d.name} role={d.role} profile={d.profile} company={d.company ?? undefined} linkedin={d.linkedin ?? undefined} />
@@ -70,21 +70,21 @@ export default async function DiretoriaPage() {
         </section>
 
         {/* Nota */}
-        <div className="mt-10 bg-white shadow-card rounded-xl p-5 border border-corp-border">
+        <div className="mt-10 bg-corp-card rounded-xl p-5 border border-corp-border">
           <p className="text-xs text-corp-muted">
             A presença do Consul-Geral como Presidente Honorário confere credibilidade diplomática significativa. Nota: não há representante dedicado para o Condado de Lee / Fort Myers — uma lacuna operacional importante.
           </p>
         </div>
 
         {/* CTA */}
-        <div className="mt-16 bg-white shadow-card rounded-2xl p-8 border border-corp-border text-center max-w-2xl mx-auto">
+        <div className="mt-16 bg-corp-card rounded-2xl p-8 border border-corp-border text-center max-w-2xl mx-auto">
           <h3 className="text-xl font-bold mb-3 text-corp-text">Quer fazer parte?</h3>
           <p className="text-corp-muted text-sm mb-6">
             A BSWFCC está sempre aberta a novos membros, parceiros estratégicos e voluntários que queiram contribuir para o crescimento da comunidade.
           </p>
           <a
             href="/register"
-            className="inline-block px-8 py-3 bg-navy text-white font-semibold rounded-xl hover:bg-light-navy transition-colors"
+            className="inline-block px-8 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent/90 transition-colors"
           >
             Cadastrar-se
           </a>

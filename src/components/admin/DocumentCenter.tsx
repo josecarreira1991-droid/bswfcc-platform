@@ -82,7 +82,7 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
           <p className="text-sm text-corp-muted mt-0.5">{documents.length} {documents.length === 1 ? "documento disponível" : "documentos disponíveis"}</p>
         </div>
         {admin && (
-          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors">
+          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors">
             <Plus size={16} /> Adicionar
           </button>
         )}
@@ -94,7 +94,7 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
           const count = documents.filter((d) => d.category === cat.value).length;
           return (
             <button key={cat.value} onClick={() => setFilterCat(filterCat === cat.value ? "all" : cat.value)}
-              className={cn("bg-white shadow-card border rounded-lg p-2 text-center transition-colors", filterCat === cat.value ? "border-navy/30 bg-navy/5" : "border-corp-border hover:border-slate-400")}>
+              className={cn("bg-corp-card border rounded-lg p-2 text-center transition-colors", filterCat === cat.value ? "border-accent/30 bg-accent/10" : "border-corp-border hover:border-accent/15")}>
               <p className="text-sm font-bold text-corp-text">{count}</p>
               <p className="text-[9px] text-corp-muted truncate">{cat.label}</p>
             </button>
@@ -105,20 +105,20 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
       <div className="relative mb-4 max-w-sm">
         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-muted" />
         <input type="text" placeholder="Buscar documento..." value={search} onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-8 pr-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none" />
+          className="w-full pl-8 pr-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none" />
       </div>
 
       {/* Documents list */}
       <div className="space-y-2">
         {filtered.map((doc) => (
-          <div key={doc.id} className="bg-white shadow-card border border-corp-border rounded-xl p-4 flex items-center justify-between hover:border-slate-400 transition-colors">
+          <div key={doc.id} className="bg-corp-card border border-corp-border rounded-xl p-4 flex items-center justify-between hover:border-accent/15 transition-colors">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-white/[0.05] flex items-center justify-center flex-shrink-0">
                 <FileText size={18} className="text-corp-muted" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  {doc.is_pinned && <Pin size={10} className="text-navy" />}
+                  {doc.is_pinned && <Pin size={10} className="text-accent" />}
                   <Badge variant={categoryVariant[doc.category] || "default"}>{CATEGORIES.find((c) => c.value === doc.category)?.label || doc.category}</Badge>
                   <Badge variant="default">{doc.access_level}</Badge>
                 </div>
@@ -128,12 +128,12 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
               {doc.file_url && (
-                <a href={doc.file_url!.startsWith("http") ? doc.file_url! : `https://${doc.file_url}`} target="_blank" rel="noopener noreferrer" className="p-2 text-corp-muted hover:text-navy rounded-lg transition-colors">
+                <a href={doc.file_url!.startsWith("http") ? doc.file_url! : `https://${doc.file_url}`} target="_blank" rel="noopener noreferrer" className="p-2 text-corp-muted hover:text-accent rounded-lg transition-colors">
                   <Download size={15} />
                 </a>
               )}
               {admin && (
-                <button onClick={() => setDeleteTarget(doc)} className="p-2 text-corp-muted hover:text-red-600 rounded-lg transition-colors">
+                <button onClick={() => setDeleteTarget(doc)} className="p-2 text-corp-muted hover:text-red-400 rounded-lg transition-colors">
                   <Trash2 size={15} />
                 </button>
               )}
@@ -141,7 +141,7 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
+          <div className="bg-corp-card border border-corp-border rounded-xl p-12 text-center">
             <FolderOpen size={32} className="text-corp-muted mx-auto mb-3" />
             <p className="text-sm text-corp-muted">Nenhum documento encontrado</p>
           </div>
@@ -152,28 +152,28 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
       <Modal open={showForm} onClose={() => setShowForm(false)} title="Adicionar Documento" size="md">
         <form onSubmit={handleCreate} className="space-y-4">
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Título *</label>
-            <input name="title" required className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" /></div>
+            <input name="title" required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Descrição</label>
-            <textarea name="description" rows={2} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none resize-none" /></div>
+            <textarea name="description" rows={2} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none resize-none" /></div>
           <div className="grid grid-cols-2 gap-4">
             <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Categoria</label>
-              <select name="category" defaultValue="general" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none">
+              <select name="category" defaultValue="general" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none">
                 {CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select></div>
             <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Acesso</label>
-              <select name="access_level" defaultValue="member" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none">
+              <select name="access_level" defaultValue="member" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none">
                 <option value="public">Público</option><option value="member">Membros</option>
                 <option value="business_partner">Business Partner</option><option value="executive">Executive</option>
                 <option value="admin">Admin</option>
               </select></div>
           </div>
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">URL do Arquivo</label>
-            <input name="file_url" placeholder="https://..." className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none" /></div>
+            <input name="file_url" placeholder="https://..." className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none" /></div>
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Tags (separar por vírgula)</label>
-            <input name="tags" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" /></div>
+            <input name="tags" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
           <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors">Cancelar</button>
-            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
+            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">Cancelar</button>
+            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">
               {loading ? "Salvando..." : "Adicionar"}
             </button>
           </div>

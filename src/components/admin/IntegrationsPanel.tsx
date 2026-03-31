@@ -88,22 +88,22 @@ export default function IntegrationsPanel() {
 
   const StatusIcon = ({ ok }: { ok: boolean | "pending" }) =>
     ok === true
-      ? <CheckCircle2 size={14} className="text-emerald-700" />
+      ? <CheckCircle2 size={14} className="text-emerald-400" />
       : ok === "pending"
-        ? <Clock size={14} className="text-amber-700" />
-        : <XCircle size={14} className="text-red-700" />;
+        ? <Clock size={14} className="text-amber-400" />
+        : <XCircle size={14} className="text-red-400" />;
 
   return (
     <div className="space-y-4">
       {/* WhatsApp / Waha */}
-      <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+      <div className="bg-corp-card border border-corp-border rounded-xl p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-medium text-corp-text">WhatsApp (Waha)</h3>
             <span className={`flex items-center gap-1 text-[11px] font-medium ${
-              wahaStatus.status === "connected" ? "text-emerald-700" :
-              wahaStatus.status === "qr_pending" ? "text-amber-700" :
-              "text-red-700"
+              wahaStatus.status === "connected" ? "text-emerald-400" :
+              wahaStatus.status === "qr_pending" ? "text-amber-400" :
+              "text-red-400"
             }`}>
               {wahaStatus.status === "connected" ? <Wifi size={11} /> : <WifiOff size={11} />}
               {wahaStatus.status === "connected" ? "Conectado" :
@@ -116,7 +116,7 @@ export default function IntegrationsPanel() {
             <button
               onClick={checkWahaStatus}
               disabled={loading}
-              className="p-1.5 text-corp-muted hover:text-corp-text hover:bg-slate-50 rounded-lg transition-colors disabled:opacity-50"
+              className="p-1.5 text-corp-muted hover:text-corp-text hover:bg-white/[0.03] rounded-lg transition-colors disabled:opacity-50"
               title="Atualizar status"
             >
               <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
@@ -125,7 +125,7 @@ export default function IntegrationsPanel() {
               <button
                 onClick={startWahaSession}
                 disabled={loading}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-500/20 rounded-lg hover:bg-emerald-50 transition-colors disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 rounded-lg hover:bg-emerald-500/20 transition-colors disabled:opacity-50"
               >
                 <Play size={12} /> Conectar
               </button>
@@ -133,7 +133,7 @@ export default function IntegrationsPanel() {
               <button
                 onClick={stopWahaSession}
                 disabled={loading}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-red-50 text-red-700 border border-red-500/20 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/15 rounded-lg hover:bg-red-500/20 transition-colors disabled:opacity-50"
               >
                 <Square size={12} /> Desconectar
               </button>
@@ -146,12 +146,12 @@ export default function IntegrationsPanel() {
         )}
 
         {wahaStatus.error && (
-          <p className="text-xs text-red-700 mt-2">{wahaStatus.error}</p>
+          <p className="text-xs text-red-400 mt-2">{wahaStatus.error}</p>
         )}
 
         {/* QR Code Display */}
         {(wahaStatus.status === "qr_pending" || wahaStatus.qrCode) && wahaStatus.qrCode && (
-          <div className="mt-4 flex flex-col items-center gap-3 p-4 bg-white rounded-xl">
+          <div className="mt-4 flex flex-col items-center gap-3 p-4 bg-white/[0.03] rounded-xl">
             <img
               src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(wahaStatus.qrCode)}`}
               alt="WhatsApp QR Code"
@@ -159,7 +159,7 @@ export default function IntegrationsPanel() {
               height={250}
               className="rounded-lg"
             />
-            <p className="text-xs text-gray-600 text-center">
+            <p className="text-xs text-corp-muted text-center">
               Abra o WhatsApp no celular da câmara e escaneie este QR code
             </p>
           </div>
@@ -168,7 +168,7 @@ export default function IntegrationsPanel() {
         {wahaStatus.status === "disconnected" && !wahaStatus.error && (
           <div className="mt-3 text-xs text-corp-muted space-y-1">
             <p>Para conectar o WhatsApp:</p>
-            <ol className="list-decimal list-inside space-y-0.5 text-slate-600">
+            <ol className="list-decimal list-inside space-y-0.5 text-corp-muted/70">
               <li>Certifique-se que o Waha está rodando na VPS</li>
               <li>Clique em "Conectar" acima</li>
               <li>Escaneie o QR code com o WhatsApp Business da câmara</li>
@@ -178,28 +178,28 @@ export default function IntegrationsPanel() {
       </div>
 
       {/* Other Integrations */}
-      <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+      <div className="bg-corp-card border border-corp-border rounded-xl p-5">
         <h3 className="text-sm font-medium text-corp-text mb-3">Status das Integrações</h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between py-2 border-b border-corp-border">
             <div className="flex items-center gap-2">
               <Database size={14} className="text-corp-muted" />
-              <span className="text-sm text-slate-600">Supabase</span>
+              <span className="text-sm text-corp-muted">Supabase</span>
             </div>
             <div className="flex items-center gap-1.5">
               <StatusIcon ok={true} />
-              <span className="text-xs text-emerald-700">Conectado</span>
+              <span className="text-xs text-emerald-400">Conectado</span>
             </div>
           </div>
 
           <div className="flex items-center justify-between py-2 border-b border-corp-border">
             <div className="flex items-center gap-2">
               <Wifi size={14} className="text-corp-muted" />
-              <span className="text-sm text-slate-600">WhatsApp</span>
+              <span className="text-sm text-corp-muted">WhatsApp</span>
             </div>
             <div className="flex items-center gap-1.5">
               <StatusIcon ok={wahaStatus.status === "connected"} />
-              <span className={`text-xs ${wahaStatus.status === "connected" ? "text-emerald-700" : "text-red-700"}`}>
+              <span className={`text-xs ${wahaStatus.status === "connected" ? "text-emerald-400" : "text-red-400"}`}>
                 {wahaStatus.status === "connected" ? "Conectado" : "Desconectado"}
               </span>
             </div>
@@ -208,11 +208,11 @@ export default function IntegrationsPanel() {
           <div className="flex items-center justify-between py-2 border-b border-corp-border">
             <div className="flex items-center gap-2">
               <CreditCard size={14} className="text-corp-muted" />
-              <span className="text-sm text-slate-600">Stripe</span>
+              <span className="text-sm text-corp-muted">Stripe</span>
             </div>
             <div className="flex items-center gap-1.5">
               <StatusIcon ok={stripeConfigured ? true : "pending"} />
-              <span className={`text-xs ${stripeConfigured ? "text-emerald-700" : "text-amber-700"}`}>
+              <span className={`text-xs ${stripeConfigured ? "text-emerald-400" : "text-amber-400"}`}>
                 {stripeConfigured ? "Configurado" : "Pendente"}
               </span>
             </div>
@@ -221,11 +221,11 @@ export default function IntegrationsPanel() {
           <div className="flex items-center justify-between py-2">
             <div className="flex items-center gap-2">
               <Mail size={14} className="text-corp-muted" />
-              <span className="text-sm text-slate-600">Email (SMTP)</span>
+              <span className="text-sm text-corp-muted">Email (SMTP)</span>
             </div>
             <div className="flex items-center gap-1.5">
               <StatusIcon ok={"pending"} />
-              <span className="text-xs text-amber-700">Pendente</span>
+              <span className="text-xs text-amber-400">Pendente</span>
             </div>
           </div>
         </div>

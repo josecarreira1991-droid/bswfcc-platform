@@ -30,12 +30,12 @@ import Modal from "@/components/ui/Modal";
 import type { Member, Post, PostCategory, PostComment } from "@/types/database";
 
 const CATEGORY_CONFIG: Record<PostCategory, { label: string; icon: typeof Megaphone; color: string }> = {
-  anuncio: { label: "Anúncio", icon: Megaphone, color: "text-blue-700 bg-blue-50 border-blue-200" },
-  oportunidade: { label: "Oportunidade", icon: Briefcase, color: "text-navy bg-navy/5 border-navy/15" },
-  parceria: { label: "Parceria", icon: Handshake, color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
-  evento: { label: "Evento", icon: Calendar, color: "text-purple-700 bg-purple-50 border-purple-200" },
-  discussao: { label: "Discussão", icon: MessageSquare, color: "text-cyan-700 bg-cyan-50 border-cyan-200" },
-  geral: { label: "Geral", icon: Tag, color: "text-corp-muted bg-slate-50 border-corp-border" },
+  anuncio: { label: "Anúncio", icon: Megaphone, color: "text-blue-400 bg-blue-500/10 border-blue-500/15" },
+  oportunidade: { label: "Oportunidade", icon: Briefcase, color: "text-accent bg-accent/10 border-accent/20" },
+  parceria: { label: "Parceria", icon: Handshake, color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/15" },
+  evento: { label: "Evento", icon: Calendar, color: "text-purple-400 bg-purple-500/10 border-purple-500/15" },
+  discussao: { label: "Discussão", icon: MessageSquare, color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/15" },
+  geral: { label: "Geral", icon: Tag, color: "text-corp-muted bg-white/[0.03] border-corp-border" },
 };
 
 type PostWithAuthor = Post & { author: { full_name: string; company: string | null; role: string; avatar_url: string | null } };
@@ -175,7 +175,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
         </div>
         <button
           onClick={() => setShowNewPost(true)}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors"
         >
           <MessageSquarePlus size={16} /> Nova Publicação
         </button>
@@ -188,8 +188,8 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
           className={cn(
             "px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
             activeFilter === "all"
-              ? "bg-navy/5 text-navy border-navy/15"
-              : "text-corp-muted border-corp-border hover:text-corp-text hover:border-slate-400"
+              ? "bg-accent/10 text-accent border-accent/20"
+              : "text-corp-muted border-corp-border hover:text-corp-text hover:border-corp-muted"
           )}
         >
           Todos
@@ -199,8 +199,8 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
           className={cn(
             "px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
             activeFilter === "oportunidades"
-              ? "bg-navy/5 text-navy border-navy/15"
-              : "text-corp-muted border-corp-border hover:text-corp-text hover:border-slate-400"
+              ? "bg-accent/10 text-accent border-accent/20"
+              : "text-corp-muted border-corp-border hover:text-corp-text hover:border-corp-muted"
           )}
         >
           Oportunidades
@@ -215,7 +215,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                 "px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
                 activeFilter === cat
                   ? config.color
-                  : "text-corp-muted border-corp-border hover:text-corp-text hover:border-slate-400"
+                  : "text-corp-muted border-corp-border hover:text-corp-text hover:border-corp-muted"
               )}
             >
               {config.label}
@@ -230,7 +230,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
             placeholder="Buscar..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none w-48"
+            className="pl-8 pr-3 py-1.5 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none w-48"
           />
           {searchTerm && (
             <button onClick={() => setSearchTerm("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-corp-muted hover:text-corp-text">
@@ -243,8 +243,8 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
       {/* Posts Feed */}
       <div className="space-y-4">
         {filteredPosts.length === 0 && (
-          <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
-            <MessageSquarePlus size={32} className="mx-auto text-slate-300 mb-3" />
+          <div className="bg-corp-card border border-corp-border rounded-xl p-12 text-center">
+            <MessageSquarePlus size={32} className="mx-auto text-corp-muted mb-3" />
             <p className="text-corp-muted text-sm">Nenhuma publicação encontrada.</p>
             <p className="text-corp-muted text-xs mt-1">Seja o primeiro a publicar!</p>
           </div>
@@ -263,8 +263,8 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
             <div
               key={post.id}
               className={cn(
-                "bg-white shadow-card border rounded-xl overflow-hidden transition-all",
-                post.is_pinned ? "border-navy/30 ring-1 ring-navy/10" : "border-corp-border"
+                "bg-corp-card border rounded-xl overflow-hidden transition-all",
+                post.is_pinned ? "border-accent/30 ring-1 ring-accent/10" : "border-corp-border"
               )}
             >
               {/* Post Header */}
@@ -274,7 +274,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                     {/* Avatar */}
                     <div className={cn(
                       "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold",
-                      isLeadership ? "bg-navy/10 text-navy" : "bg-slate-100 text-slate-600"
+                      isLeadership ? "bg-accent/10 text-accent" : "bg-white/[0.05] text-corp-muted"
                     )}>
                       {post.author.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
                     </div>
@@ -294,7 +294,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
 
                   <div className="flex items-center gap-1.5 flex-shrink-0">
                     {post.is_pinned && (
-                      <Pin size={14} className="text-navy" />
+                      <Pin size={14} className="text-accent" />
                     )}
                     <div className={cn("px-2 py-0.5 rounded-md border text-[10px] font-medium", catConfig.color)}>
                       {catConfig.label}
@@ -310,13 +310,13 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                       {post.opportunity_type === "oferta" ? "Ofereço" : "Procuro"}
                     </Badge>
                   )}
-                  <p className="text-sm text-slate-600 mt-2 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-sm text-corp-muted mt-2 whitespace-pre-wrap leading-relaxed">
                     {post.content.length > 300 && !isExpanded
                       ? post.content.slice(0, 300) + "..."
                       : post.content}
                   </p>
                   {post.content.length > 300 && (
-                    <button onClick={() => toggleExpand(post.id)} className="text-navy text-xs mt-1 hover:underline">
+                    <button onClick={() => toggleExpand(post.id)} className="text-accent text-xs mt-1 hover:underline">
                       {isExpanded ? "Ver menos" : "Ver mais"}
                     </button>
                   )}
@@ -326,7 +326,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                 {post.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3">
                     {post.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] px-2 py-0.5 bg-slate-50 text-corp-muted rounded-md border border-corp-border">
+                      <span key={tag} className="text-[10px] px-2 py-0.5 bg-white/[0.03] text-corp-muted rounded-md border border-corp-border">
                         #{tag}
                       </span>
                     ))}
@@ -340,7 +340,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                   onClick={() => handleLike(post.id)}
                   className={cn(
                     "flex items-center gap-1.5 text-xs transition-colors",
-                    isLiked ? "text-red-600" : "text-corp-muted hover:text-red-600"
+                    isLiked ? "text-red-400" : "text-corp-muted hover:text-red-400"
                   )}
                 >
                   <Heart size={15} fill={isLiked ? "currentColor" : "none"} />
@@ -361,7 +361,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                       onClick={() => handlePin(post.id)}
                       className={cn(
                         "p-1.5 rounded-lg text-xs transition-colors",
-                        post.is_pinned ? "text-navy bg-navy/10" : "text-corp-muted hover:text-navy hover:bg-navy/5"
+                        post.is_pinned ? "text-accent bg-accent/10" : "text-corp-muted hover:text-accent hover:bg-accent/10"
                       )}
                       title={post.is_pinned ? "Desafixar" : "Fixar"}
                     >
@@ -371,7 +371,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                   {(isAdmin || isAuthor) && (
                     <button
                       onClick={() => handleDelete(post.id)}
-                      className="p-1.5 rounded-lg text-corp-muted hover:text-red-600 hover:bg-red-50 transition-colors"
+                      className="p-1.5 rounded-lg text-corp-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
                       title="Excluir"
                     >
                       <Trash2 size={14} />
@@ -382,13 +382,13 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
 
               {/* Comments Section */}
               {isExpanded && (
-                <div className="border-t border-corp-border bg-slate-50/50">
+                <div className="border-t border-corp-border bg-white/[0.02]">
                   {/* Existing comments */}
                   {postComments.length > 0 && (
                     <div className="divide-y divide-corp-border">
                       {postComments.map((c) => (
                         <div key={c.id} className="px-5 py-3 flex items-start gap-3">
-                          <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 text-[10px] font-semibold text-slate-600">
+                          <div className="w-7 h-7 rounded-full bg-white/[0.05] flex items-center justify-center flex-shrink-0 text-[10px] font-semibold text-corp-muted">
                             {c.author.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -396,12 +396,12 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                               <span className="text-xs font-medium text-corp-text">{c.author.full_name}</span>
                               <span className="text-[10px] text-corp-muted">{timeAgo(c.created_at)}</span>
                             </div>
-                            <p className="text-xs text-slate-600 mt-0.5">{c.content}</p>
+                            <p className="text-xs text-corp-muted mt-0.5">{c.content}</p>
                           </div>
                           {(isAdmin || c.author_id === currentMember.id) && (
                             <button
                               onClick={() => handleDeleteComment(c.id)}
-                              className="text-slate-300 hover:text-red-600 transition-colors flex-shrink-0"
+                              className="text-corp-muted hover:text-red-400 transition-colors flex-shrink-0"
                             >
                               <Trash2 size={12} />
                             </button>
@@ -419,12 +419,12 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                       value={commentText[post.id] || ""}
                       onChange={(e) => setCommentText((prev) => ({ ...prev, [post.id]: e.target.value }))}
                       onKeyDown={(e) => { if (e.key === "Enter") handleComment(post.id); }}
-                      className="flex-1 px-3 py-2 text-xs bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none"
+                      className="flex-1 px-3 py-2 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none"
                     />
                     <button
                       onClick={() => handleComment(post.id)}
                       disabled={!commentText[post.id]?.trim()}
-                      className="p-2 bg-navy/5 text-navy rounded-lg hover:bg-navy/10 transition-colors disabled:opacity-30"
+                      className="p-2 bg-accent/10 text-accent rounded-lg hover:bg-accent/20 transition-colors disabled:opacity-30"
                     >
                       <Send size={14} />
                     </button>
@@ -451,8 +451,8 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                     key={cat}
                     className={cn(
                       "flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors text-xs",
-                      "has-[:checked]:bg-navy/5 has-[:checked]:border-navy/30 has-[:checked]:text-navy",
-                      "border-corp-border text-corp-muted hover:border-slate-400"
+                      "has-[:checked]:bg-accent/10 has-[:checked]:border-accent/30 has-[:checked]:text-accent",
+                      "border-corp-border text-corp-muted hover:border-corp-muted"
                     )}
                   >
                     <input type="radio" name="category" value={cat} defaultChecked={cat === "geral"} className="hidden" />
@@ -471,7 +471,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
               name="title"
               required
               placeholder="Título da publicação"
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none"
+              className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none"
             />
           </div>
 
@@ -483,7 +483,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
               required
               rows={5}
               placeholder="Compartilhe uma oportunidade, anúncio ou discussão com os membros..."
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none resize-none"
+              className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none resize-none"
             />
           </div>
 
@@ -492,7 +492,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
             <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Tipo de Oportunidade (se aplicável)</label>
             <select
               name="opportunity_type"
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none"
+              className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none"
             >
               <option value="">Não é oportunidade</option>
               <option value="oferta">Ofereço (serviço/produto/parceria)</option>
@@ -506,15 +506,15 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
             <input
               name="tags"
               placeholder="Ex: importação, construção, contabilidade"
-              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none"
+              className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none"
             />
           </div>
 
           <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => setShowNewPost(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors">
+            <button type="button" onClick={() => setShowNewPost(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">
               Cancelar
             </button>
-            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
+            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">
               {loading ? "Publicando..." : "Publicar"}
             </button>
           </div>

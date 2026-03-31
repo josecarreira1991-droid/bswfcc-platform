@@ -41,7 +41,7 @@ export default function FerramentasFAQ() {
           >
             <button
               onClick={() => setOpenIndex(isOpen ? null : i)}
-              className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-slate-50 transition-colors"
+              className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-white/[0.03] transition-colors"
             >
               <span className="text-sm font-medium text-corp-text">
                 {faq.question}

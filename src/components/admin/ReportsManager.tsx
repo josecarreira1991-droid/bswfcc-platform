@@ -86,8 +86,8 @@ export default function ReportsManager({ reports }: ReportsManagerProps) {
   return (
     <div className="space-y-6">
       {/* Generate buttons */}
-      <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
-        <h3 className="text-sm font-medium text-slate-600 mb-3">Gerar Novo Relatório</h3>
+      <div className="bg-corp-card border border-corp-border rounded-xl p-5">
+        <h3 className="text-sm font-medium text-corp-muted mb-3">Gerar Novo Relatório</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
             { type: "members", label: "Relatório de Membros", desc: "Status, cargos, indústrias, crescimento", icon: Users },
@@ -98,13 +98,13 @@ export default function ReportsManager({ reports }: ReportsManagerProps) {
               key={item.type}
               onClick={() => handleGenerate(item.type)}
               disabled={generating === item.type}
-              className="flex items-start gap-3 p-4 bg-slate-50 border border-corp-border rounded-xl text-left hover:border-navy/30 transition-colors disabled:opacity-50"
+              className="flex items-start gap-3 p-4 bg-white/[0.03] border border-corp-border rounded-xl text-left hover:border-accent/30 transition-colors disabled:opacity-50"
             >
-              <div className="w-9 h-9 rounded-lg bg-navy/5 flex items-center justify-center flex-shrink-0">
+              <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
                 {generating === item.type ? (
-                  <RefreshCw size={16} className="text-navy animate-spin" />
+                  <RefreshCw size={16} className="text-accent animate-spin" />
                 ) : (
-                  <item.icon size={16} className="text-navy" />
+                  <item.icon size={16} className="text-accent" />
                 )}
               </div>
               <div>
@@ -118,7 +118,7 @@ export default function ReportsManager({ reports }: ReportsManagerProps) {
 
       {/* Reports List */}
       <div>
-        <h3 className="text-sm font-medium text-slate-600 mb-3">Relatórios Gerados</h3>
+        <h3 className="text-sm font-medium text-corp-muted mb-3">Relatórios Gerados</h3>
         {reports.length > 0 ? (
           <div className="space-y-2">
             {reports.map((report) => {
@@ -129,10 +129,10 @@ export default function ReportsManager({ reports }: ReportsManagerProps) {
               return (
                 <div
                   key={report.id}
-                  className="bg-white shadow-card border border-corp-border rounded-xl p-4 flex items-center justify-between hover:border-slate-300 transition-colors"
+                  className="bg-corp-card border border-corp-border rounded-xl p-4 flex items-center justify-between hover:border-accent/20 transition-colors"
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-lg bg-white/[0.03] flex items-center justify-center flex-shrink-0">
                       <Icon size={18} className="text-corp-muted" />
                     </div>
                     <div className="min-w-0">
@@ -157,7 +157,7 @@ export default function ReportsManager({ reports }: ReportsManagerProps) {
                   </div>
                   <button
                     onClick={() => exportReportCSV(report)}
-                    className="p-2 text-corp-muted hover:text-navy hover:bg-navy/5 rounded-lg transition-colors flex-shrink-0"
+                    className="p-2 text-corp-muted hover:text-accent hover:bg-accent/10 rounded-lg transition-colors flex-shrink-0"
                     title="Exportar CSV"
                   >
                     <Download size={16} />
@@ -167,8 +167,8 @@ export default function ReportsManager({ reports }: ReportsManagerProps) {
             })}
           </div>
         ) : (
-          <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
-            <FileText size={32} className="text-slate-300 mx-auto mb-3" />
+          <div className="bg-corp-card border border-corp-border rounded-xl p-12 text-center">
+            <FileText size={32} className="text-corp-muted/30 mx-auto mb-3" />
             <p className="text-sm text-corp-muted">Nenhum relatório gerado ainda</p>
             <p className="text-[11px] text-corp-muted mt-1">Use os botões acima para gerar seu primeiro relatório</p>
           </div>

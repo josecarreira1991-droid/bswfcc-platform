@@ -21,13 +21,11 @@ export default function AdminShell({ member, pendingCount = 0, children }: Admin
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
-
       <div className="flex-1 flex flex-col overflow-hidden">
         <AdminHeader
           onMenuClick={() => setSidebarOpen(true)}
           pendingCount={pendingCount}
         />
-
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
             {children}

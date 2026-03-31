@@ -76,26 +76,26 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
           <p className="text-sm text-corp-muted mt-0.5">Sugestões inteligentes de conexões</p>
         </div>
         <button onClick={handleGenerate} disabled={generating || !hasProfile}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">
           {generating ? <RefreshCw size={16} className="animate-spin" /> : <Sparkles size={16} />}
           {generating ? "Gerando..." : "Gerar Sugestões"}
         </button>
       </div>
 
       {!hasProfile && (
-        <div className="bg-navy/5 border border-navy/15 rounded-xl p-4 mb-6">
-          <p className="text-sm text-navy">Complete seu Business Profile em <a href="/matchmaking" className="underline">Matchmaking</a> para receber sugestões personalizadas.</p>
+        <div className="bg-accent/10 border border-accent/20 rounded-xl p-4 mb-6">
+          <p className="text-sm text-accent">Complete seu Business Profile em <a href="/matchmaking" className="underline">Matchmaking</a> para receber sugestões personalizadas.</p>
         </div>
       )}
 
       {suggestions.length > 0 ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {suggestions.map((s) => (
-            <div key={s.id} className="bg-white shadow-card border border-corp-border rounded-xl p-5 hover:border-slate-300 transition-colors">
+            <div key={s.id} className="bg-corp-card border border-corp-border rounded-xl p-5 hover:border-accent/20 transition-colors">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-9 h-9 rounded-full bg-navy/10 flex items-center justify-center">
-                    <span className="text-navy text-xs font-semibold">
+                  <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center">
+                    <span className="text-accent text-xs font-semibold">
                       {s.members?.full_name?.[0]?.toUpperCase() || "?"}
                     </span>
                   </div>
@@ -105,8 +105,8 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Zap size={12} className="text-navy" />
-                  <span className="text-xs font-bold text-navy">{s.score}%</span>
+                  <Zap size={12} className="text-accent" />
+                  <span className="text-xs font-bold text-accent">{s.score}%</span>
                 </div>
               </div>
 
@@ -119,7 +119,7 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
                 <div className="mb-3 space-y-1">
                   {s.reasons.slice(0, 3).map((r, i) => (
                     <p key={i} className="text-[10px] text-corp-muted flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-navy flex-shrink-0" /> {r}
+                      <span className="w-1 h-1 rounded-full bg-accent flex-shrink-0" /> {r}
                     </p>
                   ))}
                 </div>
@@ -128,11 +128,11 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
               <div className="flex gap-2">
                 <button onClick={() => handleConnect(s.id, s.suggested_member_id, s.members?.full_name || "")}
                   disabled={connecting === s.id}
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium bg-navy/5 text-navy border border-navy/15 rounded-lg hover:bg-navy/10 transition-colors disabled:opacity-50">
+                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium bg-accent/10 text-accent border border-accent/20 rounded-lg hover:bg-accent/20 transition-colors disabled:opacity-50">
                   <Handshake size={12} /> {connecting === s.id ? "..." : "Conectar"}
                 </button>
                 <button onClick={() => handleDismiss(s.id)}
-                  className="p-2 text-corp-muted hover:text-corp-text hover:bg-slate-50 rounded-lg transition-colors">
+                  className="p-2 text-corp-muted hover:text-corp-text hover:bg-white/[0.03] rounded-lg transition-colors">
                   <X size={14} />
                 </button>
               </div>
@@ -140,8 +140,8 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
           ))}
         </div>
       ) : (
-        <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
-          <Sparkles size={32} className="text-slate-300 mx-auto mb-3" />
+        <div className="bg-corp-card border border-corp-border rounded-xl p-12 text-center">
+          <Sparkles size={32} className="text-corp-muted mx-auto mb-3" />
           <p className="text-sm text-corp-muted">Nenhuma sugestão disponível</p>
           <p className="text-[11px] text-corp-muted mt-1">Clique em "Gerar Sugestões" para encontrar conexões</p>
         </div>

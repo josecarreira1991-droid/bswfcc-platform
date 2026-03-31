@@ -36,9 +36,9 @@ const EVENT_TYPE_COLORS: Record<string, string> = {
   networking: "bg-blue-500",
   palestra: "bg-purple-500",
   workshop: "bg-emerald-500",
-  gala: "bg-navy",
+  gala: "bg-accent",
   almoco: "bg-amber-500",
-  outro: "bg-slate-400",
+  outro: "bg-corp-muted",
 };
 
 function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingEvents: Event[] }) {
@@ -96,7 +96,7 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
   return (
     <div className="space-y-4">
       {/* Calendar header */}
-      <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+      <div className="bg-corp-card border border-corp-border rounded-xl p-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <h3 className="text-lg font-semibold text-corp-text">
@@ -104,16 +104,16 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
             </h3>
             <button
               onClick={goToToday}
-              className="text-[11px] text-navy hover:text-light-navy border border-navy/30 rounded px-2 py-0.5 transition-colors"
+              className="text-[11px] text-accent hover:text-accent/80 border border-accent/30 rounded px-2 py-0.5 transition-colors"
             >
               Hoje
             </button>
           </div>
           <div className="flex items-center gap-1">
-            <button onClick={prevMonth} className="p-1.5 text-corp-muted hover:text-corp-text hover:bg-slate-50 rounded-lg transition-colors">
+            <button onClick={prevMonth} className="p-1.5 text-corp-muted hover:text-corp-text hover:bg-white/[0.03] rounded-lg transition-colors">
               <ChevronLeft size={18} />
             </button>
-            <button onClick={nextMonth} className="p-1.5 text-corp-muted hover:text-corp-text hover:bg-slate-50 rounded-lg transition-colors">
+            <button onClick={nextMonth} className="p-1.5 text-corp-muted hover:text-corp-text hover:bg-white/[0.03] rounded-lg transition-colors">
               <ChevronRight size={18} />
             </button>
           </div>
@@ -132,7 +132,7 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
         <div className="grid grid-cols-7 gap-px bg-corp-border rounded-lg overflow-hidden">
           {cells.map((day, i) => {
             if (day === null) {
-              return <div key={`empty-${i}`} className="bg-white min-h-[80px]" />;
+              return <div key={`empty-${i}`} className="bg-corp-card min-h-[80px]" />;
             }
             const dateStr = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
             const dayEvents = eventsByDate[dateStr] || [];
@@ -144,15 +144,15 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
                 key={dateStr}
                 onClick={() => setSelectedDate(isSelected ? null : dateStr)}
                 className={cn(
-                  "bg-white min-h-[80px] p-1.5 text-left transition-colors relative group",
-                  isSelected && "ring-1 ring-navy/30 bg-navy/5",
-                  !isSelected && "hover:bg-slate-50"
+                  "bg-corp-card min-h-[80px] p-1.5 text-left transition-colors relative group",
+                  isSelected && "ring-1 ring-accent/30 bg-accent/10",
+                  !isSelected && "hover:bg-white/[0.03]"
                 )}
               >
                 <span
                   className={cn(
                     "inline-flex items-center justify-center w-6 h-6 text-xs font-medium rounded-full",
-                    isToday ? "bg-navy text-white font-bold" : "text-corp-muted group-hover:text-corp-text"
+                    isToday ? "bg-accent text-white font-bold" : "text-corp-muted group-hover:text-corp-text"
                   )}
                 >
                   {day}
@@ -164,7 +164,7 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
                         key={ev.id}
                         className={cn(
                           "text-[9px] leading-tight px-1 py-0.5 rounded truncate text-white/90 font-medium",
-                          EVENT_TYPE_COLORS[ev.type] || "bg-slate-400"
+                          EVENT_TYPE_COLORS[ev.type] || "bg-corp-muted"
                         )}
                       >
                         {ev.time ? `${ev.time} ` : ""}{ev.title}
@@ -184,7 +184,7 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
         <div className="flex flex-wrap gap-3 mt-4 pt-3 border-t border-corp-border">
           {Object.entries(EVENT_TYPE_LABELS).map(([key, label]) => (
             <div key={key} className="flex items-center gap-1.5">
-              <div className={cn("w-2.5 h-2.5 rounded-sm", EVENT_TYPE_COLORS[key] || "bg-slate-400")} />
+              <div className={cn("w-2.5 h-2.5 rounded-sm", EVENT_TYPE_COLORS[key] || "bg-corp-muted")} />
               <span className="text-[10px] text-corp-muted">{label}</span>
             </div>
           ))}
@@ -193,7 +193,7 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
 
       {/* Selected date detail */}
       {selectedDate && (
-        <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+        <div className="bg-corp-card border border-corp-border rounded-xl p-5">
           <h3 className="text-sm font-medium text-corp-text mb-3">
             {new Date(selectedDate + "T00:00:00").toLocaleDateString("pt-BR", {
               weekday: "long",
@@ -205,18 +205,18 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
           {selectedEvents.length > 0 ? (
             <div className="space-y-3">
               {selectedEvents.map((ev) => (
-                <div key={ev.id} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
-                  <div className={cn("w-1 self-stretch rounded-full flex-shrink-0", EVENT_TYPE_COLORS[ev.type] || "bg-slate-400")} />
+                <div key={ev.id} className="flex items-start gap-3 p-3 bg-white/[0.03] rounded-lg">
+                  <div className={cn("w-1 self-stretch rounded-full flex-shrink-0", EVENT_TYPE_COLORS[ev.type] || "bg-corp-muted")} />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-corp-text">{ev.title}</p>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
                       {ev.time && (
-                        <span className="text-[11px] text-slate-600 flex items-center gap-1">
+                        <span className="text-[11px] text-corp-muted flex items-center gap-1">
                           <Clock size={10} /> {ev.time}
                         </span>
                       )}
                       {ev.location && (
-                        <span className="text-[11px] text-slate-600 flex items-center gap-1">
+                        <span className="text-[11px] text-corp-muted flex items-center gap-1">
                           <MapPin size={10} /> {ev.location}
                         </span>
                       )}
@@ -239,10 +239,10 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
       )}
 
       {/* Upcoming events sidebar */}
-      <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+      <div className="bg-corp-card border border-corp-border rounded-xl p-5">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-sm font-medium text-corp-text">Próximos Eventos</h3>
-          <Link href="/eventos" className="text-[11px] text-navy hover:text-light-navy flex items-center gap-1">
+          <Link href="/eventos" className="text-[11px] text-accent hover:text-accent/80 flex items-center gap-1">
             Gerenciar <ArrowRight size={10} />
           </Link>
         </div>
@@ -251,7 +251,7 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
             {upcomingEvents.map((ev) => (
               <div key={ev.id} className="flex items-center gap-3 py-2 border-b border-corp-border last:border-0">
                 <div className="flex flex-col items-center w-10 flex-shrink-0">
-                  <span className="text-lg font-bold text-navy leading-none">
+                  <span className="text-lg font-bold text-accent leading-none">
                     {new Date(ev.date + "T00:00:00").getDate()}
                   </span>
                   <span className="text-[10px] text-corp-muted uppercase">
@@ -264,7 +264,7 @@ function AgendaCalendar({ events, upcomingEvents }: { events: Event[]; upcomingE
                     {EVENT_TYPE_LABELS[ev.type]}{ev.time ? ` · ${ev.time}` : ""}{ev.location ? ` · ${ev.location}` : ""}
                   </p>
                 </div>
-                <div className={cn("w-2 h-2 rounded-full flex-shrink-0", EVENT_TYPE_COLORS[ev.type] || "bg-slate-400")} />
+                <div className={cn("w-2 h-2 rounded-full flex-shrink-0", EVENT_TYPE_COLORS[ev.type] || "bg-corp-muted")} />
               </div>
             ))}
           </div>
@@ -321,7 +321,7 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
             className={cn(
               "px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors",
               activeTab === tab.key
-                ? "bg-white text-navy border border-corp-border border-b-white -mb-px"
+                ? "bg-corp-card text-accent border border-corp-border border-b-corp-card -mb-px"
                 : "text-corp-muted hover:text-corp-text"
             )}
           >
@@ -336,16 +336,16 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
           {/* KPI row */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
             {[
-              { label: "Total Membros", value: stats.total, icon: Users, color: "text-navy" },
-              { label: "Ativos", value: stats.ativos, icon: UserCheck, color: "text-emerald-700" },
-              { label: "Pendentes", value: stats.pendentes, icon: Clock, color: "text-amber-700" },
-              { label: "Inativos", value: stats.inativos, icon: UserX, color: "text-red-700" },
-              { label: "Eventos", value: events.length, icon: Calendar, color: "text-blue-700" },
+              { label: "Total Membros", value: stats.total, icon: Users, color: "text-accent" },
+              { label: "Ativos", value: stats.ativos, icon: UserCheck, color: "text-emerald-400" },
+              { label: "Pendentes", value: stats.pendentes, icon: Clock, color: "text-amber-400" },
+              { label: "Inativos", value: stats.inativos, icon: UserX, color: "text-red-400" },
+              { label: "Eventos", value: events.length, icon: Calendar, color: "text-blue-400" },
             ].map((kpi) => (
-              <div key={kpi.label} className="bg-white shadow-card border border-corp-border rounded-xl p-4">
+              <div key={kpi.label} className="bg-corp-card border border-corp-border rounded-xl p-4">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] text-corp-muted uppercase tracking-wider">{kpi.label}</span>
-                  <kpi.icon size={14} className="text-slate-300" strokeWidth={1.5} />
+                  <kpi.icon size={14} className="text-corp-muted/40" strokeWidth={1.5} />
                 </div>
                 <p className={`text-2xl font-bold ${kpi.color}`}>{kpi.value}</p>
               </div>
@@ -354,10 +354,10 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
 
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Pending actions */}
-            <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+            <div className="bg-corp-card border border-corp-border rounded-xl p-5">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-medium text-corp-text">Ações Pendentes</h3>
-                <Link href="/membros" className="text-[11px] text-navy hover:text-light-navy flex items-center gap-1">
+                <Link href="/membros" className="text-[11px] text-accent hover:text-accent/80 flex items-center gap-1">
                   Ver todos <ArrowRight size={10} />
                 </Link>
               </div>
@@ -366,8 +366,8 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
                   {pendingMembers.slice(0, 5).map((m) => (
                     <div key={m.id} className="flex items-center justify-between py-2 border-b border-corp-border last:border-0">
                       <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-7 h-7 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0">
-                          <span className="text-amber-700 text-[10px] font-bold">{m.full_name[0]}</span>
+                        <div className="w-7 h-7 rounded-full bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                          <span className="text-amber-400 text-[10px] font-bold">{m.full_name[0]}</span>
                         </div>
                         <div className="min-w-0">
                           <p className="text-sm text-corp-text truncate">{m.full_name}</p>
@@ -384,10 +384,10 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
             </div>
 
             {/* Upcoming events */}
-            <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+            <div className="bg-corp-card border border-corp-border rounded-xl p-5">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-medium text-corp-text">Próximos Eventos</h3>
-                <Link href="/eventos" className="text-[11px] text-navy hover:text-light-navy flex items-center gap-1">
+                <Link href="/eventos" className="text-[11px] text-accent hover:text-accent/80 flex items-center gap-1">
                   Ver todos <ArrowRight size={10} />
                 </Link>
               </div>
@@ -396,7 +396,7 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
                   {upcomingEvents.map((ev) => (
                     <div key={ev.id} className="flex items-center gap-3 py-2 border-b border-corp-border last:border-0">
                       <div className="flex flex-col items-center w-10 flex-shrink-0">
-                        <span className="text-lg font-bold text-navy leading-none">
+                        <span className="text-lg font-bold text-accent leading-none">
                           {new Date(ev.date + "T00:00:00").getDate()}
                         </span>
                         <span className="text-[10px] text-corp-muted uppercase">
@@ -418,12 +418,12 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
 
           {/* Industries */}
           {topIndustries.length > 0 && (
-            <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+            <div className="bg-corp-card border border-corp-border rounded-xl p-5">
               <h3 className="text-sm font-medium text-corp-text mb-3">Membros por Indústria</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {topIndustries.map(([industry, count]) => (
-                  <div key={industry} className="text-center py-3 bg-slate-50 rounded-lg">
-                    <p className="text-lg font-bold text-navy">{count}</p>
+                  <div key={industry} className="text-center py-3 bg-white/[0.03] rounded-lg">
+                    <p className="text-lg font-bold text-accent">{count}</p>
                     <p className="text-[10px] text-corp-muted truncate px-2">{industry}</p>
                   </div>
                 ))}
@@ -443,10 +443,10 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
               placeholder="Buscar membro..."
               value={memberSearch}
               onChange={(e) => setMemberSearch(e.target.value)}
-              className="w-full pl-8 pr-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none"
+              className="w-full pl-8 pr-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
             />
           </div>
-          <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden">
+          <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-corp-border">
@@ -459,13 +459,13 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
               </thead>
               <tbody>
                 {filteredMembers.slice(0, 25).map((m, i) => (
-                  <tr key={m.id} className={cn("border-b border-corp-border hover:bg-slate-50", i % 2 !== 0 && "bg-slate-50/50")}>
+                  <tr key={m.id} className={cn("border-b border-corp-border hover:bg-white/[0.03]", i % 2 !== 0 && "bg-white/[0.02]")}>
                     <td className="px-4 py-2.5">
                       <p className="font-medium text-corp-text">{m.full_name}</p>
                       <p className="text-[10px] text-corp-muted">{m.email}</p>
                     </td>
-                    <td className="px-4 py-2.5 text-slate-600">{m.company || "—"}</td>
-                    <td className="px-4 py-2.5 text-slate-600">{m.industry || "—"}</td>
+                    <td className="px-4 py-2.5 text-corp-muted">{m.company || "—"}</td>
+                    <td className="px-4 py-2.5 text-corp-muted">{m.industry || "—"}</td>
                     <td className="px-4 py-2.5">
                       <Badge variant={m.status === "ativo" ? "success" : m.status === "pendente" ? "warning" : "danger"}>
                         {m.status}
@@ -478,7 +478,7 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
             </table>
             {filteredMembers.length > 25 && (
               <div className="px-4 py-3 border-t border-corp-border text-center">
-                <Link href="/membros" className="text-xs text-navy hover:text-light-navy">
+                <Link href="/membros" className="text-xs text-accent hover:text-accent/80">
                   Ver todos os {filteredMembers.length} membros
                 </Link>
               </div>
@@ -492,10 +492,10 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
         <div className="space-y-6">
           <div className="grid sm:grid-cols-4 gap-4">
             {[
-              { label: "Pendentes", count: pendingMembers.length, members: pendingMembers, color: "border-amber-200 bg-amber-50" },
-              { label: "Ativos", count: stats.ativos, members: members.filter((m) => m.status === "ativo").slice(0, 5), color: "border-emerald-200 bg-emerald-50" },
-              { label: "Inativos", count: stats.inativos, members: members.filter((m) => m.status === "inativo").slice(0, 5), color: "border-red-200 bg-red-50" },
-              { label: "Total", count: stats.total, members: [], color: "border-navy/15 bg-navy/5" },
+              { label: "Pendentes", count: pendingMembers.length, members: pendingMembers, color: "border-amber-500/15 bg-amber-500/10" },
+              { label: "Ativos", count: stats.ativos, members: members.filter((m) => m.status === "ativo").slice(0, 5), color: "border-emerald-500/15 bg-emerald-500/10" },
+              { label: "Inativos", count: stats.inativos, members: members.filter((m) => m.status === "inativo").slice(0, 5), color: "border-red-500/15 bg-red-500/10" },
+              { label: "Total", count: stats.total, members: [], color: "border-accent/15 bg-accent/10" },
             ].map((col) => (
               <div key={col.label} className={`border rounded-xl p-4 ${col.color}`}>
                 <div className="flex items-center justify-between mb-3">
@@ -505,10 +505,10 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
                 <div className="space-y-1.5">
                   {col.members.slice(0, 5).map((m) => (
                     <div key={m.id} className="flex items-center gap-2 py-1">
-                      <div className="w-6 h-6 rounded-full bg-white border border-corp-border flex items-center justify-center flex-shrink-0">
+                      <div className="w-6 h-6 rounded-full bg-corp-card border border-corp-border flex items-center justify-center flex-shrink-0">
                         <span className="text-[9px] text-corp-muted font-bold">{m.full_name[0]}</span>
                       </div>
-                      <p className="text-xs text-slate-600 truncate">{m.full_name}</p>
+                      <p className="text-xs text-corp-muted truncate">{m.full_name}</p>
                     </div>
                   ))}
                 </div>
@@ -521,14 +521,14 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
       {/* Activity Tab */}
       {activeTab === "activity" && (
         <div className="space-y-4">
-          <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+          <div className="bg-corp-card border border-corp-border rounded-xl p-5">
             <h3 className="text-sm font-medium text-corp-text mb-3">Membros Recentes</h3>
             <div className="space-y-2">
               {recentMembers.map((m) => (
                 <div key={m.id} className="flex items-center justify-between py-2 border-b border-corp-border last:border-0">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-navy text-xs font-bold">{m.full_name[0]}</span>
+                    <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                      <span className="text-accent text-xs font-bold">{m.full_name[0]}</span>
                     </div>
                     <div>
                       <p className="text-sm text-corp-text">{m.full_name}</p>
@@ -539,7 +539,7 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
                     <Badge variant={m.status === "ativo" ? "success" : m.status === "pendente" ? "warning" : "danger"}>
                       {m.status}
                     </Badge>
-                    <p className="text-[10px] text-slate-400 mt-0.5">{formatDate(m.created_at)}</p>
+                    <p className="text-[10px] text-corp-muted mt-0.5">{formatDate(m.created_at)}</p>
                   </div>
                 </div>
               ))}
@@ -547,7 +547,7 @@ export default function WorkspaceView({ members, stats, events, upcomingEvents, 
           </div>
 
           {pastEvents.length > 0 && (
-            <div className="bg-white shadow-card border border-corp-border rounded-xl p-5">
+            <div className="bg-corp-card border border-corp-border rounded-xl p-5">
               <h3 className="text-sm font-medium text-corp-text mb-3">Eventos Recentes</h3>
               <div className="space-y-2">
                 {pastEvents.slice(0, 5).map((ev) => (

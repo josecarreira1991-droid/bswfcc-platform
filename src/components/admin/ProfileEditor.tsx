@@ -40,7 +40,7 @@ export default function ProfileEditor({ member }: { member: Member }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors"
+        className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors"
       >
         <Edit2 size={16} /> Editar Perfil
       </button>
@@ -50,38 +50,38 @@ export default function ProfileEditor({ member }: { member: Member }) {
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Nome Completo</label>
-              <input name="full_name" defaultValue={member.full_name} required className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
+              <input name="full_name" defaultValue={member.full_name} required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
             </div>
             <div>
               <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Telefone</label>
-              <input name="phone" defaultValue={member.phone || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
+              <input name="phone" defaultValue={member.phone || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
             </div>
             <div>
               <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Empresa</label>
-              <input name="company" defaultValue={member.company || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
+              <input name="company" defaultValue={member.company || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
             </div>
             <div>
               <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Indústria</label>
-              <input name="industry" defaultValue={member.industry || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
+              <input name="industry" defaultValue={member.industry || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
             </div>
             <div>
               <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Cidade</label>
-              <input name="city" defaultValue={member.city || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
+              <input name="city" defaultValue={member.city || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
             </div>
             <div>
               <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">LinkedIn</label>
-              <input name="linkedin" defaultValue={member.linkedin || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
+              <input name="linkedin" defaultValue={member.linkedin || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
             </div>
           </div>
           <div>
             <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Bio</label>
-            <textarea name="bio" rows={3} defaultValue={member.bio || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none resize-none" />
+            <textarea name="bio" rows={3} defaultValue={member.bio || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none resize-none" />
           </div>
           <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => setOpen(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors">
+            <button type="button" onClick={() => setOpen(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">
               Cancelar
             </button>
-            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
+            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">
               {loading ? "Salvando..." : "Salvar"}
             </button>
           </div>

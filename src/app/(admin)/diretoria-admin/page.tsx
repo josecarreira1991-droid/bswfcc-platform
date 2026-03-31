@@ -23,17 +23,17 @@ export default async function DiretoriaAdminPage() {
           {directors.map((d) => (
             <div
               key={d.id}
-              className="bg-white shadow-card border border-corp-border rounded-xl p-5 hover:border-slate-300 transition-colors"
+              className="bg-corp-card border border-corp-border rounded-2xl p-5 hover:border-accent/20 transition-colors"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-11 h-11 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0">
-                  <span className="text-navy font-semibold text-sm">
+                <div className="w-11 h-11 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-accent font-semibold text-sm">
                     {(d.name || "").split(" ").filter(Boolean).map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
                   </span>
                 </div>
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-corp-text truncate">{d.name}</p>
-                  <p className="text-[11px] text-navy">{d.role}</p>
+                  <p className="text-[11px] text-accent">{d.role}</p>
                 </div>
               </div>
               <p className="text-xs text-corp-muted mb-3 line-clamp-3">{d.profile}</p>
@@ -46,7 +46,7 @@ export default async function DiretoriaAdminPage() {
                     href={d.linkedin.startsWith("http") ? d.linkedin : `https://${d.linkedin}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-blue-700 hover:text-blue-600"
+                    className="flex items-center gap-1 text-blue-400 hover:text-blue-300"
                   >
                     <Linkedin size={11} /> LinkedIn
                   </a>
@@ -56,8 +56,8 @@ export default async function DiretoriaAdminPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
-          <Shield size={32} className="text-slate-400 mx-auto mb-3" />
+        <div className="bg-corp-card border border-corp-border rounded-2xl p-12 text-center">
+          <Shield size={32} className="text-corp-muted mx-auto mb-3" />
           <p className="text-sm text-corp-muted">Nenhum diretor cadastrado ainda.</p>
         </div>
       )}

@@ -5,7 +5,7 @@ import { login } from "@/lib/actions/auth";
 import { useState, Suspense } from "react";
 
 const INPUT_CLASS =
-  "w-full px-4 py-3 bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none focus:ring-1 focus:ring-navy/20 transition-colors";
+  "w-full px-4 py-3 bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none focus:ring-1 focus:ring-accent/20 transition-colors";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -25,18 +25,18 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-corp-bg flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="text-3xl font-bold text-navy">BSWFCC</Link>
+          <Link href="/" className="text-3xl font-bold text-accent">BSWFCC</Link>
           <p className="text-corp-muted mt-2">Acesse a plataforma</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-8 border border-corp-border shadow-card">
+        <div className="bg-corp-card rounded-2xl p-8 border border-corp-border">
           <h2 className="text-2xl font-bold text-corp-text mb-6">Entrar</h2>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/15 rounded-lg text-red-400 text-sm">
               {error}
             </div>
           )}
@@ -68,7 +68,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-navy text-white font-semibold rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Entrando..." : "Entrar"}
             </button>
@@ -76,7 +76,7 @@ function LoginForm() {
 
           <div className="mt-6 text-center text-sm text-corp-muted">
             Não tem conta?{" "}
-            <Link href="/register" className="text-navy hover:text-light-navy font-medium transition-colors">
+            <Link href="/register" className="text-accent hover:text-accent/80 font-medium transition-colors">
               Cadastrar-se
             </Link>
           </div>
@@ -88,7 +88,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center"><div className="text-navy">Carregando...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-corp-bg flex items-center justify-center"><div className="text-accent">Carregando...</div></div>}>
       <LoginForm />
     </Suspense>
   );

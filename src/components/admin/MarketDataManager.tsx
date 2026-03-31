@@ -126,7 +126,7 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
         {admin && (
           <button
             onClick={() => { setEditItem(null); setShowForm(true); }}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors"
           >
             <Plus size={16} /> Novo Indicador
           </button>
@@ -142,10 +142,10 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
               key={cat.value}
               onClick={() => setFilterCategory(filterCategory === cat.value ? "all" : cat.value)}
               className={cn(
-                "bg-white shadow-card border rounded-xl p-3 text-left transition-colors",
+                "bg-corp-card border rounded-xl p-3 text-left transition-colors",
                 filterCategory === cat.value
-                  ? "border-navy/30 bg-navy/5"
-                  : "border-corp-border hover:border-slate-400"
+                  ? "border-accent/30 bg-accent/10"
+                  : "border-corp-border hover:border-accent/15"
               )}
             >
               <p className="text-lg font-bold text-corp-text">{count}</p>
@@ -164,13 +164,13 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
             placeholder="Buscar indicador..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none transition-colors"
+            className="w-full pl-8 pr-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none transition-colors"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden">
+      <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
@@ -190,14 +190,14 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
                 <tr
                   key={item.id}
                   className={cn(
-                    "border-b border-corp-border hover:bg-slate-50 transition-colors",
-                    i % 2 === 0 ? "bg-transparent" : "bg-slate-50/50"
+                    "border-b border-corp-border hover:bg-white/[0.03] transition-colors",
+                    i % 2 === 0 ? "bg-transparent" : "bg-white/[0.02]"
                   )}
                 >
                   <td className="px-4 py-3 font-medium text-corp-text">
                     {item.indicator.replace(/_/g, " ")}
                   </td>
-                  <td className="px-4 py-3 text-navy font-semibold">{item.value}</td>
+                  <td className="px-4 py-3 text-accent font-semibold">{item.value}</td>
                   <td className="px-4 py-3">
                     <Badge variant={categoryVariant(item.category)}>
                       {categoryLabel(item.category)}
@@ -214,14 +214,14 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => { setEditItem(item); setShowForm(true); }}
-                          className="p-1.5 rounded-md text-corp-muted hover:text-navy hover:bg-navy/5 transition-colors"
+                          className="p-1.5 rounded-md text-corp-muted hover:text-accent hover:bg-accent/10 transition-colors"
                           title="Editar"
                         >
                           <Edit2 size={14} />
                         </button>
                         <button
                           onClick={() => setDeleteTarget(item)}
-                          className="p-1.5 rounded-md text-corp-muted hover:text-red-600 hover:bg-red-50 transition-colors"
+                          className="p-1.5 rounded-md text-corp-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
                           title="Remover"
                         >
                           <Trash2 size={14} />
@@ -244,8 +244,8 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
       </div>
 
       {/* Sources footer */}
-      <div className="mt-6 bg-white shadow-card border border-corp-border rounded-xl p-5">
-        <h3 className="text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wider">Fontes</h3>
+      <div className="mt-6 bg-corp-card border border-corp-border rounded-xl p-5">
+        <h3 className="text-xs font-semibold text-corp-muted mb-2 uppercase tracking-wider">Fontes</h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-1.5 text-[11px] text-corp-muted">
           <p>U.S. Census Bureau — ACS 2024</p>
           <p>Enterprise Florida — Trade Data 2024</p>
@@ -265,15 +265,15 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
         <form key={editItem?.id || "new"} onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Indicador *</label>
-            <input name="indicator" defaultValue={editItem?.indicator || ""} required className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
+            <input name="indicator" defaultValue={editItem?.indicator || ""} required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
           </div>
           <div>
             <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Valor *</label>
-            <input name="value" defaultValue={editItem?.value || ""} required className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
+            <input name="value" defaultValue={editItem?.value || ""} required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
           </div>
           <div>
             <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Categoria *</label>
-            <select name="category" defaultValue={editItem?.category || "comercio"} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none">
+            <select name="category" defaultValue={editItem?.category || "comercio"} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none">
               {CATEGORIES.map((c) => (
                 <option key={c.value} value={c.value}>{c.label}</option>
               ))}
@@ -281,13 +281,13 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
           </div>
           <div>
             <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Fonte</label>
-            <input name="source" defaultValue={editItem?.source || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
+            <input name="source" defaultValue={editItem?.source || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
           </div>
           <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => { setShowForm(false); setEditItem(null); }} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors">
+            <button type="button" onClick={() => { setShowForm(false); setEditItem(null); }} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">
               Cancelar
             </button>
-            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
+            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">
               {loading ? "Salvando..." : editItem ? "Salvar" : "Criar"}
             </button>
           </div>
