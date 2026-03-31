@@ -288,3 +288,88 @@ export async function uploadMedia(formData: FormData): Promise<string> {
   const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(path);
   return urlData.publicUrl;
 }
+
+// ─── Reactions ───
+
+export type ReactionGroup = {
+  emoji: string;
+  count: number;
+  members: string[]; // member IDs who reacted
+};
+
+export async function getMessageReactions(
+  messageIds: string[]
+): Promise<Record<string, ReactionGroup[]>> {
+  const member = await getCurrentMember();
+  if (!member) throw new Error("Unauthorized");
+  if (messageIds.length === 0) return {};
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("message_reactions")
+    .select("message_id, emoji, member_id")
+    .in("message_id", messageIds);
+
+  if (error) throw error;
+
+  // Group by message_id → emoji → member list
+  const result: Record<string, ReactionGroup[]> = {};
+
+  for (const row of data || []) {
+    if (!result[row.message_id]) result[row.message_id] = [];
+
+    const group = result[row.message_id].find((g) => g.emoji === row.emoji);
+    if (group) {
+      group.count++;
+      group.members.push(row.member_id);
+    } else {
+      result[row.message_id].push({
+        emoji: row.emoji,
+        count: 1,
+        members: [row.member_id],
+      });
+    }
+  }
+
+  return result;
+}
+
+export async function toggleReaction(
+  messageId: string,
+  emoji: string
+): Promise<{ added: boolean }> {
+  const member = await getCurrentMember();
+  if (!member) throw new Error("Unauthorized");
+
+  const supabase = createClient();
+
+  // Check if reaction already exists
+  const { data: existing } = await supabase
+    .from("message_reactions")
+    .select("id")
+    .eq("message_id", messageId)
+    .eq("member_id", member.id)
+    .eq("emoji", emoji)
+    .limit(1);
+
+  if (existing && existing.length > 0) {
+    // Remove reaction
+    await supabase
+      .from("message_reactions")
+      .delete()
+      .eq("message_id", messageId)
+      .eq("member_id", member.id)
+      .eq("emoji", emoji);
+    return { added: false };
+  } else {
+    // Add reaction
+    const { error } = await supabase.from("message_reactions").insert({
+      message_id: messageId,
+      member_id: member.id,
+      emoji,
+    });
+    if (error) throw error;
+    return { added: true };
+  }
+}

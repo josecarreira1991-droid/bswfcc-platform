@@ -18,6 +18,7 @@ import {
   Trash2,
   Settings,
   Edit3,
+  SmilePlus,
 } from "lucide-react";
 import {
   getChannels,
@@ -27,10 +28,15 @@ import {
   deleteChannelMessage,
   updateChannel,
   deleteChannel,
+  getMessageReactions,
+  toggleReaction,
 } from "@/lib/actions/group-chat";
+import type { ReactionGroup } from "@/lib/actions/group-chat";
 import { uploadChatMedia } from "@/lib/actions/upload";
 import { cn, ROLE_LABELS, ADMIN_ROLES, formatTime, getInitials } from "@/lib/utils";
 import type { ChatChannel, ChatMessage } from "@/types/database";
+
+const REACTION_EMOJIS = ["👍", "❤️", "😂", "🔥", "👏", "🎯"];
 
 interface GroupChatViewProps {
   channels: ChatChannel[];
@@ -75,6 +81,8 @@ export default function GroupChatView({
   const [editChannelDesc, setEditChannelDesc] = useState("");
   const [savingChannel, setSavingChannel] = useState(false);
   const [showChannelMenu, setShowChannelMenu] = useState(false);
+  const [reactions, setReactions] = useState<Record<string, ReactionGroup[]>>({});
+  const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -83,6 +91,14 @@ export default function GroupChatView({
     currentMemberRole as (typeof ADMIN_ROLES)[number]
   );
 
+  const loadReactions = useCallback(async (msgIds: string[]) => {
+    if (msgIds.length === 0) return;
+    try {
+      const r = await getMessageReactions(msgIds);
+      setReactions((prev) => ({ ...prev, ...r }));
+    } catch { /* silent */ }
+  }, []);
+
   const selectChannel = useCallback(async (channel: ChatChannel) => {
     setSelected(channel);
     setMobileShowChat(true);
@@ -90,11 +106,12 @@ export default function GroupChatView({
     try {
       const msgs = await getChannelMessages(channel.id);
       setMessages(msgs);
+      loadReactions(msgs.map((m) => m.id));
     } catch {
       toast.error("Erro ao carregar mensagens");
     }
     setLoading(false);
-  }, []);
+  }, [loadReactions]);
 
   // Auto-select default channel on mount
   useEffect(() => {
@@ -119,6 +136,7 @@ export default function GroupChatView({
           if (prev.length === msgs.length && prev[prev.length - 1]?.id === msgs[msgs.length - 1]?.id) {
             return prev;
           }
+          loadReactions(msgs.map((m) => m.id));
           return msgs;
         });
       } catch {
@@ -126,7 +144,7 @@ export default function GroupChatView({
       }
     }, 15000);
     return () => clearInterval(interval);
-  }, [selected]);
+  }, [selected, loadReactions]);
 
   // Sync channels from props
   useEffect(() => {
@@ -246,6 +264,36 @@ export default function GroupChatView({
       }
     } catch {
       toast.error("Erro ao apagar mensagem");
+    }
+  }
+
+  async function handleReaction(messageId: string, emoji: string) {
+    setReactionPickerFor(null);
+    try {
+      const result = await toggleReaction(messageId, emoji);
+      // Optimistically update
+      setReactions((prev) => {
+        const current = [...(prev[messageId] || [])];
+        const idx = current.findIndex((g) => g.emoji === emoji);
+        if (result.added) {
+          if (idx >= 0) {
+            current[idx] = { ...current[idx], count: current[idx].count + 1, members: [...current[idx].members, currentMemberId] };
+          } else {
+            current.push({ emoji, count: 1, members: [currentMemberId] });
+          }
+        } else {
+          if (idx >= 0) {
+            if (current[idx].count <= 1) {
+              current.splice(idx, 1);
+            } else {
+              current[idx] = { ...current[idx], count: current[idx].count - 1, members: current[idx].members.filter((m) => m !== currentMemberId) };
+            }
+          }
+        }
+        return { ...prev, [messageId]: current };
+      });
+    } catch {
+      toast.error("Erro ao reagir");
     }
   }
 
@@ -502,7 +550,7 @@ export default function GroupChatView({
                           isMine ? "justify-end" : "justify-start"
                         )}
                         onMouseEnter={() => setHoveredMessage(msg.id)}
-                        onMouseLeave={() => setHoveredMessage(null)}
+                        onMouseLeave={() => { setHoveredMessage(null); setReactionPickerFor(null); }}
                       >
                         {/* Avatar for others */}
                         {!isMine && (
@@ -568,20 +616,68 @@ export default function GroupChatView({
                                 {formatTime(msg.created_at)}
                               </p>
                             </div>
-                            {/* Delete button on hover */}
-                            {canDelete && hoveredMessage === msg.id && (
-                              <button
-                                onClick={() => handleDeleteMessage(msg.id)}
-                                className={cn(
-                                  "absolute top-1 p-1 rounded-md bg-white border border-corp-border text-corp-muted hover:text-red-600 hover:border-red-200 transition-colors",
-                                  isMine ? "-left-8" : "-right-8"
+                            {/* Action buttons on hover */}
+                            {hoveredMessage === msg.id && (
+                              <div className={cn(
+                                "absolute top-1 flex items-center gap-0.5",
+                                isMine ? "-left-16" : "-right-16"
+                              )}>
+                                <button
+                                  onClick={() => setReactionPickerFor(reactionPickerFor === msg.id ? null : msg.id)}
+                                  className="p-1 rounded-md bg-white border border-corp-border text-corp-muted hover:text-navy hover:border-navy/20 transition-colors"
+                                  title="Reagir"
+                                >
+                                  <SmilePlus size={12} />
+                                </button>
+                                {canDelete && (
+                                  <button
+                                    onClick={() => handleDeleteMessage(msg.id)}
+                                    className="p-1 rounded-md bg-white border border-corp-border text-corp-muted hover:text-red-600 hover:border-red-200 transition-colors"
+                                    title="Apagar mensagem"
+                                  >
+                                    <Trash2 size={12} />
+                                  </button>
                                 )}
-                                title="Apagar mensagem"
-                              >
-                                <Trash2 size={12} />
-                              </button>
+                              </div>
+                            )}
+                            {/* Reaction picker */}
+                            {reactionPickerFor === msg.id && (
+                              <div className={cn(
+                                "absolute -bottom-8 z-10 flex items-center gap-0.5 bg-white border border-corp-border rounded-full px-1.5 py-1 shadow-lg",
+                                isMine ? "right-0" : "left-0"
+                              )}>
+                                {REACTION_EMOJIS.map((emoji) => (
+                                  <button
+                                    key={emoji}
+                                    onClick={() => handleReaction(msg.id, emoji)}
+                                    className="hover:scale-125 transition-transform px-1 text-base"
+                                  >
+                                    {emoji}
+                                  </button>
+                                ))}
+                              </div>
                             )}
                           </div>
+                          {/* Reaction display */}
+                          {reactions[msg.id] && reactions[msg.id].length > 0 && (
+                            <div className={cn("flex flex-wrap gap-1 mt-1", isMine ? "justify-end" : "justify-start")}>
+                              {reactions[msg.id].map((r) => (
+                                <button
+                                  key={r.emoji}
+                                  onClick={() => handleReaction(msg.id, r.emoji)}
+                                  className={cn(
+                                    "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border transition-colors",
+                                    r.members.includes(currentMemberId)
+                                      ? "bg-navy/5 border-navy/20 text-navy"
+                                      : "bg-slate-50 border-corp-border text-corp-muted hover:border-navy/20"
+                                  )}
+                                >
+                                  <span>{r.emoji}</span>
+                                  <span className="text-[10px] font-medium">{r.count}</span>
+                                </button>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     );
