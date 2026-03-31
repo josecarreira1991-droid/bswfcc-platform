@@ -96,7 +96,7 @@ export default async function InteligenciaPage() {
                   </div>
                 </div>
               </div>
-              <span className="p-2 text-slate-600 flex-shrink-0" title="Disponível em breve">
+              <span className="p-2 text-slate-700 opacity-40 flex-shrink-0 cursor-not-allowed" title="Relatório em produção — disponível em breve">
                 <Download size={16} />
               </span>
             </div>

@@ -16,6 +16,7 @@ import type { Member } from "@/types/database";
 
 const CATEGORIES = [
   { value: "comercio", label: "Comércio Bilateral" },
+  { value: "economia", label: "Economia" },
   { value: "demografico", label: "Demográfico" },
   { value: "infraestrutura", label: "Infraestrutura" },
   { value: "desenvolvimento", label: "Desenvolvimento" },
@@ -27,6 +28,7 @@ const categoryLabel = (cat: string) => CATEGORIES.find((c) => c.value === cat)?.
 const categoryVariant = (cat: string) => {
   const map: Record<string, "gold" | "info" | "success" | "warning" | "default"> = {
     comercio: "gold",
+    economia: "info",
     demografico: "info",
     infraestrutura: "success",
     desenvolvimento: "warning",

@@ -24,6 +24,7 @@ export default function MatchmakingView({ currentMember, myProfile, profiles }: 
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [showProfile, setShowProfile] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<ProfileWithMember | null>(null);
   const [connecting, setConnecting] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -104,7 +105,7 @@ export default function MatchmakingView({ currentMember, myProfile, profiles }: 
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {filtered.map((p) => (
-          <div key={p.id} className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5 hover:border-slate-600 transition-colors">
+          <div key={p.id} onClick={() => setSelectedProfile(p)} className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5 hover:border-gold/30 transition-colors cursor-pointer">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-full bg-gold/15 flex items-center justify-center flex-shrink-0">
                 <span className="text-gold text-xs font-semibold">
@@ -158,6 +159,83 @@ export default function MatchmakingView({ currentMember, myProfile, profiles }: 
           </div>
         )}
       </div>
+
+      {/* Profile Detail Modal */}
+      <Modal open={!!selectedProfile} onClose={() => setSelectedProfile(null)} title={selectedProfile?.business_name || selectedProfile?.members?.full_name || "Empresa"} size="md">
+        {selectedProfile && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Contato</p>
+                <p className="text-sm text-white">{selectedProfile.members?.full_name || "—"}</p>
+              </div>
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Empresa</p>
+                <p className="text-sm text-white">{selectedProfile.members?.company || "—"}</p>
+              </div>
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Indústria</p>
+                <p className="text-sm text-white">{selectedProfile.members?.industry || "—"}</p>
+              </div>
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Cidade</p>
+                <p className="text-sm text-white">{selectedProfile.members?.city || "—"}</p>
+              </div>
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Tipo</p>
+                <p className="text-sm text-white">{selectedProfile.business_type === "service" ? "Serviço" : selectedProfile.business_type === "product" ? "Produto" : selectedProfile.business_type === "both" ? "Ambos" : selectedProfile.business_type || "—"}</p>
+              </div>
+              {selectedProfile.website && (
+                <div>
+                  <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Website</p>
+                  <a href={selectedProfile.website.startsWith("http") ? selectedProfile.website : `https://${selectedProfile.website}`} target="_blank" rel="noopener noreferrer" className="text-sm text-gold hover:text-light-gold flex items-center gap-1">{selectedProfile.website} <Globe size={11} /></a>
+                </div>
+              )}
+            </div>
+            {selectedProfile.description && (
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Descrição</p>
+                <p className="text-sm text-slate-300">{selectedProfile.description}</p>
+              </div>
+            )}
+            {selectedProfile.services_offered.length > 0 && (
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Serviços Oferecidos</p>
+                <div className="flex flex-wrap gap-1.5 mt-1">{selectedProfile.services_offered.map((s) => <span key={s} className="px-2 py-0.5 text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">{s}</span>)}</div>
+              </div>
+            )}
+            {selectedProfile.services_needed.length > 0 && (
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Serviços que Precisa</p>
+                <div className="flex flex-wrap gap-1.5 mt-1">{selectedProfile.services_needed.map((s) => <span key={s} className="px-2 py-0.5 text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded">{s}</span>)}</div>
+              </div>
+            )}
+            {selectedProfile.looking_for.length > 0 && (
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Procurando</p>
+                <div className="flex flex-wrap gap-1.5 mt-1">{selectedProfile.looking_for.map((l) => <span key={l} className="px-2 py-0.5 text-[10px] bg-gold/10 text-gold border border-gold/20 rounded">{l}</span>)}</div>
+              </div>
+            )}
+            {selectedProfile.tags.length > 0 && (
+              <div>
+                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Tags</p>
+                <div className="flex flex-wrap gap-1.5 mt-1">{selectedProfile.tags.map((t) => <span key={t} className="px-2 py-0.5 text-[10px] bg-slate-800 text-slate-400 rounded">{t}</span>)}</div>
+              </div>
+            )}
+            {selectedProfile.member_id !== currentMember.id && (
+              <div className="pt-2 border-t border-slate-700/50">
+                <button
+                  onClick={() => { handleConnect(selectedProfile.member_id, selectedProfile.members?.full_name || ""); setSelectedProfile(null); }}
+                  disabled={connecting === selectedProfile.member_id}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50"
+                >
+                  <Handshake size={14} /> {connecting === selectedProfile.member_id ? "Enviando..." : "Conectar"}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
 
       {/* Profile Form Modal */}
       <Modal open={showProfile} onClose={() => setShowProfile(false)} title="Business Profile" size="lg">
