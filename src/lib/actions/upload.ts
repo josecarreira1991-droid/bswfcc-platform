@@ -21,6 +21,16 @@ export async function uploadChatMedia(
     return { error: "Arquivo muito grande. Limite: 10MB" };
   }
 
+  // Validate file type (allowlist)
+  const ALLOWED_TYPES = [
+    "image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml",
+    "video/mp4", "video/quicktime",
+    "application/pdf",
+  ];
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    return { error: "Tipo de arquivo não permitido. Use imagens, vídeos ou PDFs." };
+  }
+
   const supabase = createClient();
 
   // Generate a unique filename (timestamp + sanitized original name)

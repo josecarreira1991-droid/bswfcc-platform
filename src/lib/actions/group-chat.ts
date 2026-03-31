@@ -36,10 +36,22 @@ export async function createChannel(
 
   const supabase = createClient();
 
+  // Prevent duplicate channel names
+  const trimmedName = name.trim();
+  const { data: existing } = await supabase
+    .from("chat_channels")
+    .select("id")
+    .ilike("name", trimmedName)
+    .limit(1);
+
+  if (existing && existing.length > 0) {
+    throw new Error(`Canal "${trimmedName}" já existe`);
+  }
+
   const { data, error } = await supabase
     .from("chat_channels")
     .insert({
-      name: name.trim(),
+      name: trimmedName,
       description: description.trim() || null,
       created_by: member.id,
     })
