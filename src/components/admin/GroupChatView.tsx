@@ -350,7 +350,7 @@ export default function GroupChatView({
               (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
             }}
           />
-          <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="hidden flex items-center gap-2 px-3 py-2 bg-white/[0.05] border border-corp-border rounded-lg text-xs text-corp-muted hover:text-accent transition-colors max-w-sm">
+          <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="hidden flex items-center gap-2 px-3 py-2 bg-gray-50 border border-corp-border rounded-lg text-xs text-corp-muted hover:text-accent transition-colors max-w-sm">
             {msg.media_name || "Imagem"} — Abrir em nova aba
           </a>
         </div>
@@ -373,7 +373,7 @@ export default function GroupChatView({
         href={msg.media_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-2 mt-1.5 px-3 py-2 bg-white/[0.05] border border-corp-border rounded-lg hover:bg-white/[0.08] transition-colors max-w-sm"
+        className="flex items-center gap-2 mt-1.5 px-3 py-2 bg-gray-50 border border-corp-border rounded-lg hover:bg-gray-100 transition-colors max-w-sm"
       >
         <FileText size={16} className="text-accent flex-shrink-0" />
         <span className="text-xs text-corp-muted truncate">
@@ -386,11 +386,11 @@ export default function GroupChatView({
 
   return (
     <>
-      <div className="flex h-[calc(100vh-8rem)] bg-corp-card border border-corp-border rounded-xl overflow-hidden">
+      <div className="flex h-[calc(100vh-8rem)] bg-white border border-corp-border rounded-xl overflow-hidden">
         {/* Channel List — sidebar */}
         <div
           className={cn(
-            "w-full sm:w-72 bg-dark-navy border-r border-corp-border flex flex-col flex-shrink-0",
+            "w-full sm:w-72 bg-[#E4E8EF] border-r border-corp-border flex flex-col flex-shrink-0",
             mobileShowChat ? "hidden sm:flex" : "flex"
           )}
         >
@@ -426,7 +426,7 @@ export default function GroupChatView({
                   key={channel.id}
                   onClick={() => selectChannel(channel)}
                   className={cn(
-                    "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-white/[0.03] transition-colors",
+                    "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-white transition-colors",
                     selected?.id === channel.id &&
                       "bg-accent/10 border-l-2 border-l-accent"
                   )}
@@ -496,12 +496,12 @@ export default function GroupChatView({
                   <div className="relative">
                     <button
                       onClick={() => setShowChannelMenu((v) => !v)}
-                      className="p-2 text-corp-muted hover:text-corp-text transition-colors rounded-lg hover:bg-white/[0.03]"
+                      className="p-2 text-corp-muted hover:text-corp-text transition-colors rounded-lg hover:bg-white"
                     >
                       <Settings size={16} />
                     </button>
                     {showChannelMenu && (
-                      <div className="absolute right-0 top-full mt-1 w-40 bg-corp-card border border-corp-border rounded-lg shadow-lg z-20 py-1">
+                      <div className="absolute right-0 top-full mt-1 w-40 bg-white border border-corp-border rounded-lg shadow-lg z-20 py-1">
                         <button
                           onClick={() => {
                             setEditChannelName(selected.name);
@@ -509,7 +509,7 @@ export default function GroupChatView({
                             setShowEditChannelModal(true);
                             setShowChannelMenu(false);
                           }}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-corp-muted hover:bg-white/[0.05] hover:text-corp-text transition-colors"
+                          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-corp-muted hover:bg-gray-50 hover:text-corp-text transition-colors"
                         >
                           <Edit3 size={13} />
                           Editar
@@ -573,7 +573,7 @@ export default function GroupChatView({
                                 "rounded-xl px-3.5 py-2.5",
                                 isMine
                                   ? "bg-accent text-white"
-                                  : "bg-white/[0.05] text-corp-text"
+                                  : "bg-gray-100 text-corp-text"
                               )}
                             >
                               {!isMine && msg.sender && (
@@ -588,7 +588,7 @@ export default function GroupChatView({
                                       |
                                     </span>
                                   )}
-                                  <span className="text-[9px] px-1.5 py-0.5 bg-white/[0.08] text-corp-muted rounded-full">
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-gray-100 text-corp-muted rounded-full">
                                     {ROLE_LABELS[msg.sender.role] ||
                                       msg.sender.role}
                                   </span>
@@ -624,7 +624,7 @@ export default function GroupChatView({
                               )}>
                                 <button
                                   onClick={() => setReactionPickerFor(reactionPickerFor === msg.id ? null : msg.id)}
-                                  className="p-1 rounded-md bg-corp-card border border-corp-border text-corp-muted hover:text-accent hover:border-accent/20 transition-colors"
+                                  className="p-1 rounded-md bg-white border border-corp-border text-corp-muted hover:text-accent hover:border-accent/20 transition-colors"
                                   title="Reagir"
                                 >
                                   <SmilePlus size={12} />
@@ -632,7 +632,7 @@ export default function GroupChatView({
                                 {canDelete && (
                                   <button
                                     onClick={() => handleDeleteMessage(msg.id)}
-                                    className="p-1 rounded-md bg-corp-card border border-corp-border text-corp-muted hover:text-red-400 hover:border-red-500/20 transition-colors"
+                                    className="p-1 rounded-md bg-white border border-corp-border text-corp-muted hover:text-red-400 hover:border-red-500/20 transition-colors"
                                     title="Apagar mensagem"
                                   >
                                     <Trash2 size={12} />
@@ -643,7 +643,7 @@ export default function GroupChatView({
                             {/* Reaction picker */}
                             {reactionPickerFor === msg.id && (
                               <div className={cn(
-                                "absolute -bottom-8 z-10 flex items-center gap-0.5 bg-corp-card border border-corp-border rounded-full px-1.5 py-1 shadow-lg",
+                                "absolute -bottom-8 z-10 flex items-center gap-0.5 bg-white border border-corp-border rounded-full px-1.5 py-1 shadow-lg",
                                 isMine ? "right-0" : "left-0"
                               )}>
                                 {REACTION_EMOJIS.map((emoji) => (
@@ -669,7 +669,7 @@ export default function GroupChatView({
                                     "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs border transition-colors",
                                     r.members.includes(currentMemberId)
                                       ? "bg-accent/10 border-accent/20 text-accent"
-                                      : "bg-white/[0.05] border-corp-border text-corp-muted hover:border-accent/20"
+                                      : "bg-gray-50 border-corp-border text-corp-muted hover:border-accent/20"
                                   )}
                                 >
                                   <span>{r.emoji}</span>
@@ -694,7 +694,7 @@ export default function GroupChatView({
 
               {/* Attachment preview */}
               {attachment && (
-                <div className="px-4 py-2 border-t border-corp-border bg-white/[0.03]">
+                <div className="px-4 py-2 border-t border-corp-border bg-white">
                   <div className="flex items-center gap-3">
                     {attachment.mediaType === "image" && attachment.preview ? (
                       <img
@@ -703,14 +703,14 @@ export default function GroupChatView({
                         className="h-16 rounded-lg border border-corp-border object-cover"
                       />
                     ) : attachment.mediaType === "video" ? (
-                      <div className="flex items-center gap-2 px-3 py-2 bg-white/[0.05] rounded-lg">
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg">
                         <Film size={16} className="text-accent" />
                         <span className="text-xs text-corp-muted truncate max-w-[200px]">
                           {attachment.file.name}
                         </span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 px-3 py-2 bg-white/[0.05] rounded-lg">
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg">
                         <FileText size={16} className="text-accent" />
                         <span className="text-xs text-corp-muted truncate max-w-[200px]">
                           {attachment.file.name}
@@ -728,7 +728,7 @@ export default function GroupChatView({
               )}
 
               {/* Message Input */}
-              <div className="px-4 py-3 border-t border-corp-border bg-corp-card">
+              <div className="px-4 py-3 border-t border-corp-border bg-white">
                 <div className="flex items-end gap-2">
                   {/* Attach button */}
                   <button
@@ -757,7 +757,7 @@ export default function GroupChatView({
                     }}
                     placeholder="Escreva uma mensagem..."
                     rows={1}
-                    className="flex-1 px-3 py-2.5 text-sm bg-white/[0.03] border border-corp-border rounded-xl text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none"
+                    className="flex-1 px-3 py-2.5 text-sm bg-white border border-corp-border rounded-xl text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none"
                   />
                   <button
                     onClick={handleSend}
@@ -792,7 +792,7 @@ export default function GroupChatView({
       {/* New Channel Modal */}
       {showNewChannelModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-corp-card border border-corp-border rounded-xl w-full max-w-md flex flex-col">
+          <div className="bg-white border border-corp-border rounded-xl w-full max-w-md flex flex-col">
             {/* Modal Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-corp-border">
               <div className="flex items-center gap-2">
@@ -823,7 +823,7 @@ export default function GroupChatView({
                   onChange={(e) => setNewChannelName(e.target.value)}
                   placeholder="Ex: Eventos, Marketing..."
                   autoFocus
-                  className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
+                  className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
                 />
               </div>
               <div>
@@ -835,7 +835,7 @@ export default function GroupChatView({
                   value={newChannelDesc}
                   onChange={(e) => setNewChannelDesc(e.target.value)}
                   placeholder="Sobre o que é este canal..."
-                  className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
+                  className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
                 />
               </div>
             </div>
@@ -848,7 +848,7 @@ export default function GroupChatView({
                   setNewChannelName("");
                   setNewChannelDesc("");
                 }}
-                className="px-3 py-2 text-xs text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors"
+                className="px-3 py-2 text-xs text-corp-muted hover:text-corp-text hover:bg-gray-50 rounded-lg transition-colors"
               >
                 Cancelar
               </button>
@@ -867,7 +867,7 @@ export default function GroupChatView({
       {/* Edit Channel Modal */}
       {showEditChannelModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-corp-card border border-corp-border rounded-xl w-full max-w-md flex flex-col">
+          <div className="bg-white border border-corp-border rounded-xl w-full max-w-md flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 border-b border-corp-border">
               <div className="flex items-center gap-2">
                 <Edit3 size={16} className="text-accent" />
@@ -890,7 +890,7 @@ export default function GroupChatView({
                   value={editChannelName}
                   onChange={(e) => setEditChannelName(e.target.value)}
                   autoFocus
-                  className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
+                  className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
                 />
               </div>
               <div>
@@ -902,14 +902,14 @@ export default function GroupChatView({
                   value={editChannelDesc}
                   onChange={(e) => setEditChannelDesc(e.target.value)}
                   placeholder="Sobre o que é este canal..."
-                  className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
+                  className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
                 />
               </div>
             </div>
             <div className="flex justify-end gap-2 px-4 py-3 border-t border-corp-border">
               <button
                 onClick={() => setShowEditChannelModal(false)}
-                className="px-3 py-2 text-xs text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors"
+                className="px-3 py-2 text-xs text-corp-muted hover:text-corp-text hover:bg-gray-50 rounded-lg transition-colors"
               >
                 Cancelar
               </button>

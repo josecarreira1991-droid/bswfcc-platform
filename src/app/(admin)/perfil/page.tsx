@@ -23,9 +23,9 @@ export default async function PerfilPage() {
 
       <div className="max-w-2xl space-y-6">
         {/* Profile header */}
-        <div className="bg-corp-card border border-corp-border rounded-2xl p-6">
+        <div className="bg-white border border-corp-border rounded-lg p-6 shadow-sm">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center">
               <span className="text-accent font-bold text-xl">
                 {(member.full_name || "").split(" ").filter(Boolean).map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
               </span>
@@ -46,7 +46,7 @@ export default async function PerfilPage() {
         </div>
 
         {/* Details */}
-        <div className="bg-corp-card border border-corp-border rounded-2xl p-6">
+        <div className="bg-white border border-corp-border rounded-lg p-6 shadow-sm">
           <h3 className="text-sm font-medium text-corp-muted mb-4">Informações de Contato</h3>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
@@ -66,7 +66,7 @@ export default async function PerfilPage() {
                       href={field.value.startsWith("http") ? field.value : `https://${field.value}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-blue-400 hover:text-blue-300 hover:underline"
+                      className="text-sm text-blue-700 hover:text-accent hover:underline"
                     >
                       {field.value}
                     </a>
@@ -80,7 +80,7 @@ export default async function PerfilPage() {
         </div>
 
         {member.industry && (
-          <div className="bg-corp-card border border-corp-border rounded-2xl p-6">
+          <div className="bg-white border border-corp-border rounded-lg p-6 shadow-sm">
             <h3 className="text-sm font-medium text-corp-muted mb-2">Indústria</h3>
             <p className="text-sm text-corp-text">{member.industry}</p>
           </div>

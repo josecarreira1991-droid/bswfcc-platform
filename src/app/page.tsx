@@ -14,10 +14,10 @@ const kpis = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-corp-bg">
+    <div className="min-h-screen bg-[#ECF0F5]">
       {/* Hero */}
       <header className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-corp-bg via-corp-card to-corp-bg" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#ECF0F5] via-white to-[#ECF0F5]" />
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
         <nav className="relative z-10 flex items-center justify-between max-w-7xl mx-auto px-6 py-6">
@@ -53,13 +53,13 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
             <Link
               href="/register"
-              className="px-8 py-3.5 bg-accent text-white font-semibold rounded-xl hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 hover:shadow-accent/40"
+              className="px-8 py-3.5 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 hover:shadow-accent/40"
             >
               Tornar-se Membro
             </Link>
             <Link
               href="/diretoria"
-              className="px-8 py-3.5 border border-accent/20 text-accent font-medium rounded-xl hover:bg-accent/10 transition-all"
+              className="px-8 py-3.5 border border-accent/20 text-accent font-medium rounded-lg hover:bg-accent/10 transition-all"
             >
               Conheça a Diretoria
             </Link>
@@ -93,7 +93,7 @@ export default function Home() {
               EIN: 99-4852466 | SunBiz: N24000010828 | Florida Not For Profit Corporation — 501(c)(6)
             </p>
           </div>
-          <div className="bg-corp-card rounded-2xl p-8 border border-corp-border">
+          <div className="bg-white rounded-lg p-8 border border-corp-border">
             <h3 className="text-accent font-semibold mb-4">Dados Verificados</h3>
             <div className="space-y-3 text-sm">
               {[
@@ -115,7 +115,7 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="bg-gradient-to-r from-corp-card to-corp-bg border-y border-corp-border">
+      <section className="bg-gradient-to-r from-white to-[#ECF0F5] border-y border-corp-border">
         <div className="max-w-4xl mx-auto px-6 py-20 text-center">
           <h2 className="text-3xl font-bold mb-4 text-corp-text">
             Pronto para fazer parte da <span className="text-accent">câmara que conecta</span>?
@@ -125,7 +125,7 @@ export default function Home() {
           </p>
           <Link
             href="/register"
-            className="inline-block px-10 py-4 bg-accent text-white font-bold rounded-xl hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 text-lg"
+            className="inline-block px-10 py-4 bg-accent text-white font-bold rounded-lg hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 text-lg"
           >
             Cadastrar Agora
           </Link>

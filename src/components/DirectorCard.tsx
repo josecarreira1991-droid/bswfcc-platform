@@ -8,7 +8,7 @@ interface DirectorCardProps {
 
 export default function DirectorCard({ name, role, profile, linkedin, company }: DirectorCardProps) {
   return (
-    <div className="bg-corp-card rounded-xl p-6 border border-accent/15 hover:border-accent/30 transition-all group">
+    <div className="bg-white rounded-lg p-6 border border-accent/15 hover:border-accent/30 transition-all group">
       <div className="flex items-start gap-4">
         <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent font-bold text-lg shrink-0">
           {name.split(" ").map(n => n[0]).join("").slice(0, 2)}

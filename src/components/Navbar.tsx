@@ -15,7 +15,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-corp-bg/95 backdrop-blur-md border-b border-corp-border">
+    <nav className="sticky top-0 z-50 bg-[#ECF0F5]/95 backdrop-blur-md border-b border-corp-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-3">
@@ -56,7 +56,7 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="md:hidden bg-corp-card border-t border-corp-border">
+        <div className="md:hidden bg-white border-t border-corp-border">
           {navItems.map((item) => (
             <Link
               key={item.href}

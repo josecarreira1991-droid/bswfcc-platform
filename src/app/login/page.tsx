@@ -5,7 +5,7 @@ import { login } from "@/lib/actions/auth";
 import { useState, Suspense } from "react";
 
 const INPUT_CLASS =
-  "w-full px-4 py-3 bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none focus:ring-1 focus:ring-accent/20 transition-colors";
+  "w-full px-4 py-3 bg-white border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none focus:ring-1 focus:ring-accent/20 transition-colors";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -25,18 +25,18 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-corp-bg flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#ECF0F5] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="text-3xl font-bold text-accent">BSWFCC</Link>
           <p className="text-corp-muted mt-2">Acesse a plataforma</p>
         </div>
 
-        <div className="bg-corp-card rounded-2xl p-8 border border-corp-border">
+        <div className="bg-white rounded-lg p-8 border border-corp-border">
           <h2 className="text-2xl font-bold text-corp-text mb-6">Entrar</h2>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/15 rounded-lg text-red-400 text-sm">
+            <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-lg text-red-700 text-sm">
               {error}
             </div>
           )}
@@ -88,7 +88,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-corp-bg flex items-center justify-center"><div className="text-accent">Carregando...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#ECF0F5] flex items-center justify-center"><div className="text-accent">Carregando...</div></div>}>
       <LoginForm />
     </Suspense>
   );

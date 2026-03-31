@@ -29,7 +29,7 @@ export default async function ConfiguracoesPage() {
 
       <div className="space-y-4">
         {/* Organization Info */}
-        <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+        <div className="bg-white border border-corp-border rounded-lg p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <Building2 size={16} className="text-accent" />
             <h3 className="text-sm font-medium text-corp-text">Informações da Organização</h3>
@@ -55,7 +55,7 @@ export default async function ConfiguracoesPage() {
         </div>
 
         {/* Platform Settings */}
-        <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+        <div className="bg-white border border-corp-border rounded-lg p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <Globe size={16} className="text-accent" />
             <h3 className="text-sm font-medium text-corp-text">Plataforma</h3>
@@ -84,10 +84,10 @@ export default async function ConfiguracoesPage() {
         </div>
 
         {/* Access & Security */}
-        <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+        <div className="bg-white border border-corp-border rounded-lg p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <Shield size={16} className="text-accent" />
-            <h3 className="text-sm font-medium text-corp-text">Acesso & Segurança</h3>
+            <h3 className="text-sm font-medium text-corp-text">Acesso &amp; Segurança</h3>
           </div>
           <div className="space-y-3 text-sm">
             <div className="flex items-center justify-between py-2 border-b border-corp-border">
@@ -95,34 +95,34 @@ export default async function ConfiguracoesPage() {
                 <p className="text-corp-text">Aprovação de Novos Membros</p>
                 <p className="text-[10px] text-corp-muted">Novos cadastros precisam de aprovação da diretoria</p>
               </div>
-              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 rounded-full">Ativo</span>
+              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-300 rounded-full">Ativo</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-corp-border">
               <div>
                 <p className="text-corp-text">Cadastro por Indicação</p>
                 <p className="text-[10px] text-corp-muted">Membros podem gerar códigos de indicação</p>
               </div>
-              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 rounded-full">Ativo</span>
+              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-300 rounded-full">Ativo</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-corp-border">
               <div>
                 <p className="text-corp-text">Autenticação</p>
                 <p className="text-[10px] text-corp-muted">Login via email + senha com Supabase Auth</p>
               </div>
-              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 rounded-full">Ativo</span>
+              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-300 rounded-full">Ativo</span>
             </div>
             <div className="flex items-center justify-between py-2">
               <div>
                 <p className="text-corp-text">Row Level Security (RLS)</p>
                 <p className="text-[10px] text-corp-muted">Proteção de dados por nível de acesso no banco</p>
               </div>
-              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 rounded-full">Ativo</span>
+              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-300 rounded-full">Ativo</span>
             </div>
           </div>
         </div>
 
         {/* Notifications */}
-        <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+        <div className="bg-white border border-corp-border rounded-lg p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <Bell size={16} className="text-accent" />
             <h3 className="text-sm font-medium text-corp-text">Notificações</h3>
@@ -133,27 +133,27 @@ export default async function ConfiguracoesPage() {
                 <p className="text-corp-text">Novos Membros Pendentes</p>
                 <p className="text-[10px] text-corp-muted">Badge no sino do header quando há membros aguardando aprovação</p>
               </div>
-              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 rounded-full">Ativo</span>
+              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-300 rounded-full">Ativo</span>
             </div>
             <div className="flex items-center justify-between py-2 border-b border-corp-border">
               <div>
                 <p className="text-corp-text">Polling de Mensagens (Chat)</p>
                 <p className="text-[10px] text-corp-muted">Novas mensagens verificadas a cada 15 segundos</p>
               </div>
-              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 rounded-full">Ativo</span>
+              <span className="px-2.5 py-1 text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-300 rounded-full">Ativo</span>
             </div>
             <div className="flex items-center justify-between py-2">
               <div>
                 <p className="text-corp-text">Email Transacional</p>
                 <p className="text-[10px] text-corp-muted">Confirmação de cadastro, notificações de eventos</p>
               </div>
-              <span className="px-2.5 py-1 text-[11px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/15 rounded-full">Pendente</span>
+              <span className="px-2.5 py-1 text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-300 rounded-full">Pendente</span>
             </div>
           </div>
         </div>
 
         {/* Integrations Status */}
-        <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+        <div className="bg-white border border-corp-border rounded-lg p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <Database size={16} className="text-accent" />
             <h3 className="text-sm font-medium text-corp-text">Status das Integrações</h3>
@@ -168,8 +168,8 @@ export default async function ConfiguracoesPage() {
                 </div>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 size={14} className="text-emerald-400" />
-                <span className="text-xs text-emerald-400">Conectado</span>
+                <CheckCircle2 size={14} className="text-emerald-700" />
+                <span className="text-xs text-emerald-700">Conectado</span>
               </div>
             </div>
 
@@ -184,13 +184,13 @@ export default async function ConfiguracoesPage() {
               <div className="flex items-center gap-1.5">
                 {stripeConfigured ? (
                   <>
-                    <CheckCircle2 size={14} className="text-emerald-400" />
-                    <span className="text-xs text-emerald-400">Configurado</span>
+                    <CheckCircle2 size={14} className="text-emerald-700" />
+                    <span className="text-xs text-emerald-700">Configurado</span>
                   </>
                 ) : (
                   <>
-                    <Clock size={14} className="text-amber-400" />
-                    <span className="text-xs text-amber-400">Pendente</span>
+                    <Clock size={14} className="text-amber-700" />
+                    <span className="text-xs text-amber-700">Pendente</span>
                   </>
                 )}
               </div>
@@ -205,8 +205,8 @@ export default async function ConfiguracoesPage() {
                 </div>
               </div>
               <div className="flex items-center gap-1.5">
-                <Clock size={14} className="text-amber-400" />
-                <span className="text-xs text-amber-400">Pendente</span>
+                <Clock size={14} className="text-amber-700" />
+                <span className="text-xs text-amber-700">Pendente</span>
               </div>
             </div>
 
@@ -219,8 +219,8 @@ export default async function ConfiguracoesPage() {
                 </div>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 size={14} className="text-emerald-400" />
-                <span className="text-xs text-emerald-400">Conectado</span>
+                <CheckCircle2 size={14} className="text-emerald-700" />
+                <span className="text-xs text-emerald-700">Conectado</span>
               </div>
             </div>
           </div>

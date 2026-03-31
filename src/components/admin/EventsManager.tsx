@@ -35,11 +35,11 @@ function typeVariant(t: string): BadgeVariant {
 }
 
 const INPUT_CLASS =
-  "w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none";
-const LABEL_CLASS = "block text-[11px] text-corp-muted uppercase tracking-wider mb-1";
-const TH_CLASS = "px-4 py-3 text-left text-[11px] font-semibold text-corp-muted uppercase tracking-wider";
+  "w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none";
+const LABEL_CLASS = "block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1";
+const TH_CLASS = "px-4 py-3 text-left text-[11px] font-semibold text-[#5A6577] uppercase tracking-wider";
 const SELECT_CLASS =
-  "px-3 py-2 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-muted focus:border-accent/30 focus:outline-none";
+  "px-3 py-2 text-xs bg-white border border-[#B8C4CE] rounded-lg text-[#5A6577] focus:border-accent focus:outline-none";
 
 interface FormFieldProps {
   label: string;
@@ -148,8 +148,8 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-corp-text">Gestão de Eventos</h1>
-          <p className="text-sm text-corp-muted mt-0.5">
+          <h1 className="text-xl font-semibold text-[#1A1A2E]">Gestão de Eventos</h1>
+          <p className="text-sm text-[#5A6577] mt-0.5">
             {events.filter((e) => e.date >= today).length} próximos &middot; {events.filter((e) => e.date < today).length} passados
           </p>
         </div>
@@ -166,13 +166,13 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
       {/* Toolbar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
         <div className="relative flex-1 w-full sm:max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-muted" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5A6577]" />
           <input
             type="text"
             placeholder="Buscar evento..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none transition-colors"
+            className="w-full pl-8 pr-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] placeholder-gray-400 focus:border-accent focus:outline-none transition-colors"
           />
         </div>
         <div className="flex items-center gap-2">
@@ -199,11 +199,11 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
       </div>
 
       {/* Table */}
-      <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden">
+      <div className="bg-white border border-[#B8C4CE] rounded-lg overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-corp-border">
+              <tr className="border-b border-[#B8C4CE]">
                 <th className={TH_CLASS}>Evento</th>
                 <th className={TH_CLASS}>Data</th>
                 <th className={TH_CLASS}>Tipo</th>
@@ -221,30 +221,30 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
                   <tr
                     key={event.id}
                     className={cn(
-                      "border-b border-corp-border hover:bg-white/[0.03] transition-colors",
+                      "border-b border-[#B8C4CE] hover:bg-gray-50 transition-colors",
                       isPast && "opacity-50",
-                      i % 2 === 0 ? "bg-transparent" : "bg-white/[0.02]"
+                      i % 2 === 0 ? "bg-white" : "bg-gray-50/50"
                     )}
                   >
                     <td className="px-4 py-3">
-                      <p className="font-medium text-corp-text">{event.title}</p>
+                      <p className="font-medium text-[#1A1A2E]">{event.title}</p>
                       {event.is_public && (
                         <Badge variant="info" className="mt-0.5">Público</Badge>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-corp-muted text-xs whitespace-nowrap">
+                    <td className="px-4 py-3 text-[#5A6577] text-xs whitespace-nowrap">
                       {formatDate(event.date)}
-                      {event.time && <span className="ml-1 text-corp-muted">{event.time}</span>}
+                      {event.time && <span className="ml-1 text-[#5A6577]">{event.time}</span>}
                     </td>
                     <td className="px-4 py-3">
                       <Badge variant={typeVariant(event.type)}>
                         {EVENT_TYPE_LABELS[event.type] || event.type}
                       </Badge>
                     </td>
-                    <td className="px-4 py-3 text-corp-muted truncate max-w-[160px]">
+                    <td className="px-4 py-3 text-[#5A6577] truncate max-w-[160px]">
                       {event.location || "—"}
                     </td>
-                    <td className="px-4 py-3 text-corp-muted text-xs">
+                    <td className="px-4 py-3 text-[#5A6577] text-xs">
                       {event.max_attendees ? `${event.max_attendees} vagas` : "Ilimitado"}
                     </td>
                     {admin && (
@@ -252,21 +252,21 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
                         <div className="flex items-center justify-end gap-1">
                           <button
                             onClick={() => setViewEvent(event)}
-                            className="p-1.5 rounded-md text-corp-muted hover:text-corp-text hover:bg-white/[0.03] transition-colors"
+                            className="p-1.5 rounded-md text-[#5A6577] hover:text-[#1A1A2E] hover:bg-gray-50 transition-colors"
                             title="Detalhes"
                           >
                             <Eye size={14} />
                           </button>
                           <button
                             onClick={() => { setEditingEvent(event); setShowForm(true); }}
-                            className="p-1.5 rounded-md text-corp-muted hover:text-accent hover:bg-accent/10 transition-colors"
+                            className="p-1.5 rounded-md text-[#5A6577] hover:text-accent hover:bg-blue-50 transition-colors"
                             title="Editar"
                           >
                             <Edit2 size={14} />
                           </button>
                           <button
                             onClick={() => setDeleteTarget(event)}
-                            className="p-1.5 rounded-md text-corp-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                            className="p-1.5 rounded-md text-[#5A6577] hover:text-red-600 hover:bg-red-50 transition-colors"
                             title="Remover"
                           >
                             <Trash2 size={14} />
@@ -279,7 +279,7 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
               })}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={admin ? 6 : 5} className="px-4 py-12 text-center text-corp-muted text-sm">
+                  <td colSpan={admin ? 6 : 5} className="px-4 py-12 text-center text-[#5A6577] text-sm">
                     Nenhum evento encontrado.
                   </td>
                 </tr>
@@ -334,14 +334,14 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
                     const hidden = e.target.form?.querySelector('input[name="is_public"]') as HTMLInputElement;
                     if (hidden) hidden.value = e.target.checked ? "true" : "false";
                   }}
-                  className="w-4 h-4 rounded border-corp-border bg-white/[0.03] text-accent focus:ring-accent/30"
+                  className="w-4 h-4 rounded border-[#B8C4CE] bg-white text-accent focus:ring-accent/30"
                 />
-                <span className="text-sm text-corp-muted">Evento público</span>
+                <span className="text-sm text-[#5A6577]">Evento público</span>
               </label>
             </div>
           </div>
-          <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => { setShowForm(false); setEditingEvent(null); }} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">
+          <div className="flex justify-end gap-3 pt-2 border-t border-[#B8C4CE]">
+            <button type="button" onClick={() => { setShowForm(false); setEditingEvent(null); }} className="px-4 py-2 text-sm text-[#5A6577] hover:text-[#1A1A2E] hover:bg-gray-100 rounded-lg transition-colors">
               Cancelar
             </button>
             <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">
@@ -363,11 +363,11 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className={LABEL_CLASS}>Data</p>
-                <p className="text-sm text-corp-text flex items-center gap-1.5"><Calendar size={13} className="text-corp-muted" />{formatDate(viewEvent.date)}</p>
+                <p className="text-sm text-[#1A1A2E] flex items-center gap-1.5"><Calendar size={13} className="text-[#5A6577]" />{formatDate(viewEvent.date)}</p>
               </div>
               <div>
                 <p className={LABEL_CLASS}>Horário</p>
-                <p className="text-sm text-corp-text flex items-center gap-1.5"><Clock size={13} className="text-corp-muted" />{viewEvent.time || "—"}</p>
+                <p className="text-sm text-[#1A1A2E] flex items-center gap-1.5"><Clock size={13} className="text-[#5A6577]" />{viewEvent.time || "—"}</p>
               </div>
               <div>
                 <p className={LABEL_CLASS}>Tipo</p>
@@ -375,17 +375,17 @@ export default function EventsManager({ events, currentMember }: EventsManagerPr
               </div>
               <div>
                 <p className={LABEL_CLASS}>Capacidade</p>
-                <p className="text-sm text-corp-text">{viewEvent.max_attendees || "Ilimitado"}</p>
+                <p className="text-sm text-[#1A1A2E]">{viewEvent.max_attendees || "Ilimitado"}</p>
               </div>
               <div className="col-span-2">
                 <p className={LABEL_CLASS}>Local</p>
-                <p className="text-sm text-corp-text flex items-center gap-1.5"><MapPin size={13} className="text-corp-muted" />{viewEvent.location || "—"}</p>
+                <p className="text-sm text-[#1A1A2E] flex items-center gap-1.5"><MapPin size={13} className="text-[#5A6577]" />{viewEvent.location || "—"}</p>
               </div>
             </div>
             {viewEvent.description && (
               <div>
                 <p className={LABEL_CLASS}>Descrição</p>
-                <p className="text-sm text-corp-muted whitespace-pre-wrap">{viewEvent.description}</p>
+                <p className="text-sm text-[#5A6577] whitespace-pre-wrap">{viewEvent.description}</p>
               </div>
             )}
           </div>

@@ -263,11 +263,11 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
 
   return (
     <>
-      <div className="flex h-[calc(100vh-8rem)] bg-corp-card border border-corp-border rounded-xl overflow-hidden">
+      <div className="flex h-[calc(100vh-8rem)] bg-white border border-corp-border rounded-xl overflow-hidden">
         {/* Conversation List — sidebar */}
         <div
           className={cn(
-            "w-full sm:w-80 bg-dark-navy border-r border-corp-border flex flex-col flex-shrink-0",
+            "w-full sm:w-80 bg-[#E4E8EF] border-r border-corp-border flex flex-col flex-shrink-0",
             mobileShowChat ? "hidden sm:flex" : "flex"
           )}
         >
@@ -297,7 +297,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                 placeholder="Buscar conversa..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-8 pr-3 py-2 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
+                className="w-full pl-8 pr-3 py-2 text-xs bg-white border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
               />
             </div>
           </div>
@@ -310,7 +310,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                   key={conv.id}
                   onClick={() => selectConversation(conv)}
                   className={cn(
-                    "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-white/[0.03] transition-colors",
+                    "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-white transition-colors",
                     selected?.id === conv.id && "bg-accent/10 border-l-2 border-l-accent"
                   )}
                 >
@@ -428,7 +428,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                               "rounded-xl px-3.5 py-2.5",
                               isMine
                                 ? "bg-accent text-white"
-                                : "bg-white/[0.05] text-corp-text"
+                                : "bg-gray-100 text-corp-text"
                             )}
                           >
                             {!isMine && msg.sender?.full_name && (
@@ -446,7 +446,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                               <video src={msg.media_url} controls className="max-w-sm w-full rounded-lg border border-corp-border mt-1" />
                             )}
                             {msg.media_url && msg.media_type === "file" && (
-                              <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 mt-1 px-3 py-2 bg-white/[0.05] border border-corp-border rounded-lg hover:bg-white/[0.08] transition-colors max-w-sm">
+                              <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 mt-1 px-3 py-2 bg-gray-50 border border-corp-border rounded-lg hover:bg-gray-100 transition-colors max-w-sm">
                                 <FileText size={16} className="text-accent flex-shrink-0" />
                                 <span className="text-xs text-corp-muted truncate">{msg.media_name || "Arquivo"}</span>
                                 <Download size={14} className="text-corp-muted flex-shrink-0 ml-auto" />
@@ -470,7 +470,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                           {isMine && hoveredMessage === msg.id && (
                             <button
                               onClick={() => handleDeleteMessage(msg.id)}
-                              className="absolute top-1 -left-8 p-1 rounded-md bg-corp-card border border-corp-border text-corp-muted hover:text-red-400 hover:border-red-500/20 transition-colors"
+                              className="absolute top-1 -left-8 p-1 rounded-md bg-white border border-corp-border text-corp-muted hover:text-red-400 hover:border-red-500/20 transition-colors"
                               title="Apagar mensagem"
                             >
                               <Trash2 size={12} />
@@ -490,17 +490,17 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
 
               {/* Attachment preview */}
               {attachment && (
-                <div className="px-4 py-2 border-t border-corp-border bg-white/[0.03]">
+                <div className="px-4 py-2 border-t border-corp-border bg-white">
                   <div className="flex items-center gap-3">
                     {attachment.mediaType === "image" && attachment.preview ? (
                       <img src={attachment.preview} alt="Preview" className="h-16 rounded-lg border border-corp-border object-cover" />
                     ) : attachment.mediaType === "video" ? (
-                      <div className="flex items-center gap-2 px-3 py-2 bg-white/[0.05] rounded-lg">
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg">
                         <Film size={16} className="text-accent" />
                         <span className="text-xs text-corp-muted truncate max-w-[200px]">{attachment.file.name}</span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 px-3 py-2 bg-white/[0.05] rounded-lg">
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg">
                         <FileText size={16} className="text-accent" />
                         <span className="text-xs text-corp-muted truncate max-w-[200px]">{attachment.file.name}</span>
                       </div>
@@ -513,7 +513,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
               )}
 
               {/* Message Input */}
-              <div className="px-4 py-3 border-t border-corp-border bg-corp-card">
+              <div className="px-4 py-3 border-t border-corp-border bg-white">
                 <div className="flex items-end gap-2">
                   <button
                     onClick={() => fileInputRef.current?.click()}
@@ -540,7 +540,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                     }}
                     placeholder="Escreva uma mensagem..."
                     rows={1}
-                    className="flex-1 px-3 py-2.5 text-sm bg-white/[0.03] border border-corp-border rounded-xl text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none"
+                    className="flex-1 px-3 py-2.5 text-sm bg-white border border-corp-border rounded-xl text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none"
                   />
                   <button
                     onClick={handleSend}
@@ -578,7 +578,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
       {/* New Conversation Modal */}
       {showNewConvModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-corp-card border border-corp-border rounded-xl w-full max-w-md max-h-[70vh] flex flex-col">
+          <div className="bg-white border border-corp-border rounded-xl w-full max-w-md max-h-[70vh] flex flex-col">
             {/* Modal Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-corp-border">
               <div className="flex items-center gap-2">
@@ -606,7 +606,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                   value={memberSearch}
                   onChange={(e) => setMemberSearch(e.target.value)}
                   autoFocus
-                  className="w-full pl-8 pr-3 py-2 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
+                  className="w-full pl-8 pr-3 py-2 text-xs bg-white border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none"
                 />
               </div>
             </div>
@@ -622,7 +622,7 @@ export default function DirectChatView({ conversations, currentMemberId }: Direc
                   <button
                     key={m.id}
                     onClick={() => startConversation(m.id)}
-                    className="w-full flex items-center gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-white/[0.03] transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-white transition-colors"
                   >
                     <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                       <span className="text-accent text-xs font-semibold">

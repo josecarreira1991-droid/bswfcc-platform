@@ -59,10 +59,10 @@ export default function Sidebar({ member, open, onClose }: SidebarProps) {
           href={item.href}
           onClick={onClose}
           className={cn(
-            "flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-all",
+            "flex items-center gap-3 px-3 py-2 rounded text-[13px] font-medium transition-all",
             isActive
-              ? "bg-accent/15 text-accent-light"
-              : "text-corp-muted hover:text-corp-text hover:bg-white/[0.03]"
+              ? "bg-accent text-white shadow-retro"
+              : "text-corp-muted hover:text-corp-text hover:bg-black/[0.04]"
           )}
         >
           <item.icon size={16} strokeWidth={1.6} />
@@ -75,57 +75,57 @@ export default function Sidebar({ member, open, onClose }: SidebarProps) {
   return (
     <>
       {open && (
-        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={onClose} />
+        <div className="fixed inset-0 bg-black/30 z-40 lg:hidden" onClick={onClose} />
       )}
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 h-screen w-[220px] bg-dark-navy border-r border-corp-border flex flex-col transition-transform duration-200",
+          "fixed top-0 left-0 z-50 h-screen w-[220px] bg-gradient-to-b from-[#E8EDF3] to-[#D8DEE8] border-r border-corp-border flex flex-col transition-transform duration-200",
           "lg:translate-x-0 lg:static lg:z-auto",
           open ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="h-14 flex items-center justify-between px-5 border-b border-corp-border">
-          <Link href="/dashboard" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center">
-              <span className="text-accent font-bold text-sm">B</span>
+        <div className="h-14 flex items-center justify-between px-4 border-b border-corp-border bg-gradient-to-r from-accent to-accent-light">
+          <Link href="/dashboard" className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded bg-white/20 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">B</span>
             </div>
             <div>
-              <span className="font-semibold text-corp-text text-sm tracking-wide">BSWFCC</span>
-              <span className="block text-[10px] text-corp-subtle -mt-0.5">Chamber of Commerce</span>
+              <span className="font-bold text-white text-sm">BSWFCC</span>
+              <span className="block text-[9px] text-white/70 -mt-0.5">Chamber of Commerce</span>
             </div>
           </Link>
-          <button onClick={onClose} className="lg:hidden text-corp-muted hover:text-corp-text">
+          <button onClick={onClose} className="lg:hidden text-white/70 hover:text-white">
             <X size={16} />
           </button>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-          <p className="px-3 text-[10px] font-semibold text-corp-subtle uppercase tracking-widest mb-2">
+        <nav className="flex-1 px-2 py-3 space-y-0.5 overflow-y-auto">
+          <p className="px-3 text-[10px] font-bold text-corp-subtle uppercase tracking-wider mb-2">
             Principal
           </p>
           {renderMenuItems(mainMenu, true)}
-          <div className="my-4 border-t border-corp-border" />
-          <p className="px-3 text-[10px] font-semibold text-corp-subtle uppercase tracking-widest mb-2">
+          <div className="my-3 border-t border-corp-border" />
+          <p className="px-3 text-[10px] font-bold text-corp-subtle uppercase tracking-wider mb-2">
             Sistema
           </p>
           {renderMenuItems(secondaryMenu, false)}
         </nav>
 
-        <div className="px-4 py-4 border-t border-corp-border">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-accent/15 flex items-center justify-center flex-shrink-0">
-              <span className="text-accent font-semibold text-[10px]">
+        <div className="px-3 py-3 border-t border-corp-border bg-[#DEE3EC]">
+          <div className="flex items-center gap-2.5 mb-2">
+            <div className="w-8 h-8 rounded bg-accent/15 flex items-center justify-center flex-shrink-0">
+              <span className="text-accent font-bold text-[10px]">
                 {member.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
               </span>
             </div>
             <div className="min-w-0">
-              <p className="text-xs font-medium text-corp-text truncate">{member.full_name}</p>
+              <p className="text-xs font-semibold text-corp-text truncate">{member.full_name}</p>
               <p className="text-[10px] text-corp-subtle truncate">{ROLE_LABELS[member.role] || member.role}</p>
             </div>
           </div>
           <form action={logout}>
-            <button type="submit" className="flex items-center gap-2 w-full px-3 py-1.5 text-xs text-corp-muted hover:text-red-400 rounded-lg transition-colors">
-              <LogOut size={14} strokeWidth={1.6} /> Sair
+            <button type="submit" className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-corp-muted hover:text-red-600 rounded transition-colors">
+              <LogOut size={13} strokeWidth={1.6} /> Sair
             </button>
           </form>
         </div>

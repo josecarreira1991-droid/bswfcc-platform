@@ -114,7 +114,7 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
           const config = statusConfig[poll.status] || statusConfig.draft;
           return (
             <button key={poll.id} onClick={() => openPoll(poll)}
-              className="w-full bg-corp-card border border-corp-border rounded-xl p-5 text-left hover:border-accent/20 transition-colors">
+              className="w-full bg-white border border-corp-border rounded-xl p-5 text-left hover:border-accent/20 transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Badge variant={config.variant}>{config.label}</Badge>
@@ -131,7 +131,7 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
           );
         })}
         {polls.length === 0 && (
-          <div className="bg-corp-card border border-corp-border rounded-xl p-12 text-center">
+          <div className="bg-white border border-corp-border rounded-xl p-12 text-center">
             <Vote size={32} className="text-corp-muted mx-auto mb-3" />
             <p className="text-sm text-corp-muted">Nenhuma enquete criada ainda</p>
           </div>
@@ -152,7 +152,7 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
                     <button
                       onClick={() => viewPoll.poll.status === "active" ? handleVote(opt.id) : undefined}
                       disabled={voting || viewPoll.poll.status !== "active"}
-                      className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-white/[0.03] border border-corp-border hover:border-accent/30 transition-colors disabled:cursor-default relative overflow-hidden"
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-white border border-corp-border hover:border-accent/30 transition-colors disabled:cursor-default relative overflow-hidden"
                     >
                       <div className="absolute inset-0 bg-accent/5 transition-all" style={{ width: `${pct}%` }} />
                       <span className="text-sm text-corp-text relative z-10">{opt.label}</span>
@@ -166,7 +166,7 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
               <div className="flex gap-2 pt-2 border-t border-corp-border">
                 {viewPoll.poll.status === "draft" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "active"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-emerald-500/10 text-emerald-400 rounded-lg hover:bg-emerald-500/20">Ativar</button>}
                 {viewPoll.poll.status === "active" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "closed"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20">Encerrar</button>}
-                {viewPoll.poll.status === "closed" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "archived"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-white/[0.05] text-corp-muted rounded-lg hover:bg-white/[0.08]">Arquivar</button>}
+                {viewPoll.poll.status === "closed" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "archived"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-gray-50 text-corp-muted rounded-lg hover:bg-gray-100">Arquivar</button>}
               </div>
             )}
           </div>
@@ -177,23 +177,23 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
       <Modal open={showCreate} onClose={() => setShowCreate(false)} title="Nova Enquete" size="md">
         <form onSubmit={handleCreate} className="space-y-4">
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Título *</label>
-            <input name="title" required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
+            <input name="title" required className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Descrição</label>
-            <textarea name="description" rows={2} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none resize-none" /></div>
+            <textarea name="description" rows={2} className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none resize-none" /></div>
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Opções (uma por linha, mínimo 2) *</label>
-            <textarea name="options" rows={4} required placeholder={"Opção 1\nOpção 2\nOpção 3"} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none" /></div>
+            <textarea name="options" rows={4} required placeholder={"Opção 1\nOpção 2\nOpção 3"} className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none" /></div>
           <div className="grid grid-cols-2 gap-4">
             <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Tipo</label>
-              <select name="type" defaultValue="single" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none">
+              <select name="type" defaultValue="single" className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none">
                 <option value="single">Escolha única</option><option value="multiple">Múltipla escolha</option>
               </select></div>
             <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Status</label>
-              <select name="status" defaultValue="active" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none">
+              <select name="status" defaultValue="active" className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none">
                 <option value="draft">Rascunho</option><option value="active">Ativa</option>
               </select></div>
           </div>
           <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">Cancelar</button>
+            <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-gray-50 rounded-lg transition-colors">Cancelar</button>
             <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">
               {loading ? "Criando..." : "Criar Enquete"}
             </button>

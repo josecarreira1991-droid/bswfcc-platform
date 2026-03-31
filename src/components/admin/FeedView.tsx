@@ -35,7 +35,7 @@ const CATEGORY_CONFIG: Record<PostCategory, { label: string; icon: typeof Megaph
   parceria: { label: "Parceria", icon: Handshake, color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/15" },
   evento: { label: "Evento", icon: Calendar, color: "text-purple-400 bg-purple-500/10 border-purple-500/15" },
   discussao: { label: "Discussão", icon: MessageSquare, color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/15" },
-  geral: { label: "Geral", icon: Tag, color: "text-corp-muted bg-white/[0.03] border-corp-border" },
+  geral: { label: "Geral", icon: Tag, color: "text-corp-muted bg-white border-corp-border" },
 };
 
 type PostWithAuthor = Post & { author: { full_name: string; company: string | null; role: string; avatar_url: string | null } };
@@ -230,7 +230,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
             placeholder="Buscar..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 pr-3 py-1.5 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none w-48"
+            className="pl-8 pr-3 py-1.5 text-xs bg-white border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none w-48"
           />
           {searchTerm && (
             <button onClick={() => setSearchTerm("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-corp-muted hover:text-corp-text">
@@ -243,7 +243,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
       {/* Posts Feed */}
       <div className="space-y-4">
         {filteredPosts.length === 0 && (
-          <div className="bg-corp-card border border-corp-border rounded-xl p-12 text-center">
+          <div className="bg-white border border-corp-border rounded-xl p-12 text-center">
             <MessageSquarePlus size={32} className="mx-auto text-corp-muted mb-3" />
             <p className="text-corp-muted text-sm">Nenhuma publicação encontrada.</p>
             <p className="text-corp-muted text-xs mt-1">Seja o primeiro a publicar!</p>
@@ -263,7 +263,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
             <div
               key={post.id}
               className={cn(
-                "bg-corp-card border rounded-xl overflow-hidden transition-all",
+                "bg-white border rounded-xl overflow-hidden transition-all",
                 post.is_pinned ? "border-accent/30 ring-1 ring-accent/10" : "border-corp-border"
               )}
             >
@@ -274,7 +274,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                     {/* Avatar */}
                     <div className={cn(
                       "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold",
-                      isLeadership ? "bg-accent/10 text-accent" : "bg-white/[0.05] text-corp-muted"
+                      isLeadership ? "bg-accent/10 text-accent" : "bg-gray-50 text-corp-muted"
                     )}>
                       {post.author.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
                     </div>
@@ -326,7 +326,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                 {post.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3">
                     {post.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] px-2 py-0.5 bg-white/[0.03] text-corp-muted rounded-md border border-corp-border">
+                      <span key={tag} className="text-[10px] px-2 py-0.5 bg-white text-corp-muted rounded-md border border-corp-border">
                         #{tag}
                       </span>
                     ))}
@@ -382,13 +382,13 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
 
               {/* Comments Section */}
               {isExpanded && (
-                <div className="border-t border-corp-border bg-white/[0.02]">
+                <div className="border-t border-corp-border bg-gray-50">
                   {/* Existing comments */}
                   {postComments.length > 0 && (
                     <div className="divide-y divide-corp-border">
                       {postComments.map((c) => (
                         <div key={c.id} className="px-5 py-3 flex items-start gap-3">
-                          <div className="w-7 h-7 rounded-full bg-white/[0.05] flex items-center justify-center flex-shrink-0 text-[10px] font-semibold text-corp-muted">
+                          <div className="w-7 h-7 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0 text-[10px] font-semibold text-corp-muted">
                             {c.author.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -419,7 +419,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                       value={commentText[post.id] || ""}
                       onChange={(e) => setCommentText((prev) => ({ ...prev, [post.id]: e.target.value }))}
                       onKeyDown={(e) => { if (e.key === "Enter") handleComment(post.id); }}
-                      className="flex-1 px-3 py-2 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none"
+                      className="flex-1 px-3 py-2 text-xs bg-white border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none"
                     />
                     <button
                       onClick={() => handleComment(post.id)}
@@ -471,7 +471,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
               name="title"
               required
               placeholder="Título da publicação"
-              className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none"
+              className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none"
             />
           </div>
 
@@ -483,7 +483,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
               required
               rows={5}
               placeholder="Compartilhe uma oportunidade, anúncio ou discussão com os membros..."
-              className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none resize-none"
+              className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none resize-none"
             />
           </div>
 
@@ -492,7 +492,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
             <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Tipo de Oportunidade (se aplicável)</label>
             <select
               name="opportunity_type"
-              className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none"
+              className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none"
             >
               <option value="">Não é oportunidade</option>
               <option value="oferta">Ofereço (serviço/produto/parceria)</option>
@@ -506,12 +506,12 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
             <input
               name="tags"
               placeholder="Ex: importação, construção, contabilidade"
-              className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none"
+              className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text placeholder:text-corp-muted focus:border-accent/30 focus:outline-none"
             />
           </div>
 
           <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => setShowNewPost(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">
+            <button type="button" onClick={() => setShowNewPost(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-gray-50 rounded-lg transition-colors">
               Cancelar
             </button>
             <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">

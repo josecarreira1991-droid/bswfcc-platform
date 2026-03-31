@@ -162,13 +162,13 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
         {/* Search */}
         <div className="relative flex-1 w-full sm:max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-muted" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             placeholder="Buscar nome, email, empresa..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}
-            className="w-full pl-8 pr-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none transition-colors"
+            className="w-full pl-8 pr-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] placeholder-gray-400 focus:border-accent focus:outline-none transition-colors"
           />
         </div>
 
@@ -177,7 +177,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
           <select
             value={filterStatus}
             onChange={(e) => { setFilterStatus(e.target.value); setPage(0); }}
-            className="px-3 py-2 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-muted focus:border-accent/30 focus:outline-none"
+            className="px-3 py-2 text-xs bg-white border border-[#B8C4CE] rounded-lg text-[#5A6577] focus:border-accent focus:outline-none"
           >
             <option value="all">Todos os status</option>
             <option value="ativo">Ativos</option>
@@ -188,7 +188,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
           <select
             value={filterRole}
             onChange={(e) => { setFilterRole(e.target.value); setPage(0); }}
-            className="px-3 py-2 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-muted focus:border-accent/30 focus:outline-none"
+            className="px-3 py-2 text-xs bg-white border border-[#B8C4CE] rounded-lg text-[#5A6577] focus:border-accent focus:outline-none"
           >
             <option value="all">Todos os cargos</option>
             {uniqueRoles.map((r) => (
@@ -199,7 +199,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
           {admin && (
             <button
               onClick={exportCSV}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs text-corp-muted hover:text-corp-text border border-corp-border rounded-lg hover:bg-white/[0.03] transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs text-[#5A6577] hover:text-[#1A1A2E] border border-[#B8C4CE] rounded-lg hover:bg-gray-50 transition-colors"
             >
               <Download size={12} /> CSV
             </button>
@@ -208,16 +208,16 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
       </div>
 
       {/* Results count */}
-      <p className="text-[11px] text-corp-muted mb-2">
+      <p className="text-[11px] text-[#5A6577] mb-2">
         {filtered.length} membro{filtered.length !== 1 ? "s" : ""} encontrado{filtered.length !== 1 ? "s" : ""}
       </p>
 
       {/* Table */}
-      <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden">
+      <div className="bg-white border border-[#B8C4CE] rounded-lg overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-corp-border">
+              <tr className="border-b border-[#B8C4CE]">
                 {[
                   { key: "full_name" as SortKey, label: "Nome" },
                   { key: "company" as SortKey, label: "Empresa" },
@@ -228,7 +228,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                   <th
                     key={col.key}
                     onClick={() => toggleSort(col.key)}
-                    className="px-4 py-3 text-left text-[11px] font-semibold text-corp-muted uppercase tracking-wider cursor-pointer hover:text-corp-text select-none"
+                    className="px-4 py-3 text-left text-[11px] font-semibold text-[#5A6577] uppercase tracking-wider cursor-pointer hover:text-[#1A1A2E] select-none"
                   >
                     <span className="flex items-center gap-1">
                       {col.label} <SortIcon col={col.key} />
@@ -236,7 +236,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                   </th>
                 ))}
                 {admin && (
-                  <th className="px-4 py-3 text-right text-[11px] font-semibold text-corp-muted uppercase tracking-wider">
+                  <th className="px-4 py-3 text-right text-[11px] font-semibold text-[#5A6577] uppercase tracking-wider">
                     Ações
                   </th>
                 )}
@@ -247,28 +247,28 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                 <tr
                   key={m.id}
                   className={cn(
-                    "border-b border-corp-border hover:bg-white/[0.03] transition-colors",
-                    i % 2 === 0 ? "bg-transparent" : "bg-white/[0.02]"
+                    "border-b border-[#B8C4CE] hover:bg-gray-50 transition-colors",
+                    i % 2 === 0 ? "bg-white" : "bg-gray-50/50"
                   )}
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-accent/15 flex items-center justify-center flex-shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
                         <span className="text-accent text-xs font-semibold">
                           {m.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
                         </span>
                       </div>
                       <div className="min-w-0">
-                        <p className="font-medium text-corp-text truncate">{m.full_name}</p>
-                        <p className="text-[11px] text-corp-muted truncate">
+                        <p className="font-medium text-[#1A1A2E] truncate">{m.full_name}</p>
+                        <p className="text-[11px] text-[#5A6577] truncate">
                           {m.email}
-                          {m.referrer_name && <span className="ml-2 text-accent/60">via {m.referrer_name}</span>}
+                          {m.referrer_name && <span className="ml-2 text-[#2B5EA7]/60">via {m.referrer_name}</span>}
                         </p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-corp-muted truncate max-w-[160px]">
-                    {m.company || <span className="text-corp-muted">—</span>}
+                  <td className="px-4 py-3 text-[#5A6577] truncate max-w-[160px]">
+                    {m.company || <span className="text-[#5A6577]">—</span>}
                   </td>
                   <td className="px-4 py-3">
                     <Badge variant="gold">{ROLE_LABELS[m.role] || m.role}</Badge>
@@ -278,7 +278,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                       {m.status.charAt(0).toUpperCase() + m.status.slice(1)}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 text-corp-muted text-xs">
+                  <td className="px-4 py-3 text-[#5A6577] text-xs">
                     {formatDate(m.created_at)}
                   </td>
                   {admin && (
@@ -286,14 +286,14 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => setSelectedMember(m)}
-                          className="p-1.5 rounded-md text-corp-muted hover:text-corp-text hover:bg-white/[0.03] transition-colors"
+                          className="p-1.5 rounded-md text-[#5A6577] hover:text-[#1A1A2E] hover:bg-gray-50 transition-colors"
                           title="Detalhes"
                         >
                           <Eye size={14} />
                         </button>
                         <button
                           onClick={() => setEditMember(m)}
-                          className="p-1.5 rounded-md text-corp-muted hover:text-accent hover:bg-accent/10 transition-colors"
+                          className="p-1.5 rounded-md text-[#5A6577] hover:text-accent hover:bg-blue-50 transition-colors"
                           title="Editar"
                         >
                           <Edit2 size={14} />
@@ -302,14 +302,14 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                           <>
                             <button
                               onClick={() => setConfirmAction({ id: m.id, name: m.full_name, action: "approve", referrer: m.referrer_name })}
-                              className="p-1.5 rounded-md text-emerald-500/70 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"
+                              className="p-1.5 rounded-md text-emerald-700 hover:text-emerald-700 hover:bg-emerald-50 transition-colors"
                               title="Aprovar"
                             >
                               <Check size={14} />
                             </button>
                             <button
                               onClick={() => setConfirmAction({ id: m.id, name: m.full_name, action: "reject", referrer: m.referrer_name })}
-                              className="p-1.5 rounded-md text-red-500/70 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                              className="p-1.5 rounded-md text-red-500/70 hover:text-red-600 hover:bg-red-50 transition-colors"
                               title="Rejeitar"
                             >
                               <X size={14} />
@@ -323,7 +323,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
               ))}
               {paged.length === 0 && (
                 <tr>
-                  <td colSpan={admin ? 6 : 5} className="px-4 py-12 text-center text-corp-muted text-sm">
+                  <td colSpan={admin ? 6 : 5} className="px-4 py-12 text-center text-[#5A6577] text-sm">
                     Nenhum membro encontrado com os filtros selecionados.
                   </td>
                 </tr>
@@ -334,22 +334,22 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-corp-border">
-            <p className="text-[11px] text-corp-muted">
+          <div className="flex items-center justify-between px-4 py-3 border-t border-[#B8C4CE]">
+            <p className="text-[11px] text-[#5A6577]">
               Página {page + 1} de {totalPages}
             </p>
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setPage(Math.max(0, page - 1))}
                 disabled={page === 0}
-                className="px-3 py-1 text-xs text-corp-muted hover:text-corp-text border border-corp-border rounded-md disabled:opacity-30 transition-colors"
+                className="px-3 py-1 text-xs text-[#5A6577] hover:text-[#1A1A2E] border border-[#B8C4CE] rounded-md disabled:opacity-30 transition-colors"
               >
                 Anterior
               </button>
               <button
                 onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
                 disabled={page >= totalPages - 1}
-                className="px-3 py-1 text-xs text-corp-muted hover:text-corp-text border border-corp-border rounded-md disabled:opacity-30 transition-colors"
+                className="px-3 py-1 text-xs text-[#5A6577] hover:text-[#1A1A2E] border border-[#B8C4CE] rounded-md disabled:opacity-30 transition-colors"
               >
                 Próxima
               </button>
@@ -382,15 +382,15 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                 { label: "Membro desde", value: formatDate(selectedMember.created_at) },
               ].map((field) => (
                 <div key={field.label}>
-                  <p className="text-[11px] text-corp-muted uppercase tracking-wider mb-1">{field.label}</p>
-                  <p className="text-sm text-corp-text">{field.value || "—"}</p>
+                  <p className="text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">{field.label}</p>
+                  <p className="text-sm text-[#1A1A2E]">{field.value || "—"}</p>
                 </div>
               ))}
             </div>
             {selectedMember.bio && (
               <div>
-                <p className="text-[11px] text-corp-muted uppercase tracking-wider mb-1">Bio</p>
-                <p className="text-sm text-corp-muted">{selectedMember.bio}</p>
+                <p className="text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Bio</p>
+                <p className="text-sm text-[#5A6577]">{selectedMember.bio}</p>
               </div>
             )}
           </div>
@@ -408,40 +408,40 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
           <form onSubmit={handleEditSubmit} className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Nome</label>
-                <input name="full_name" defaultValue={editMember.full_name} required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
+                <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Nome</label>
+                <input name="full_name" defaultValue={editMember.full_name} required className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Empresa</label>
-                <input name="company" defaultValue={editMember.company || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
+                <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Empresa</label>
+                <input name="company" defaultValue={editMember.company || ""} className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Indústria</label>
-                <input name="industry" defaultValue={editMember.industry || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
+                <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Indústria</label>
+                <input name="industry" defaultValue={editMember.industry || ""} className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Cidade</label>
-                <input name="city" defaultValue={editMember.city || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
+                <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Cidade</label>
+                <input name="city" defaultValue={editMember.city || ""} className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Telefone</label>
-                <input name="phone" defaultValue={editMember.phone || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
+                <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Telefone</label>
+                <input name="phone" defaultValue={editMember.phone || ""} className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">LinkedIn</label>
-                <input name="linkedin" defaultValue={editMember.linkedin || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
+                <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">LinkedIn</label>
+                <input name="linkedin" defaultValue={editMember.linkedin || ""} className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Cargo</label>
-                <select name="role" defaultValue={editMember.role} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none">
+                <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Cargo</label>
+                <select name="role" defaultValue={editMember.role} className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none">
                   {Object.entries(ROLE_LABELS).map(([value, label]) => (
                     <option key={value} value={value}>{label}</option>
                   ))}
                 </select>
               </div>
             </div>
-            <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-              <button type="button" onClick={() => setEditMember(null)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">
+            <div className="flex justify-end gap-3 pt-2 border-t border-[#B8C4CE]">
+              <button type="button" onClick={() => setEditMember(null)} className="px-4 py-2 text-sm text-[#5A6577] hover:text-[#1A1A2E] hover:bg-gray-100 rounded-lg transition-colors">
                 Cancelar
               </button>
               <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">

@@ -7,7 +7,7 @@ import { useState, useEffect, Suspense } from "react";
 import { UserCheck, ShieldAlert, X } from "lucide-react";
 
 const INPUT_CLASS =
-  "w-full px-4 py-3 bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none focus:ring-1 focus:ring-accent/20 transition-colors";
+  "w-full px-4 py-3 bg-white border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none focus:ring-1 focus:ring-accent/20 transition-colors";
 const LABEL_CLASS = "block text-sm text-corp-muted mb-1.5";
 
 const tiers = [
@@ -95,7 +95,7 @@ function RegisterForm() {
   // Loading — show spinner while validating the referral code
   if (validatingCode || !codeChecked) {
     return (
-      <div className="min-h-screen bg-corp-bg flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#ECF0F5] flex items-center justify-center px-4">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-corp-muted text-sm">Validando convite...</p>
@@ -107,12 +107,12 @@ function RegisterForm() {
   // No referral code — invite-only gate
   if (!refCode) {
     return (
-      <div className="min-h-screen bg-corp-bg flex items-center justify-center px-4 py-12">
+      <div className="min-h-screen bg-[#ECF0F5] flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-lg text-center">
           <div className="text-center mb-8">
             <Link href="/" className="text-3xl font-bold text-accent">BSWFCC</Link>
           </div>
-          <div className="bg-corp-card rounded-2xl p-8 border border-corp-border">
+          <div className="bg-white rounded-lg p-8 border border-corp-border">
             <div className="w-16 h-16 rounded-full bg-accent/10 border border-accent/15 flex items-center justify-center mx-auto mb-6">
               <ShieldAlert size={28} className="text-accent" />
             </div>
@@ -120,7 +120,7 @@ function RegisterForm() {
             <p className="text-corp-muted mb-6">
               O cadastro na BSWFCC funciona por indicação de membros ativos. Peça seu convite a um membro da câmara para receber seu link exclusivo de cadastro.
             </p>
-            <div className="bg-white/[0.03] rounded-xl p-4 border border-corp-border mb-6">
+            <div className="bg-white rounded-lg p-4 border border-corp-border mb-6">
               <p className="text-sm text-corp-text mb-2 font-medium">Como funciona:</p>
               <ol className="text-sm text-corp-muted space-y-2 text-left">
                 {[
@@ -139,13 +139,13 @@ function RegisterForm() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/"
-                className="px-6 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent/90 transition-colors"
+                className="px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors"
               >
                 Voltar ao Site
               </Link>
               <Link
                 href="/login"
-                className="px-6 py-3 border border-accent/20 text-accent rounded-xl hover:bg-accent/10 transition-colors"
+                className="px-6 py-3 border border-accent/20 text-accent rounded-lg hover:bg-accent/10 transition-colors"
               >
                 Já tenho conta
               </Link>
@@ -159,14 +159,14 @@ function RegisterForm() {
   // Invalid referral code
   if (!referrer) {
     return (
-      <div className="min-h-screen bg-corp-bg flex items-center justify-center px-4 py-12">
+      <div className="min-h-screen bg-[#ECF0F5] flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-lg text-center">
           <div className="text-center mb-8">
             <Link href="/" className="text-3xl font-bold text-accent">BSWFCC</Link>
           </div>
-          <div className="bg-corp-card rounded-2xl p-8 border border-red-500/15">
-            <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/15 flex items-center justify-center mx-auto mb-6">
-              <span className="text-red-400 text-2xl font-bold">!</span>
+          <div className="bg-white rounded-lg p-8 border border-red-300">
+            <div className="w-16 h-16 rounded-full bg-red-50 border border-red-300 flex items-center justify-center mx-auto mb-6">
+              <span className="text-red-700 text-2xl font-bold">!</span>
             </div>
             <h2 className="text-2xl font-bold text-corp-text mb-3">Convite Inválido</h2>
             <p className="text-corp-muted mb-6">
@@ -174,7 +174,7 @@ function RegisterForm() {
             </p>
             <Link
               href="/"
-              className="inline-block px-6 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent/90 transition-colors"
+              className="inline-block px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors"
             >
               Voltar ao Site
             </Link>
@@ -185,7 +185,7 @@ function RegisterForm() {
   }
 
   return (
-    <div className="min-h-screen bg-corp-bg flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-[#ECF0F5] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-2xl">
         <div className="text-center mb-8">
           <Link href="/" className="text-3xl font-bold text-accent">BSWFCC</Link>
@@ -194,7 +194,7 @@ function RegisterForm() {
 
         {/* Referrer Banner */}
         {referrer && (
-          <div className="mb-6 bg-accent/10 border border-accent/15 rounded-xl p-4 flex items-center gap-4">
+          <div className="mb-6 bg-accent/10 border border-accent/15 rounded-lg p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
               <UserCheck size={22} className="text-accent" />
             </div>
@@ -215,10 +215,10 @@ function RegisterForm() {
                 key={tier.label}
                 type="button"
                 onClick={() => setSelectedTier(i)}
-                className={`rounded-xl p-4 border text-left transition-all ${
+                className={`rounded-lg p-4 border text-left transition-all ${
                   selectedTier === i
                     ? "border-accent bg-accent/10"
-                    : "border-corp-border bg-corp-card hover:border-accent/30"
+                    : "border-corp-border bg-white hover:border-accent/30"
                 }`}
               >
                 <p className={`font-semibold text-sm ${selectedTier === i ? "text-accent" : "text-corp-text"}`}>
@@ -229,18 +229,18 @@ function RegisterForm() {
               </button>
             ))}
           </div>
-          <div className="mt-3 bg-white/[0.03] rounded-lg p-3 border border-corp-border">
+          <div className="mt-3 bg-white rounded-lg p-3 border border-corp-border">
             <p className="text-xs text-corp-muted">
               <span className="text-accent font-medium">Informativo:</span> A seleção de tier será confirmada após aprovação. O pagamento é configurado pós-cadastro.
             </p>
           </div>
         </div>
 
-        <div className="bg-corp-card rounded-2xl p-8 border border-corp-border">
+        <div className="bg-white rounded-lg p-8 border border-corp-border">
           <h2 className="text-2xl font-bold text-corp-text mb-6">Cadastro Completo</h2>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/15 rounded-lg text-red-400 text-sm">
+            <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-lg text-red-700 text-sm">
               {error}
             </div>
           )}
@@ -434,7 +434,7 @@ function RegisterForm() {
                       className="inline-flex items-center gap-1 px-3 py-1 bg-accent/10 text-accent border border-accent/15 rounded-full text-xs font-medium"
                     >
                       {tag}
-                      <button type="button" onClick={() => removeServiceTag(tag)} className="hover:text-red-400 transition-colors">
+                      <button type="button" onClick={() => removeServiceTag(tag)} className="hover:text-red-700 transition-colors">
                         <X size={12} />
                       </button>
                     </span>
@@ -472,7 +472,7 @@ function RegisterForm() {
 export default function RegisterPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-corp-bg flex items-center justify-center">
+      <div className="min-h-screen bg-[#ECF0F5] flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin" />
       </div>
     }>

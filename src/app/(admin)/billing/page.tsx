@@ -29,7 +29,7 @@ export default async function BillingPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-corp-text">Billing & Membership</h1>
+        <h1 className="text-xl font-semibold text-corp-text">Billing &amp; Membership</h1>
         <p className="text-sm text-corp-muted mt-0.5">
           {admin ? "Gestão financeira e planos de membership" : "Gerencie sua assinatura"}
         </p>

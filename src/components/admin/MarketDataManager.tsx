@@ -118,8 +118,8 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-corp-text">Dados de Mercado</h1>
-          <p className="text-sm text-corp-muted mt-0.5">
+          <h1 className="text-xl font-semibold text-[#1A1A2E]">Dados de Mercado</h1>
+          <p className="text-sm text-[#5A6577] mt-0.5">
             {data.length} indicadores &middot; Corredor FL-Brasil e SWFL
           </p>
         </div>
@@ -142,14 +142,14 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
               key={cat.value}
               onClick={() => setFilterCategory(filterCategory === cat.value ? "all" : cat.value)}
               className={cn(
-                "bg-corp-card border rounded-xl p-3 text-left transition-colors",
+                "bg-white border rounded-lg p-3 text-left transition-colors shadow-sm",
                 filterCategory === cat.value
-                  ? "border-accent/30 bg-accent/10"
-                  : "border-corp-border hover:border-accent/15"
+                  ? "border-blue-300 bg-blue-50"
+                  : "border-[#B8C4CE] hover:border-blue-300"
               )}
             >
-              <p className="text-lg font-bold text-corp-text">{count}</p>
-              <p className="text-[11px] text-corp-muted">{cat.label}</p>
+              <p className="text-lg font-bold text-[#1A1A2E]">{count}</p>
+              <p className="text-[11px] text-[#5A6577]">{cat.label}</p>
             </button>
           );
         })}
@@ -158,30 +158,30 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
       {/* Toolbar */}
       <div className="flex items-center gap-3 mb-4">
         <div className="relative flex-1 max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-muted" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5A6577]" />
           <input
             type="text"
             placeholder="Buscar indicador..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none transition-colors"
+            className="w-full pl-8 pr-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] placeholder-gray-400 focus:border-accent focus:outline-none transition-colors"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden">
+      <div className="bg-white border border-[#B8C4CE] rounded-lg overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-corp-border">
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-corp-muted uppercase tracking-wider">Indicador</th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-corp-muted uppercase tracking-wider">Valor</th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-corp-muted uppercase tracking-wider">Categoria</th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-corp-muted uppercase tracking-wider">Fonte</th>
-                <th className="px-4 py-3 text-left text-[11px] font-semibold text-corp-muted uppercase tracking-wider">Atualizado</th>
+              <tr className="border-b border-[#B8C4CE]">
+                <th className="px-4 py-3 text-left text-[11px] font-semibold text-[#5A6577] uppercase tracking-wider">Indicador</th>
+                <th className="px-4 py-3 text-left text-[11px] font-semibold text-[#5A6577] uppercase tracking-wider">Valor</th>
+                <th className="px-4 py-3 text-left text-[11px] font-semibold text-[#5A6577] uppercase tracking-wider">Categoria</th>
+                <th className="px-4 py-3 text-left text-[11px] font-semibold text-[#5A6577] uppercase tracking-wider">Fonte</th>
+                <th className="px-4 py-3 text-left text-[11px] font-semibold text-[#5A6577] uppercase tracking-wider">Atualizado</th>
                 {admin && (
-                  <th className="px-4 py-3 text-right text-[11px] font-semibold text-corp-muted uppercase tracking-wider">Ações</th>
+                  <th className="px-4 py-3 text-right text-[11px] font-semibold text-[#5A6577] uppercase tracking-wider">Ações</th>
                 )}
               </tr>
             </thead>
@@ -190,11 +190,11 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
                 <tr
                   key={item.id}
                   className={cn(
-                    "border-b border-corp-border hover:bg-white/[0.03] transition-colors",
-                    i % 2 === 0 ? "bg-transparent" : "bg-white/[0.02]"
+                    "border-b border-[#B8C4CE] hover:bg-gray-50 transition-colors",
+                    i % 2 === 0 ? "bg-white" : "bg-gray-50/50"
                   )}
                 >
-                  <td className="px-4 py-3 font-medium text-corp-text">
+                  <td className="px-4 py-3 font-medium text-[#1A1A2E]">
                     {item.indicator.replace(/_/g, " ")}
                   </td>
                   <td className="px-4 py-3 text-accent font-semibold">{item.value}</td>
@@ -203,10 +203,10 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
                       {categoryLabel(item.category)}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 text-corp-muted text-xs truncate max-w-[160px]">
+                  <td className="px-4 py-3 text-[#5A6577] text-xs truncate max-w-[160px]">
                     {item.source || "—"}
                   </td>
-                  <td className="px-4 py-3 text-corp-muted text-xs whitespace-nowrap">
+                  <td className="px-4 py-3 text-[#5A6577] text-xs whitespace-nowrap">
                     {item.updated_at ? new Date(item.updated_at).toLocaleDateString("pt-BR") : "—"}
                   </td>
                   {admin && (
@@ -214,14 +214,14 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => { setEditItem(item); setShowForm(true); }}
-                          className="p-1.5 rounded-md text-corp-muted hover:text-accent hover:bg-accent/10 transition-colors"
+                          className="p-1.5 rounded-md text-[#5A6577] hover:text-accent hover:bg-blue-50 transition-colors"
                           title="Editar"
                         >
                           <Edit2 size={14} />
                         </button>
                         <button
                           onClick={() => setDeleteTarget(item)}
-                          className="p-1.5 rounded-md text-corp-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                          className="p-1.5 rounded-md text-[#5A6577] hover:text-red-600 hover:bg-red-50 transition-colors"
                           title="Remover"
                         >
                           <Trash2 size={14} />
@@ -233,7 +233,7 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={admin ? 6 : 5} className="px-4 py-12 text-center text-corp-muted text-sm">
+                  <td colSpan={admin ? 6 : 5} className="px-4 py-12 text-center text-[#5A6577] text-sm">
                     Nenhum indicador encontrado.
                   </td>
                 </tr>
@@ -244,9 +244,9 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
       </div>
 
       {/* Sources footer */}
-      <div className="mt-6 bg-corp-card border border-corp-border rounded-xl p-5">
-        <h3 className="text-xs font-semibold text-corp-muted mb-2 uppercase tracking-wider">Fontes</h3>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-1.5 text-[11px] text-corp-muted">
+      <div className="mt-6 bg-white border border-[#B8C4CE] rounded-lg p-5 shadow-sm">
+        <h3 className="text-xs font-semibold text-[#5A6577] mb-2 uppercase tracking-wider">Fontes</h3>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-1.5 text-[11px] text-[#5A6577]">
           <p>U.S. Census Bureau — ACS 2024</p>
           <p>Enterprise Florida — Trade Data 2024</p>
           <p>Bureau of Economic Analysis</p>
@@ -264,27 +264,27 @@ export default function MarketDataManager({ data, currentMember }: MarketDataMan
       >
         <form key={editItem?.id || "new"} onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Indicador *</label>
-            <input name="indicator" defaultValue={editItem?.indicator || ""} required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
+            <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Indicador *</label>
+            <input name="indicator" defaultValue={editItem?.indicator || ""} required className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none" />
           </div>
           <div>
-            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Valor *</label>
-            <input name="value" defaultValue={editItem?.value || ""} required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
+            <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Valor *</label>
+            <input name="value" defaultValue={editItem?.value || ""} required className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none" />
           </div>
           <div>
-            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Categoria *</label>
-            <select name="category" defaultValue={editItem?.category || "comercio"} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none">
+            <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Categoria *</label>
+            <select name="category" defaultValue={editItem?.category || "comercio"} className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none">
               {CATEGORIES.map((c) => (
                 <option key={c.value} value={c.value}>{c.label}</option>
               ))}
             </select>
           </div>
           <div>
-            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Fonte</label>
-            <input name="source" defaultValue={editItem?.source || ""} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" />
+            <label className="block text-[11px] text-[#5A6577] uppercase tracking-wider mb-1">Fonte</label>
+            <input name="source" defaultValue={editItem?.source || ""} className="w-full px-3 py-2 text-sm bg-white border border-[#B8C4CE] rounded-lg text-[#1A1A2E] focus:border-accent focus:outline-none" />
           </div>
-          <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => { setShowForm(false); setEditItem(null); }} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">
+          <div className="flex justify-end gap-3 pt-2 border-t border-[#B8C4CE]">
+            <button type="button" onClick={() => { setShowForm(false); setEditItem(null); }} className="px-4 py-2 text-sm text-[#5A6577] hover:text-[#1A1A2E] hover:bg-gray-100 rounded-lg transition-colors">
               Cancelar
             </button>
             <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">

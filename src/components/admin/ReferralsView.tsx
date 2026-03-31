@@ -213,7 +213,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
       </div>
 
       {/* My Referral Code Section — for all members */}
-      <div className="bg-corp-card border border-corp-border rounded-xl p-6 mb-6">
+      <div className="bg-white border border-corp-border rounded-xl p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
             <Link2 size={16} className="text-accent" />
@@ -231,7 +231,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
         {myCode ? (
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="flex-1 bg-white/[0.03] border border-accent/20 rounded-lg px-4 py-3 font-mono text-lg text-accent tracking-widest text-center">
+              <div className="flex-1 bg-white border border-accent/20 rounded-lg px-4 py-3 font-mono text-lg text-accent tracking-widest text-center">
                 {myCode}
               </div>
               <button
@@ -247,7 +247,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                 type="text"
                 readOnly
                 value={shareUrl || ""}
-                className="flex-1 px-3 py-2 text-xs bg-white/[0.03] border border-corp-border rounded-lg text-corp-muted truncate"
+                className="flex-1 px-3 py-2 text-xs bg-white border border-corp-border rounded-lg text-corp-muted truncate"
               />
               <button
                 onClick={copyCode}
@@ -270,7 +270,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
       {/* My Referrals Section */}
       {myReferrals && myReferrals.length > 0 && (
-        <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
+        <div className="bg-white border border-corp-border rounded-xl overflow-hidden mb-6">
           <div className="px-4 py-3 border-b border-corp-border">
             <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
               <Users size={16} className="text-accent" />
@@ -299,7 +299,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
       )}
 
       {/* My Rewards / Bonificações Section — for all members */}
-      <div className="bg-corp-card border border-corp-border rounded-xl p-6 mb-6">
+      <div className="bg-white border border-corp-border rounded-xl p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
             <Gift size={16} className="text-accent" />
@@ -324,7 +324,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
               <span className="text-accent">Nível máximo atingido!</span>
             )}
           </div>
-          <div className="w-full bg-white/[0.05] rounded-full h-2.5">
+          <div className="w-full bg-gray-50 rounded-full h-2.5">
             <div
               className="bg-gradient-to-r from-accent to-purple-400 h-2.5 rounded-full transition-all duration-500"
               style={{
@@ -345,7 +345,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                   "border rounded-lg p-3 text-center transition-all",
                   achieved
                     ? "bg-accent/10 border-accent/30"
-                    : "bg-white/[0.03] border-corp-border opacity-60"
+                    : "bg-white border-corp-border opacity-60"
                 )}
               >
                 <div className="flex justify-center mb-1.5">
@@ -374,7 +374,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
             <p className="text-[11px] text-corp-muted uppercase tracking-wider mb-2">Recompensas Conquistadas</p>
             <div className="space-y-2">
               {myRewards.map((r) => (
-                <div key={r.id} className="flex items-center justify-between bg-white/[0.03] border border-corp-border rounded-lg px-3 py-2">
+                <div key={r.id} className="flex items-center justify-between bg-white border border-corp-border rounded-lg px-3 py-2">
                   <div className="flex items-center gap-2">
                     <CircleDollarSign size={14} className="text-accent" />
                     <div>
@@ -400,7 +400,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
       {/* Admin: Reward Management */}
       {isAdmin && rewardSummary && (
-        <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
+        <div className="bg-white border border-corp-border rounded-xl overflow-hidden mb-6">
           <div className="px-4 py-3 border-b border-corp-border">
             <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
               <Gift size={16} className="text-accent" />
@@ -410,19 +410,19 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
           {/* Summary cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4">
-            <div className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
+            <div className="bg-white border border-corp-border rounded-lg p-2.5 text-center">
               <p className="text-lg font-bold text-corp-text">{rewardSummary.totalEarned}</p>
               <p className="text-[10px] text-corp-muted">Total Conquistadas</p>
             </div>
-            <div className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
+            <div className="bg-white border border-corp-border rounded-lg p-2.5 text-center">
               <p className="text-lg font-bold text-accent">{rewardSummary.totalPending}</p>
               <p className="text-[10px] text-corp-muted">Pendentes Resgate</p>
             </div>
-            <div className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
+            <div className="bg-white border border-corp-border rounded-lg p-2.5 text-center">
               <p className="text-lg font-bold text-emerald-400">{rewardSummary.totalRedeemed}</p>
               <p className="text-[10px] text-corp-muted">Resgatadas</p>
             </div>
-            <div className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
+            <div className="bg-white border border-corp-border rounded-lg p-2.5 text-center">
               <p className="text-lg font-bold text-corp-text">{rewardSummary.totalDiscountValue}%</p>
               <p className="text-[10px] text-corp-muted">Descontos Pendentes</p>
             </div>
@@ -442,7 +442,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
               </thead>
               <tbody>
                 {allRewards.map((r, i) => (
-                  <tr key={r.id} className={cn("border-b border-corp-border hover:bg-white/[0.03]", i % 2 !== 0 && "bg-white/[0.02]")}>
+                  <tr key={r.id} className={cn("border-b border-corp-border hover:bg-white", i % 2 !== 0 && "bg-gray-50")}>
                     <td className="px-4 py-3">
                       <p className="font-medium text-corp-text">{r.member_name}</p>
                       {r.member_company && <p className="text-[10px] text-corp-muted">{r.member_company}</p>}
@@ -481,7 +481,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
       {isAdmin && stats && (
         <>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-            <div className="bg-corp-card border border-corp-border rounded-xl p-4">
+            <div className="bg-white border border-corp-border rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
                   <Link2 size={16} className="text-accent" />
@@ -490,7 +490,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
               <p className="text-2xl font-bold text-corp-text">{stats.totalCodes}</p>
               <p className="text-[10px] text-corp-muted uppercase tracking-wider">Total Códigos</p>
             </div>
-            <div className="bg-corp-card border border-corp-border rounded-xl p-4">
+            <div className="bg-white border border-corp-border rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
                   <Check size={16} className="text-emerald-400" />
@@ -499,7 +499,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
               <p className="text-2xl font-bold text-corp-text">{stats.totalUsed}</p>
               <p className="text-[10px] text-corp-muted uppercase tracking-wider">Convertidos</p>
             </div>
-            <div className="bg-corp-card border border-corp-border rounded-xl p-4">
+            <div className="bg-white border border-corp-border rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
                   <TrendingUp size={16} className="text-blue-400" />
@@ -508,7 +508,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
               <p className="text-2xl font-bold text-corp-text">{stats.conversionRate}%</p>
               <p className="text-[10px] text-corp-muted uppercase tracking-wider">Taxa Conversão</p>
             </div>
-            <div className="bg-corp-card border border-corp-border rounded-xl p-4">
+            <div className="bg-white border border-corp-border rounded-xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
                   <Crown size={16} className="text-accent" />
@@ -523,7 +523,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
           {/* Leaderboard */}
           {stats.topReferrers.length > 0 && (
-            <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-white border border-corp-border rounded-xl overflow-hidden mb-6">
               <div className="px-4 py-3 border-b border-corp-border">
                 <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
                   <Crown size={16} className="text-accent" />
@@ -539,9 +539,9 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                       <div className={cn(
                         "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0",
                         i === 0 ? "bg-accent/10 text-accent" :
-                        i === 1 ? "bg-white/[0.05] text-corp-muted" :
+                        i === 1 ? "bg-gray-50 text-corp-muted" :
                         i === 2 ? "bg-amber-500/10 text-amber-400" :
-                        "bg-white/[0.03] text-corp-muted"
+                        "bg-white text-corp-muted"
                       )}>
                         {i + 1}
                       </div>
@@ -562,7 +562,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
           {/* Referral Tree */}
           {tree && tree.length > 0 && (
-            <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-white border border-corp-border rounded-xl overflow-hidden mb-6">
               <div className="px-4 py-3 border-b border-corp-border">
                 <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
                   <Users size={16} className="text-accent" />
@@ -574,7 +574,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                   <div key={node.id}>
                     <button
                       onClick={() => toggleTree(node.id)}
-                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-white/[0.03] transition-colors text-left"
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-white transition-colors text-left"
                     >
                       {expandedTree.has(node.id) ? (
                         <ChevronDown size={14} className="text-corp-muted flex-shrink-0" />
@@ -588,7 +588,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
                       <Badge variant="gold">{node.referred.length} indicações</Badge>
                     </button>
                     {expandedTree.has(node.id) && node.referred.length > 0 && (
-                      <div className="bg-white/[0.02] border-t border-corp-border">
+                      <div className="bg-gray-50 border-t border-corp-border">
                         {node.referred.map((ref) => (
                           <div key={ref.id} className="px-4 py-2.5 pl-12 flex items-center gap-2 border-b border-corp-border last:border-0">
                             <ArrowRight size={12} className="text-accent/30 flex-shrink-0" />
@@ -609,7 +609,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
 
           {/* Recent Timeline */}
           {stats.recentReferrals.length > 0 && (
-            <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden mb-6">
+            <div className="bg-white border border-corp-border rounded-xl overflow-hidden mb-6">
               <div className="px-4 py-3 border-b border-corp-border">
                 <h2 className="text-sm font-semibold text-corp-text flex items-center gap-2">
                   <TrendingUp size={16} className="text-accent" />
@@ -637,7 +637,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
       )}
 
       {/* Legacy Referrals Table */}
-      <div className="bg-corp-card border border-corp-border rounded-xl overflow-hidden">
+      <div className="bg-white border border-corp-border rounded-xl overflow-hidden">
         <div className="px-4 py-3 border-b border-corp-border flex items-center justify-between">
           <h2 className="text-sm font-semibold text-corp-text">Indicações Manuais</h2>
           <p className="text-xs text-corp-muted">{referrals.length} indicações &middot; {activeCount} convertidas</p>
@@ -646,7 +646,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 p-4">
           {Object.entries(statusLabel).filter(([key]) => ["pending", "contacted", "registered", "active", "declined"].includes(key)).map(([key, label]) => (
-            <div key={key} className="bg-white/[0.03] border border-corp-border rounded-lg p-2.5 text-center">
+            <div key={key} className="bg-white border border-corp-border rounded-lg p-2.5 text-center">
               <p className="text-lg font-bold text-corp-text">{referrals.filter((r) => r.status === key).length}</p>
               <p className="text-[10px] text-corp-muted">{label}</p>
             </div>
@@ -666,7 +666,7 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
           </thead>
           <tbody>
             {referrals.map((r, i) => (
-              <tr key={r.id} className={cn("border-b border-corp-border hover:bg-white/[0.03]", i % 2 !== 0 && "bg-white/[0.02]")}>
+              <tr key={r.id} className={cn("border-b border-corp-border hover:bg-white", i % 2 !== 0 && "bg-gray-50")}>
                 <td className="px-4 py-3">
                   <p className="font-medium text-corp-text">{r.referred_name}</p>
                   <div className="flex items-center gap-2 text-[11px] text-corp-muted">
@@ -705,19 +705,19 @@ export default function ReferralsView({ referrals, currentMember, isAdmin, myCod
       <Modal open={showForm} onClose={() => setShowForm(false)} title="Indicar Novo Membro">
         <form onSubmit={handleCreate} className="space-y-4">
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Nome *</label>
-            <input name="referred_name" required className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
+            <input name="referred_name" required className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
           <div className="grid grid-cols-2 gap-4">
             <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Email</label>
-              <input name="referred_email" type="email" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
+              <input name="referred_email" type="email" className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
             <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Telefone</label>
-              <input name="referred_phone" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
+              <input name="referred_phone" className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
           </div>
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Empresa</label>
-            <input name="referred_company" className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
+            <input name="referred_company" className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none" /></div>
           <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Notas</label>
-            <textarea name="notes" rows={2} className="w-full px-3 py-2 text-sm bg-white/[0.03] border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none resize-none" /></div>
+            <textarea name="notes" rows={2} className="w-full px-3 py-2 text-sm bg-white border border-corp-border rounded-lg text-corp-text focus:border-accent/30 focus:outline-none resize-none" /></div>
           <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-white/[0.05] rounded-lg transition-colors">Cancelar</button>
+            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-gray-50 rounded-lg transition-colors">Cancelar</button>
             <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-accent text-white rounded-lg hover:bg-accent-dim transition-colors disabled:opacity-50">
               {loading ? "Enviando..." : "Indicar"}
             </button>

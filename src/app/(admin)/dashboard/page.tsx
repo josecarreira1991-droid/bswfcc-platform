@@ -49,13 +49,13 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {[
           { label: "Total de Membros", value: stats.total, icon: Users, color: "text-accent", border: "border-l-accent" },
-          { label: "Membros Ativos", value: stats.ativos, icon: UserCheck, color: "text-emerald-400", border: "border-l-emerald-500" },
-          { label: "Pendentes", value: stats.pendentes, icon: Clock, color: "text-amber-400", border: "border-l-amber-500" },
-          { label: "Comércio FL-Brasil", value: tradeData?.value || "—", icon: TrendingUp, color: "text-blue-400", border: "border-l-blue-500" },
+          { label: "Membros Ativos", value: stats.ativos, icon: UserCheck, color: "text-emerald-700", border: "border-l-emerald-500" },
+          { label: "Pendentes", value: stats.pendentes, icon: Clock, color: "text-amber-700", border: "border-l-amber-500" },
+          { label: "Comércio FL-Brasil", value: tradeData?.value || "—", icon: TrendingUp, color: "text-blue-700", border: "border-l-blue-500" },
         ].map((stat) => (
           <div
             key={stat.label}
-            className={`bg-corp-card border border-corp-border border-l-4 ${stat.border} rounded-2xl p-4`}
+            className={`bg-white border border-corp-border border-l-4 ${stat.border} rounded-lg p-4 shadow-sm`}
           >
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] text-corp-muted uppercase tracking-wider">{stat.label}</span>
@@ -77,13 +77,13 @@ export default async function DashboardPage() {
 
           {/* Quick Actions */}
           {admin && (
-            <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+            <div className="bg-white border border-corp-border rounded-lg p-5 shadow-sm">
               <h3 className="text-sm font-medium text-corp-text mb-3">Ações Rápidas</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {[
-                  { label: "Novo Evento", href: "/eventos", icon: Plus, style: "bg-accent/10 text-accent hover:bg-accent/15 border-accent/15" },
-                  { label: "Ver Membros", href: "/membros", icon: Users, style: "bg-blue-500/10 text-blue-400 hover:bg-blue-500/15 border-blue-500/15" },
-                  { label: "Dados de Mercado", href: "/mercado", icon: BarChart3, style: "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/15 border-emerald-500/15" },
+                  { label: "Novo Evento", href: "/eventos", icon: Plus, style: "bg-blue-50 text-accent hover:bg-blue-100 border-blue-300" },
+                  { label: "Ver Membros", href: "/membros", icon: Users, style: "bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-300" },
+                  { label: "Dados de Mercado", href: "/mercado", icon: BarChart3, style: "bg-emerald-50 text-emerald-700 hover:bg-emerald-50 border-emerald-300" },
                 ].map((action) => (
                   <Link
                     key={action.label}
@@ -103,12 +103,12 @@ export default async function DashboardPage() {
         <div className="space-y-6">
           {/* Pending Approvals */}
           {admin && (
-            <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+            <div className="bg-white border border-corp-border rounded-lg p-5 shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-medium text-corp-text">
                   Pendentes
                   {stats.pendentes > 0 && (
-                    <span className="ml-2 px-1.5 py-0.5 text-[10px] bg-amber-500/10 text-amber-400 rounded-md border border-amber-500/15">
+                    <span className="ml-2 px-1.5 py-0.5 text-[10px] bg-amber-50 text-amber-700 rounded-md border border-amber-300">
                       {stats.pendentes}
                     </span>
                   )}
@@ -122,7 +122,7 @@ export default async function DashboardPage() {
           )}
 
           {/* Upcoming Events */}
-          <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+          <div className="bg-white border border-corp-border rounded-lg p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-medium text-corp-text">Próximos Eventos</h3>
               <Link href="/eventos" className="text-[11px] text-accent hover:text-accent-light flex items-center gap-1">
@@ -134,7 +134,7 @@ export default async function DashboardPage() {
                 {events.slice(0, 4).map((event) => (
                   <div
                     key={event.id}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/[0.03] border border-corp-border"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-gray-50 border border-corp-border"
                   >
                     <div className="flex flex-col items-center w-10 flex-shrink-0">
                       <span className="text-lg font-bold text-accent leading-none">
@@ -160,7 +160,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* BSWFCC Info */}
-          <div className="bg-corp-card border border-corp-border rounded-2xl p-5">
+          <div className="bg-white border border-corp-border rounded-lg p-5 shadow-sm">
             <h3 className="text-sm font-medium text-accent mb-3">BSWFCC</h3>
             <div className="space-y-1.5 text-[11px] text-corp-muted">
               <p>Primeira câmara brasileira formalmente constituída no SWFL.</p>

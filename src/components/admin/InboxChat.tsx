@@ -133,10 +133,10 @@ export default function InboxChat({ conversations }: InboxChatProps) {
   };
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] bg-corp-card border border-corp-border rounded-xl overflow-hidden">
+    <div className="flex h-[calc(100vh-8rem)] bg-white border border-corp-border rounded-xl overflow-hidden">
       {/* Conversation List — sidebar */}
       <div className={cn(
-        "w-full sm:w-80 bg-dark-navy border-r border-corp-border flex flex-col flex-shrink-0",
+        "w-full sm:w-80 bg-[#E4E8EF] border-r border-corp-border flex flex-col flex-shrink-0",
         mobileShowChat ? "hidden sm:flex" : "flex"
       )}>
         <div className="px-4 py-3 border-b border-corp-border">
@@ -151,8 +151,8 @@ export default function InboxChat({ conversations }: InboxChatProps) {
                 key={conv.id}
                 onClick={() => selectConversation(conv)}
                 className={cn(
-                  "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-white/[0.03] transition-colors",
-                  selected?.id === conv.id && "bg-white/[0.05]"
+                  "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-white transition-colors",
+                  selected?.id === conv.id && "bg-gray-50"
                 )}
               >
                 <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
@@ -255,7 +255,7 @@ export default function InboxChat({ conversations }: InboxChatProps) {
                         "max-w-[75%] rounded-xl px-3.5 py-2.5",
                         msg.direction === "outbound"
                           ? "bg-accent text-white"
-                          : "bg-white/[0.05] text-corp-text"
+                          : "bg-gray-100 text-corp-text"
                       )}
                     >
                       {msg.is_from_bot && (
@@ -286,7 +286,7 @@ export default function InboxChat({ conversations }: InboxChatProps) {
             </div>
 
             {/* Message Input */}
-            <div className="px-4 py-3 border-t border-corp-border bg-corp-card">
+            <div className="px-4 py-3 border-t border-corp-border bg-white">
               <div className="flex items-end gap-2">
                 <textarea
                   value={newMessage}
@@ -299,7 +299,7 @@ export default function InboxChat({ conversations }: InboxChatProps) {
                   }}
                   placeholder="Escreva uma mensagem..."
                   rows={1}
-                  className="flex-1 px-3 py-2.5 text-sm bg-white/[0.03] border border-corp-border rounded-xl text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none"
+                  className="flex-1 px-3 py-2.5 text-sm bg-white border border-corp-border rounded-xl text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-none"
                 />
                 <button
                   onClick={handleSend}

@@ -16,8 +16,8 @@ export default function AdminError({
   return (
     <div className="flex items-center justify-center min-h-[60vh] px-4">
       <div className="text-center max-w-md">
-        <div className="w-14 h-14 rounded-full bg-red-500/10 border border-red-500/15 flex items-center justify-center mx-auto mb-5">
-          <span className="text-red-400 text-xl font-bold">!</span>
+        <div className="w-14 h-14 rounded-full bg-red-50 border border-red-300 flex items-center justify-center mx-auto mb-5">
+          <span className="text-red-700 text-xl font-bold">!</span>
         </div>
         <h2 className="text-lg font-bold text-corp-text mb-2">Erro ao carregar</h2>
         <p className="text-corp-muted text-sm mb-5">
@@ -25,7 +25,7 @@ export default function AdminError({
         </p>
         <button
           onClick={reset}
-          className="px-5 py-2.5 bg-accent text-white font-semibold rounded-lg hover:bg-accent-dim transition-colors text-sm"
+          className="px-5 py-2.5 bg-accent text-white font-semibold rounded-lg hover:bg-accent-dim transition-colors text-sm shadow-sm"
         >
           Tentar novamente
         </button>

@@ -50,7 +50,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
   }
 
   return (
-    <div className="bg-corp-card border border-corp-border rounded-xl p-5 space-y-5">
+    <div className="bg-white border border-corp-border rounded-lg p-5 space-y-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Bot size={18} className="text-accent" />
@@ -61,8 +61,8 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
             form.is_active
-              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/15"
-              : "bg-white/[0.03] text-corp-muted border border-corp-border"
+              ? "bg-emerald-50 text-emerald-700 border border-emerald-300"
+              : "bg-white text-corp-muted border border-corp-border"
           )}
         >
           <Power size={12} />
@@ -104,7 +104,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
           value={form.system_prompt}
           onChange={(e) => updateField("system_prompt", e.target.value)}
           rows={5}
-          className="w-full bg-white/[0.03] border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-y"
+          className="w-full bg-white border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text placeholder-corp-muted focus:border-accent/30 focus:outline-none resize-y"
           placeholder="Você é o assistente virtual da BSWFCC..."
         />
         <p className="text-[10px] text-corp-muted mt-1">{form.system_prompt.length} caracteres</p>
@@ -123,7 +123,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
             step={50}
             value={form.max_tokens}
             onChange={(e) => updateField("max_tokens", parseInt(e.target.value) || 500)}
-            className="w-full bg-white/[0.03] border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
+            className="w-full bg-white border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
           />
           <p className="text-[10px] text-corp-muted mt-1">Tamanho max da resposta</p>
         </div>
@@ -152,7 +152,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
           <select
             value={form.auto_reply_delay_ms}
             onChange={(e) => updateField("auto_reply_delay_ms", parseInt(e.target.value))}
-            className="w-full bg-white/[0.03] border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
+            className="w-full bg-white border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
           >
             <option value={0}>Imediato</option>
             <option value={1000}>1 segundo</option>
@@ -198,7 +198,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
               type="time"
               value={form.working_hours_start}
               onChange={(e) => updateField("working_hours_start", e.target.value)}
-              className="bg-white/[0.03] border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
+              className="bg-white border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
             />
           </div>
           <span className="text-corp-muted mt-4">até</span>
@@ -208,7 +208,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
               type="time"
               value={form.working_hours_end}
               onChange={(e) => updateField("working_hours_end", e.target.value)}
-              className="bg-white/[0.03] border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
+              className="bg-white border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-accent/30 focus:outline-none"
             />
           </div>
         </div>

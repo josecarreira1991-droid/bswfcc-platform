@@ -7,18 +7,17 @@ import AdminShell from "@/components/admin/AdminShell";
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const member = await getCurrentMember();
   if (!member) redirect("/login");
-
   const stats = await getMemberStats().catch(() => ({ total: 0, ativos: 0, pendentes: 0, inativos: 0, byRole: {}, byIndustry: {} }));
 
   const pendingBanner = member.status === "pendente" ? (
-    <div className="bg-amber-500/10 border border-amber-500/15 rounded-xl p-4 mb-4">
-      <p className="text-sm text-amber-400 font-medium">Sua conta está pendente de aprovação</p>
-      <p className="text-xs text-corp-muted mt-1">Um administrador precisa aprovar seu cadastro para acesso completo.</p>
+    <div className="bg-amber-50 border border-amber-300 rounded p-3 mb-4">
+      <p className="text-sm text-amber-800 font-semibold">Sua conta está pendente de aprovação</p>
+      <p className="text-xs text-amber-700 mt-0.5">Um administrador precisa aprovar seu cadastro.</p>
     </div>
   ) : member.status === "inativo" ? (
-    <div className="bg-red-500/10 border border-red-500/15 rounded-xl p-4 mb-4">
-      <p className="text-sm text-red-400 font-medium">Sua conta está inativa</p>
-      <p className="text-xs text-corp-muted mt-1">Entre em contato com a diretoria da BSWFCC para reativar.</p>
+    <div className="bg-red-50 border border-red-300 rounded p-3 mb-4">
+      <p className="text-sm text-red-800 font-semibold">Sua conta está inativa</p>
+      <p className="text-xs text-red-700 mt-0.5">Entre em contato com a diretoria da BSWFCC.</p>
     </div>
   ) : null;
 
@@ -28,16 +27,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         {pendingBanner}
         {children}
       </AdminShell>
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: "#1A1C28",
-            border: "1px solid rgba(139,92,246,0.1)",
-            color: "#E8ECF2",
-          },
-        }}
-      />
+      <Toaster position="top-right" toastOptions={{ style: { background: "#FFFFFF", border: "1px solid #B8C4CE", color: "#1A1A2E", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" } }} />
     </>
   );
 }

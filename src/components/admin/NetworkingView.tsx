@@ -91,7 +91,7 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
       {suggestions.length > 0 ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {suggestions.map((s) => (
-            <div key={s.id} className="bg-corp-card border border-corp-border rounded-xl p-5 hover:border-accent/20 transition-colors">
+            <div key={s.id} className="bg-white border border-corp-border rounded-xl p-5 hover:border-accent/20 transition-colors">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className="w-9 h-9 rounded-full bg-accent/10 flex items-center justify-center">
@@ -132,7 +132,7 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
                   <Handshake size={12} /> {connecting === s.id ? "..." : "Conectar"}
                 </button>
                 <button onClick={() => handleDismiss(s.id)}
-                  className="p-2 text-corp-muted hover:text-corp-text hover:bg-white/[0.03] rounded-lg transition-colors">
+                  className="p-2 text-corp-muted hover:text-corp-text hover:bg-white rounded-lg transition-colors">
                   <X size={14} />
                 </button>
               </div>
@@ -140,7 +140,7 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
           ))}
         </div>
       ) : (
-        <div className="bg-corp-card border border-corp-border rounded-xl p-12 text-center">
+        <div className="bg-white border border-corp-border rounded-xl p-12 text-center">
           <Sparkles size={32} className="text-corp-muted mx-auto mb-3" />
           <p className="text-sm text-corp-muted">Nenhuma sugestão disponível</p>
           <p className="text-[11px] text-corp-muted mt-1">Clique em "Gerar Sugestões" para encontrar conexões</p>

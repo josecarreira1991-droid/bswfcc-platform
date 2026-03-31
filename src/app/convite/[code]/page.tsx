@@ -122,10 +122,10 @@ export default async function ConvitePage({ params }: { params: { code: string }
 
   if (!result.valid || !result.referrer) {
     return (
-      <div className="min-h-screen bg-corp-bg flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[#ECF0F5] flex items-center justify-center px-4">
         <div className="max-w-md text-center">
-          <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/15 flex items-center justify-center mx-auto mb-6">
-            <span className="text-red-400 text-2xl">!</span>
+          <div className="w-16 h-16 rounded-full bg-red-50 border border-red-300 flex items-center justify-center mx-auto mb-6">
+            <span className="text-red-700 text-2xl">!</span>
           </div>
           <h1 className="text-2xl font-bold text-corp-text mb-3">Convite Inválido</h1>
           <p className="text-corp-muted mb-8">
@@ -134,7 +134,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/"
-              className="px-6 py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent/90 transition-colors"
+              className="px-6 py-3 bg-accent text-white font-semibold rounded-lg hover:bg-accent/90 transition-colors"
             >
               Ir para o Site
             </Link>
@@ -142,7 +142,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
               href="https://bswfcc.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3 border border-corp-border text-corp-muted rounded-xl hover:bg-white/[0.03] transition-colors"
+              className="px-6 py-3 border border-corp-border text-corp-muted rounded-lg hover:bg-gray-50 transition-colors"
             >
               bswfcc.com
             </a>
@@ -155,9 +155,9 @@ export default async function ConvitePage({ params }: { params: { code: string }
   const referrer = result.referrer;
 
   return (
-    <div className="min-h-screen bg-corp-bg">
+    <div className="min-h-screen bg-[#ECF0F5]">
       {/* Hero */}
-      <header className="relative overflow-hidden bg-gradient-to-br from-corp-bg via-corp-card to-corp-bg">
+      <header className="relative overflow-hidden bg-gradient-to-br from-[#ECF0F5] via-white to-[#ECF0F5]">
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
@@ -187,7 +187,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
             <span className="text-accent">BSWFCC</span>
           </h1>
 
-          <div className="inline-flex items-center gap-3 bg-corp-card border border-corp-border rounded-xl px-6 py-3 mb-8">
+          <div className="inline-flex items-center gap-3 bg-white border border-corp-border rounded-lg px-6 py-3 mb-8">
             <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
               <span className="text-accent font-bold text-sm">
                 {(referrer.full_name || "").split(" ").filter(Boolean).map((n) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
@@ -205,7 +205,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
 
           <Link
             href={`/register?ref=${params.code}`}
-            className="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-xl hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 text-lg"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-lg hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 text-lg"
           >
             Cadastrar Agora
             <ArrowRight size={20} />
@@ -228,7 +228,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
           {benefits.map((b) => (
             <div
               key={b.title}
-              className="bg-corp-card border border-corp-border rounded-xl p-6 hover:border-accent/30 transition-colors group"
+              className="bg-white border border-corp-border rounded-lg p-6 hover:border-accent/30 transition-colors group"
             >
               <div className="w-11 h-11 rounded-lg bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                 <b.icon size={20} className="text-accent" />
@@ -241,7 +241,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
       </section>
 
       {/* Tiers */}
-      <section className="bg-corp-card/50 py-24">
+      <section className="bg-white/50 py-24">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-corp-text mb-4">
@@ -256,10 +256,10 @@ export default async function ConvitePage({ params }: { params: { code: string }
             {tiers.map((tier) => (
               <div
                 key={tier.name}
-                className={`rounded-xl p-6 border transition-all ${
+                className={`rounded-lg p-6 border transition-all ${
                   tier.highlight
                     ? "border-accent/30 bg-accent/10 ring-1 ring-accent/15"
-                    : "border-corp-border bg-corp-card"
+                    : "border-corp-border bg-white"
                 }`}
               >
                 {tier.highlight && (
@@ -288,7 +288,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
       </section>
 
       {/* CTA */}
-      <section className="bg-corp-bg border-y border-corp-border">
+      <section className="bg-[#ECF0F5] border-y border-corp-border">
         <div className="max-w-4xl mx-auto px-6 py-20 text-center">
           <h2 className="text-3xl font-bold text-corp-text mb-4">
             Pronto para fazer parte da <span className="text-accent">câmara que conecta</span>?
@@ -298,7 +298,7 @@ export default async function ConvitePage({ params }: { params: { code: string }
           </p>
           <Link
             href={`/register?ref=${params.code}`}
-            className="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-xl hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 text-lg"
+            className="inline-flex items-center gap-2 px-10 py-4 bg-accent text-white font-bold rounded-lg hover:bg-accent/90 transition-all shadow-lg shadow-accent/20 text-lg"
           >
             Cadastrar Agora
             <ArrowRight size={20} />
