@@ -55,7 +55,7 @@ export default function BroadcastPanel({ templates }: BroadcastPanelProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-3 py-2 text-xs font-medium bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/15 transition-colors"
+        className="flex items-center gap-2 px-3 py-2 text-xs font-medium bg-navy/5 text-navy border border-navy/15 rounded-lg hover:bg-navy/10 transition-colors"
       >
         <Send size={13} /> Broadcast
       </button>
@@ -71,13 +71,13 @@ export default function BroadcastPanel({ templates }: BroadcastPanelProps) {
           {/* Templates */}
           {templates.length > 0 && (
             <div>
-              <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-2">Templates</p>
+              <p className="text-[11px] text-corp-muted uppercase tracking-wider mb-2">Templates</p>
               <div className="flex flex-wrap gap-1.5">
                 {templates.map((t) => (
                   <button
                     key={t.id}
                     onClick={() => applyTemplate(t)}
-                    className="px-2.5 py-1 text-[11px] bg-slate-800/50 text-slate-300 border border-slate-700/50 rounded-md hover:border-gold/30 transition-colors"
+                    className="px-2.5 py-1 text-[11px] bg-slate-50 text-slate-600 border border-corp-border rounded-md hover:border-navy/30 transition-colors"
                   >
                     {t.name.replace(/_/g, " ")}
                   </button>
@@ -89,63 +89,63 @@ export default function BroadcastPanel({ templates }: BroadcastPanelProps) {
           {/* Filters */}
           <div className="grid sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">
+              <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">
                 Filtro: Cargo (opcional)
               </label>
               <input
                 value={filterRole}
                 onChange={(e) => setFilterRole(e.target.value)}
                 placeholder="Ex: membro, parceiro_estrategico"
-                className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none"
+                className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none"
               />
             </div>
             <div>
-              <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">
+              <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">
                 Filtro: Indústria (opcional)
               </label>
               <input
                 value={filterIndustry}
                 onChange={(e) => setFilterIndustry(e.target.value)}
                 placeholder="Ex: Construção, Tecnologia"
-                className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none"
+                className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none"
               />
             </div>
           </div>
 
           {/* Message */}
           <div>
-            <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Mensagem *</label>
+            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Mensagem *</label>
             <textarea
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={6}
               placeholder="Escreva a mensagem do broadcast..."
-              className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none resize-none"
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none resize-none"
             />
           </div>
 
           {/* Result */}
           {result && (
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3">
-              <p className="text-sm text-emerald-400">
+            <div className="bg-emerald-50 border border-emerald-500/20 rounded-lg p-3">
+              <p className="text-sm text-emerald-700">
                 Enviado para {result.sent} de {result.total} membros
-                {result.failed > 0 && <span className="text-red-400"> ({result.failed} falhas)</span>}
+                {result.failed > 0 && <span className="text-red-700"> ({result.failed} falhas)</span>}
               </p>
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-2 border-t border-slate-700/50">
+          <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
             <button
               onClick={() => { setOpen(false); setResult(null); }}
-              className="px-4 py-2 text-sm text-slate-400 hover:text-white rounded-lg transition-colors"
+              className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors"
             >
               Fechar
             </button>
             <button
               onClick={handleBroadcast}
               disabled={!message.trim() || sending}
-              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50"
             >
               {sending ? (
                 <>

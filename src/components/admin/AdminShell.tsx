@@ -15,7 +15,7 @@ export default function AdminShell({ member, pendingCount = 0, children }: Admin
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-navy">
+    <div className="flex h-screen overflow-hidden bg-corp-bg">
       <Sidebar
         member={member}
         open={sidebarOpen}

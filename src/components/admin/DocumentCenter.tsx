@@ -78,11 +78,11 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-white">Central de Documentos</h1>
-          <p className="text-sm text-slate-500 mt-0.5">{documents.length} {documents.length === 1 ? "documento disponível" : "documentos disponíveis"}</p>
+          <h1 className="text-xl font-semibold text-corp-text">Central de Documentos</h1>
+          <p className="text-sm text-corp-muted mt-0.5">{documents.length} {documents.length === 1 ? "documento disponível" : "documentos disponíveis"}</p>
         </div>
         {admin && (
-          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors">
+          <button onClick={() => setShowForm(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors">
             <Plus size={16} /> Adicionar
           </button>
         )}
@@ -94,46 +94,46 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
           const count = documents.filter((d) => d.category === cat.value).length;
           return (
             <button key={cat.value} onClick={() => setFilterCat(filterCat === cat.value ? "all" : cat.value)}
-              className={cn("bg-[#0D1B2A] border rounded-lg p-2 text-center transition-colors", filterCat === cat.value ? "border-gold/40 bg-gold/5" : "border-slate-700/50 hover:border-slate-600")}>
-              <p className="text-sm font-bold text-white">{count}</p>
-              <p className="text-[9px] text-slate-500 truncate">{cat.label}</p>
+              className={cn("bg-white shadow-card border rounded-lg p-2 text-center transition-colors", filterCat === cat.value ? "border-navy/30 bg-navy/5" : "border-corp-border hover:border-slate-400")}>
+              <p className="text-sm font-bold text-corp-text">{count}</p>
+              <p className="text-[9px] text-corp-muted truncate">{cat.label}</p>
             </button>
           );
         })}
       </div>
 
       <div className="relative mb-4 max-w-sm">
-        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-muted" />
         <input type="text" placeholder="Buscar documento..." value={search} onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-8 pr-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none" />
+          className="w-full pl-8 pr-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none" />
       </div>
 
       {/* Documents list */}
       <div className="space-y-2">
         {filtered.map((doc) => (
-          <div key={doc.id} className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-4 flex items-center justify-between hover:border-slate-600 transition-colors">
+          <div key={doc.id} className="bg-white shadow-card border border-corp-border rounded-xl p-4 flex items-center justify-between hover:border-slate-400 transition-colors">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
-                <FileText size={18} className="text-slate-500" />
+              <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                <FileText size={18} className="text-corp-muted" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  {doc.is_pinned && <Pin size={10} className="text-gold" />}
+                  {doc.is_pinned && <Pin size={10} className="text-navy" />}
                   <Badge variant={categoryVariant[doc.category] || "default"}>{CATEGORIES.find((c) => c.value === doc.category)?.label || doc.category}</Badge>
                   <Badge variant="default">{doc.access_level}</Badge>
                 </div>
-                <p className="text-sm font-medium text-white truncate">{doc.title}</p>
-                {doc.description && <p className="text-[11px] text-slate-500 truncate">{doc.description}</p>}
+                <p className="text-sm font-medium text-corp-text truncate">{doc.title}</p>
+                {doc.description && <p className="text-[11px] text-corp-muted truncate">{doc.description}</p>}
               </div>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
               {doc.file_url && (
-                <a href={doc.file_url!.startsWith("http") ? doc.file_url! : `https://${doc.file_url}`} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-500 hover:text-gold rounded-lg transition-colors">
+                <a href={doc.file_url!.startsWith("http") ? doc.file_url! : `https://${doc.file_url}`} target="_blank" rel="noopener noreferrer" className="p-2 text-corp-muted hover:text-navy rounded-lg transition-colors">
                   <Download size={15} />
                 </a>
               )}
               {admin && (
-                <button onClick={() => setDeleteTarget(doc)} className="p-2 text-slate-500 hover:text-red-400 rounded-lg transition-colors">
+                <button onClick={() => setDeleteTarget(doc)} className="p-2 text-corp-muted hover:text-red-600 rounded-lg transition-colors">
                   <Trash2 size={15} />
                 </button>
               )}
@@ -141,9 +141,9 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
           </div>
         ))}
         {filtered.length === 0 && (
-          <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-12 text-center">
-            <FolderOpen size={32} className="text-slate-600 mx-auto mb-3" />
-            <p className="text-sm text-slate-400">Nenhum documento encontrado</p>
+          <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
+            <FolderOpen size={32} className="text-corp-muted mx-auto mb-3" />
+            <p className="text-sm text-corp-muted">Nenhum documento encontrado</p>
           </div>
         )}
       </div>
@@ -151,29 +151,29 @@ export default function DocumentCenter({ documents, currentMember }: DocumentCen
       {/* Create Modal */}
       <Modal open={showForm} onClose={() => setShowForm(false)} title="Adicionar Documento" size="md">
         <form onSubmit={handleCreate} className="space-y-4">
-          <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Título *</label>
-            <input name="title" required className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" /></div>
-          <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Descrição</label>
-            <textarea name="description" rows={2} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none resize-none" /></div>
+          <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Título *</label>
+            <input name="title" required className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" /></div>
+          <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Descrição</label>
+            <textarea name="description" rows={2} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none resize-none" /></div>
           <div className="grid grid-cols-2 gap-4">
-            <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Categoria</label>
-              <select name="category" defaultValue="general" className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none">
+            <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Categoria</label>
+              <select name="category" defaultValue="general" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none">
                 {CATEGORIES.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select></div>
-            <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Acesso</label>
-              <select name="access_level" defaultValue="member" className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none">
+            <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Acesso</label>
+              <select name="access_level" defaultValue="member" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none">
                 <option value="public">Público</option><option value="member">Membros</option>
                 <option value="business_partner">Business Partner</option><option value="executive">Executive</option>
                 <option value="admin">Admin</option>
               </select></div>
           </div>
-          <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">URL do Arquivo</label>
-            <input name="file_url" placeholder="https://..." className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none" /></div>
-          <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Tags (separar por vírgula)</label>
-            <input name="tags" className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" /></div>
-          <div className="flex justify-end gap-3 pt-2 border-t border-slate-700/50">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-white rounded-lg transition-colors">Cancelar</button>
-            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50">
+          <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">URL do Arquivo</label>
+            <input name="file_url" placeholder="https://..." className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none" /></div>
+          <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Tags (separar por vírgula)</label>
+            <input name="tags" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" /></div>
+          <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
+            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors">Cancelar</button>
+            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
               {loading ? "Salvando..." : "Adicionar"}
             </button>
           </div>

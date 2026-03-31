@@ -37,7 +37,7 @@ export default function PendingMembers({ members }: { members: Member[] }) {
 
   if (members.length === 0) {
     return (
-      <div className="text-center py-6 text-sm text-slate-500">
+      <div className="text-center py-6 text-sm text-corp-muted">
         Nenhum membro pendente de aprovação
       </div>
     );
@@ -48,18 +48,18 @@ export default function PendingMembers({ members }: { members: Member[] }) {
       {members.map((m) => (
         <div
           key={m.id}
-          className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-slate-800/30 border border-slate-700/30"
+          className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-slate-50 border border-corp-border"
         >
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-amber-500/15 flex items-center justify-center flex-shrink-0">
-              <span className="text-amber-400 text-xs font-semibold">
+            <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0 border border-amber-200">
+              <span className="text-amber-700 text-xs font-semibold">
                 {m.full_name[0].toUpperCase()}
               </span>
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-white truncate">{m.full_name}</p>
+              <p className="text-sm font-medium text-corp-text truncate">{m.full_name}</p>
               {m.company && (
-                <p className="text-[11px] text-slate-500 flex items-center gap-1 truncate">
+                <p className="text-[11px] text-corp-muted flex items-center gap-1 truncate">
                   <Building2 size={10} /> {m.company}
                 </p>
               )}
@@ -69,7 +69,7 @@ export default function PendingMembers({ members }: { members: Member[] }) {
             <button
               onClick={() => handleApprove(m.id, m.full_name)}
               disabled={loadingId === m.id}
-              className="p-1.5 rounded-md bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25 transition-colors disabled:opacity-50"
+              className="p-1.5 rounded-md bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200 transition-colors disabled:opacity-50"
               title="Aprovar"
             >
               <Check size={14} />
@@ -77,7 +77,7 @@ export default function PendingMembers({ members }: { members: Member[] }) {
             <button
               onClick={() => handleReject(m.id, m.full_name)}
               disabled={loadingId === m.id}
-              className="p-1.5 rounded-md bg-red-500/15 text-red-400 hover:bg-red-500/25 transition-colors disabled:opacity-50"
+              className="p-1.5 rounded-md bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 transition-colors disabled:opacity-50"
               title="Rejeitar"
             >
               <X size={14} />

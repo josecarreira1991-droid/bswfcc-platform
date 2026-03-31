@@ -295,14 +295,14 @@ export default function GroupChatView({
           <img
             src={msg.media_url}
             alt={msg.media_name || "Imagem"}
-            className="max-w-sm w-full rounded-lg border border-slate-700/30 hover:opacity-90 transition-opacity cursor-pointer"
+            className="max-w-sm w-full rounded-lg border border-corp-border hover:opacity-90 transition-opacity cursor-pointer"
             onClick={() => setFullscreenImage(msg.media_url)}
             onError={(e) => {
               (e.target as HTMLImageElement).style.display = "none";
               (e.target as HTMLImageElement).nextElementSibling?.classList.remove("hidden");
             }}
           />
-          <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="hidden flex items-center gap-2 px-3 py-2 bg-slate-800/50 border border-slate-700/30 rounded-lg text-xs text-slate-400 hover:text-gold transition-colors max-w-sm">
+          <a href={msg.media_url} target="_blank" rel="noopener noreferrer" className="hidden flex items-center gap-2 px-3 py-2 bg-slate-50 border border-corp-border rounded-lg text-xs text-corp-muted hover:text-navy transition-colors max-w-sm">
             {msg.media_name || "Imagem"} — Abrir em nova aba
           </a>
         </div>
@@ -314,7 +314,7 @@ export default function GroupChatView({
         <video
           src={msg.media_url}
           controls
-          className="max-w-sm w-full rounded-lg border border-slate-700/30 mt-1.5"
+          className="max-w-sm w-full rounded-lg border border-corp-border mt-1.5"
         />
       );
     }
@@ -325,43 +325,43 @@ export default function GroupChatView({
         href={msg.media_url}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-2 mt-1.5 px-3 py-2 bg-slate-800/50 border border-slate-700/30 rounded-lg hover:bg-slate-800/80 transition-colors max-w-sm"
+        className="flex items-center gap-2 mt-1.5 px-3 py-2 bg-slate-50 border border-corp-border rounded-lg hover:bg-slate-100 transition-colors max-w-sm"
       >
-        <FileText size={16} className="text-gold flex-shrink-0" />
-        <span className="text-xs text-slate-300 truncate">
+        <FileText size={16} className="text-navy flex-shrink-0" />
+        <span className="text-xs text-slate-600 truncate">
           {msg.media_name || "Arquivo"}
         </span>
-        <Download size={14} className="text-slate-500 flex-shrink-0 ml-auto" />
+        <Download size={14} className="text-corp-muted flex-shrink-0 ml-auto" />
       </a>
     );
   }
 
   return (
     <>
-      <div className="flex h-[calc(100vh-8rem)] bg-[#0D1B2A] border border-slate-700/50 rounded-xl overflow-hidden">
+      <div className="flex h-[calc(100vh-8rem)] bg-white shadow-card border border-corp-border rounded-xl overflow-hidden">
         {/* Channel List */}
         <div
           className={cn(
-            "w-full sm:w-72 border-r border-slate-700/50 flex flex-col flex-shrink-0",
+            "w-full sm:w-72 border-r border-corp-border flex flex-col flex-shrink-0",
             mobileShowChat ? "hidden sm:flex" : "flex"
           )}
         >
           {/* Header */}
-          <div className="px-4 py-3 border-b border-slate-700/50">
+          <div className="px-4 py-3 border-b border-corp-border">
             <div className="flex items-center justify-between mb-1">
               <div>
-                <h3 className="text-sm font-medium text-white flex items-center gap-1.5">
-                  <Users2 size={15} className="text-gold" />
+                <h3 className="text-sm font-medium text-corp-text flex items-center gap-1.5">
+                  <Users2 size={15} className="text-navy" />
                   Canais
                 </h3>
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-corp-muted">
                   {channelList.length} canal{channelList.length !== 1 ? "is" : ""}
                 </p>
               </div>
               {isAdmin && (
                 <button
                   onClick={() => setShowNewChannelModal(true)}
-                  className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-medium bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/20 transition-colors"
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-medium bg-navy/5 text-navy border border-navy/15 rounded-lg hover:bg-navy/10 transition-colors"
                 >
                   <Plus size={13} />
                   Novo Canal
@@ -378,20 +378,20 @@ export default function GroupChatView({
                   key={channel.id}
                   onClick={() => selectChannel(channel)}
                   className={cn(
-                    "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-slate-800/30 hover:bg-slate-800/30 transition-colors",
+                    "w-full flex items-start gap-3 px-4 py-3 text-left border-b border-corp-border hover:bg-slate-50 transition-colors",
                     selected?.id === channel.id &&
-                      "bg-gold/5 border-l-2 border-l-gold"
+                      "bg-navy/5 border-l-2 border-l-navy"
                   )}
                 >
-                  <div className="w-9 h-9 rounded-lg bg-gold/15 flex items-center justify-center flex-shrink-0">
-                    <Hash size={16} className="text-gold" />
+                  <div className="w-9 h-9 rounded-lg bg-navy/10 flex items-center justify-center flex-shrink-0">
+                    <Hash size={16} className="text-navy" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-white truncate">
+                    <p className="text-sm font-medium text-corp-text truncate">
                       {channel.name}
                     </p>
                     {channel.description && (
-                      <p className="text-[10px] text-slate-500 truncate">
+                      <p className="text-[10px] text-corp-muted truncate">
                         {channel.description}
                       </p>
                     )}
@@ -400,9 +400,9 @@ export default function GroupChatView({
               ))
             ) : (
               <div className="flex flex-col items-center justify-center py-12 px-4">
-                <Hash size={32} className="text-slate-600 mb-3" />
-                <p className="text-sm text-slate-500">Nenhum canal</p>
-                <p className="text-[11px] text-slate-600 text-center mt-1">
+                <Hash size={32} className="text-slate-300 mb-3" />
+                <p className="text-sm text-corp-muted">Nenhum canal</p>
+                <p className="text-[11px] text-slate-400 text-center mt-1">
                   Canais de grupo ser&atilde;o listados aqui
                 </p>
               </div>
@@ -420,25 +420,25 @@ export default function GroupChatView({
           {selected ? (
             <>
               {/* Chat Header */}
-              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-corp-border">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => {
                       setMobileShowChat(false);
                     }}
-                    className="sm:hidden text-slate-400 hover:text-white p-1"
+                    className="sm:hidden text-corp-muted hover:text-corp-text p-1"
                   >
                     <ChevronLeft size={18} />
                   </button>
-                  <div className="w-9 h-9 rounded-lg bg-gold/15 flex items-center justify-center">
-                    <Hash size={16} className="text-gold" />
+                  <div className="w-9 h-9 rounded-lg bg-navy/10 flex items-center justify-center">
+                    <Hash size={16} className="text-navy" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">
+                    <p className="text-sm font-medium text-corp-text">
                       {selected.name}
                     </p>
                     {selected.description && (
-                      <p className="text-[10px] text-slate-500">
+                      <p className="text-[10px] text-corp-muted">
                         {selected.description}
                       </p>
                     )}
@@ -448,12 +448,12 @@ export default function GroupChatView({
                   <div className="relative">
                     <button
                       onClick={() => setShowChannelMenu((v) => !v)}
-                      className="p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-slate-800/50"
+                      className="p-2 text-corp-muted hover:text-corp-text transition-colors rounded-lg hover:bg-slate-50"
                     >
                       <Settings size={16} />
                     </button>
                     {showChannelMenu && (
-                      <div className="absolute right-0 top-full mt-1 w-40 bg-[#0D1B2A] border border-slate-700/50 rounded-lg shadow-lg z-20 py-1">
+                      <div className="absolute right-0 top-full mt-1 w-40 bg-white border border-corp-border rounded-lg shadow-lg z-20 py-1">
                         <button
                           onClick={() => {
                             setEditChannelName(selected.name);
@@ -461,7 +461,7 @@ export default function GroupChatView({
                             setShowEditChannelModal(true);
                             setShowChannelMenu(false);
                           }}
-                          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-300 hover:bg-slate-800/50 hover:text-white transition-colors"
+                          className="w-full flex items-center gap-2 px-3 py-2 text-xs text-slate-600 hover:bg-slate-50 hover:text-corp-text transition-colors"
                         >
                           <Edit3 size={13} />
                           Editar
@@ -472,7 +472,7 @@ export default function GroupChatView({
                               setShowChannelMenu(false);
                               handleDeleteChannel();
                             }}
-                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 transition-colors"
+                            className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-700 hover:bg-red-50 transition-colors"
                           >
                             <Trash2 size={13} />
                             Excluir
@@ -488,7 +488,7 @@ export default function GroupChatView({
               <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
                 {loading ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="animate-spin w-5 h-5 border-2 border-gold/30 border-t-gold rounded-full" />
+                    <div className="animate-spin w-5 h-5 border-2 border-navy/30 border-t-navy rounded-full" />
                   </div>
                 ) : messages.length > 0 ? (
                   messages.map((msg) => {
@@ -506,8 +506,8 @@ export default function GroupChatView({
                       >
                         {/* Avatar for others */}
                         {!isMine && (
-                          <div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center flex-shrink-0 mr-2 mt-0.5">
-                            <span className="text-gold text-[10px] font-semibold">
+                          <div className="w-8 h-8 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0 mr-2 mt-0.5">
+                            <span className="text-navy text-[10px] font-semibold">
                               {getInitials(
                                 msg.sender?.full_name || "?"
                               )}
@@ -515,32 +515,32 @@ export default function GroupChatView({
                           </div>
                         )}
                         <div className="max-w-[75%]">
-                          {/* FIX 1: Sender name above bubble for others */}
+                          {/* Sender name above bubble for others */}
                           {!isMine && (
-                            <p className="text-[11px] text-gold font-medium mb-0.5">{msg.sender?.full_name || "Membro"}</p>
+                            <p className="text-[11px] text-navy font-medium mb-0.5">{msg.sender?.full_name || "Membro"}</p>
                           )}
                           <div className="relative">
                             <div
                               className={cn(
                                 "rounded-xl px-3.5 py-2.5",
                                 isMine
-                                  ? "bg-gold/15 border border-gold/20"
-                                  : "bg-slate-800/60 border border-slate-700/30"
+                                  ? "bg-navy text-white"
+                                  : "bg-slate-100 text-corp-text"
                               )}
                             >
                               {!isMine && msg.sender && (
                                 <div className="flex items-center gap-1.5 mb-0.5">
                                   {msg.sender.company && (
-                                    <p className="text-[9px] text-slate-500">
+                                    <p className="text-[9px] text-corp-muted">
                                       {msg.sender.company}
                                     </p>
                                   )}
                                   {msg.sender.company && (
-                                    <span className="text-[9px] text-slate-600">
+                                    <span className="text-[9px] text-slate-400">
                                       |
                                     </span>
                                   )}
-                                  <span className="text-[9px] px-1.5 py-0.5 bg-slate-700/50 text-slate-400 rounded-full">
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-white/70 text-corp-muted rounded-full">
                                     {ROLE_LABELS[msg.sender.role] ||
                                       msg.sender.role}
                                   </span>
@@ -552,7 +552,7 @@ export default function GroupChatView({
 
                               {/* Text content */}
                               {msg.content && (
-                                <p className="text-sm text-white whitespace-pre-wrap break-words">
+                                <p className={cn("text-sm whitespace-pre-wrap break-words", isMine ? "text-white" : "text-corp-text")}>
                                   {msg.content}
                                 </p>
                               )}
@@ -561,19 +561,19 @@ export default function GroupChatView({
                                 className={cn(
                                   "text-[10px] mt-1",
                                   isMine
-                                    ? "text-gold/50 text-right"
-                                    : "text-slate-600"
+                                    ? "text-white/50 text-right"
+                                    : "text-slate-400"
                                 )}
                               >
                                 {formatTime(msg.created_at)}
                               </p>
                             </div>
-                            {/* FIX 2: Delete button on hover */}
+                            {/* Delete button on hover */}
                             {canDelete && hoveredMessage === msg.id && (
                               <button
                                 onClick={() => handleDeleteMessage(msg.id)}
                                 className={cn(
-                                  "absolute top-1 p-1 rounded-md bg-slate-800/80 border border-slate-700/50 text-slate-400 hover:text-red-400 hover:border-red-500/30 transition-colors",
+                                  "absolute top-1 p-1 rounded-md bg-white border border-corp-border text-corp-muted hover:text-red-600 hover:border-red-200 transition-colors",
                                   isMine ? "-left-8" : "-right-8"
                                 )}
                                 title="Apagar mensagem"
@@ -588,7 +588,7 @@ export default function GroupChatView({
                   })
                 ) : (
                   <div className="flex items-center justify-center py-8">
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-corp-muted">
                       Nenhuma mensagem neste canal
                     </p>
                   </div>
@@ -598,32 +598,32 @@ export default function GroupChatView({
 
               {/* Attachment preview */}
               {attachment && (
-                <div className="px-4 py-2 border-t border-slate-700/30 bg-slate-800/30">
+                <div className="px-4 py-2 border-t border-corp-border bg-slate-50">
                   <div className="flex items-center gap-3">
                     {attachment.mediaType === "image" && attachment.preview ? (
                       <img
                         src={attachment.preview}
                         alt="Preview"
-                        className="h-16 rounded-lg border border-slate-700/30 object-cover"
+                        className="h-16 rounded-lg border border-corp-border object-cover"
                       />
                     ) : attachment.mediaType === "video" ? (
-                      <div className="flex items-center gap-2 px-3 py-2 bg-slate-700/30 rounded-lg">
-                        <Film size={16} className="text-gold" />
-                        <span className="text-xs text-slate-300 truncate max-w-[200px]">
+                      <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 rounded-lg">
+                        <Film size={16} className="text-navy" />
+                        <span className="text-xs text-slate-600 truncate max-w-[200px]">
                           {attachment.file.name}
                         </span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 px-3 py-2 bg-slate-700/30 rounded-lg">
-                        <FileText size={16} className="text-gold" />
-                        <span className="text-xs text-slate-300 truncate max-w-[200px]">
+                      <div className="flex items-center gap-2 px-3 py-2 bg-slate-100 rounded-lg">
+                        <FileText size={16} className="text-navy" />
+                        <span className="text-xs text-slate-600 truncate max-w-[200px]">
                           {attachment.file.name}
                         </span>
                       </div>
                     )}
                     <button
                       onClick={clearAttachment}
-                      className="p-1 text-slate-400 hover:text-red-400 transition-colors"
+                      className="p-1 text-corp-muted hover:text-red-600 transition-colors"
                     >
                       <X size={16} />
                     </button>
@@ -632,12 +632,12 @@ export default function GroupChatView({
               )}
 
               {/* Message Input */}
-              <div className="px-4 py-3 border-t border-slate-700/50">
+              <div className="px-4 py-3 border-t border-corp-border bg-white">
                 <div className="flex items-end gap-2">
                   {/* Attach button */}
                   <button
                     onClick={() => fileInputRef.current?.click()}
-                    className="p-2.5 text-slate-400 hover:text-gold transition-colors"
+                    className="p-2.5 text-corp-muted hover:text-navy transition-colors"
                     title="Anexar arquivo"
                   >
                     <Paperclip size={18} />
@@ -661,17 +661,17 @@ export default function GroupChatView({
                     }}
                     placeholder="Escreva uma mensagem..."
                     rows={1}
-                    className="flex-1 px-3 py-2.5 text-sm bg-slate-800/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none resize-none"
+                    className="flex-1 px-3 py-2.5 text-sm bg-slate-50 border border-corp-border rounded-xl text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none resize-none"
                   />
                   <button
                     onClick={handleSend}
                     disabled={
                       (!newMessage.trim() && !attachment) || sending
                     }
-                    className="p-2.5 bg-gold text-navy rounded-xl hover:bg-light-gold transition-colors disabled:opacity-30"
+                    className="p-2.5 bg-navy text-white rounded-xl hover:bg-light-navy transition-colors disabled:opacity-30"
                   >
                     {uploading ? (
-                      <div className="animate-spin w-4 h-4 border-2 border-navy/30 border-t-navy rounded-full" />
+                      <div className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" />
                     ) : (
                       <Send size={16} />
                     )}
@@ -681,11 +681,11 @@ export default function GroupChatView({
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center">
-              <Hash size={40} className="text-slate-700 mb-3" />
-              <p className="text-sm text-slate-500">
+              <Hash size={40} className="text-slate-300 mb-3" />
+              <p className="text-sm text-corp-muted">
                 Selecione um canal para conversar
               </p>
-              <p className="text-[11px] text-slate-600 mt-1">
+              <p className="text-[11px] text-slate-400 mt-1">
                 Converse com todos os membros da c&acirc;mara
               </p>
             </div>
@@ -696,12 +696,12 @@ export default function GroupChatView({
       {/* New Channel Modal */}
       {showNewChannelModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl w-full max-w-md flex flex-col">
+          <div className="bg-white border border-corp-border rounded-xl w-full max-w-md flex flex-col shadow-card">
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-corp-border">
               <div className="flex items-center gap-2">
-                <Hash size={16} className="text-gold" />
-                <h3 className="text-sm font-medium text-white">Novo Canal</h3>
+                <Hash size={16} className="text-navy" />
+                <h3 className="text-sm font-medium text-corp-text">Novo Canal</h3>
               </div>
               <button
                 onClick={() => {
@@ -709,7 +709,7 @@ export default function GroupChatView({
                   setNewChannelName("");
                   setNewChannelDesc("");
                 }}
-                className="text-slate-400 hover:text-white p-1"
+                className="text-corp-muted hover:text-corp-text p-1"
               >
                 <X size={16} />
               </button>
@@ -718,7 +718,7 @@ export default function GroupChatView({
             {/* Form */}
             <div className="px-4 py-4 space-y-3">
               <div>
-                <label className="text-[11px] text-slate-400 font-medium mb-1 block">
+                <label className="text-[11px] text-corp-muted font-medium mb-1 block">
                   Nome do Canal
                 </label>
                 <input
@@ -727,11 +727,11 @@ export default function GroupChatView({
                   onChange={(e) => setNewChannelName(e.target.value)}
                   placeholder="Ex: Eventos, Marketing..."
                   autoFocus
-                  className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="text-[11px] text-slate-400 font-medium mb-1 block">
+                <label className="text-[11px] text-corp-muted font-medium mb-1 block">
                   Descri&ccedil;&atilde;o (opcional)
                 </label>
                 <input
@@ -739,27 +739,27 @@ export default function GroupChatView({
                   value={newChannelDesc}
                   onChange={(e) => setNewChannelDesc(e.target.value)}
                   placeholder="Sobre o que é este canal..."
-                  className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none"
                 />
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex justify-end gap-2 px-4 py-3 border-t border-slate-700/50">
+            <div className="flex justify-end gap-2 px-4 py-3 border-t border-corp-border">
               <button
                 onClick={() => {
                   setShowNewChannelModal(false);
                   setNewChannelName("");
                   setNewChannelDesc("");
                 }}
-                className="px-3 py-2 text-xs text-slate-400 hover:text-white transition-colors"
+                className="px-3 py-2 text-xs text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleCreateChannel}
                 disabled={!newChannelName.trim() || creatingChannel}
-                className="px-4 py-2 text-xs font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-30"
+                className="px-4 py-2 text-xs font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-30"
               >
                 {creatingChannel ? "Criando..." : "Criar Canal"}
               </button>
@@ -771,22 +771,22 @@ export default function GroupChatView({
       {/* Edit Channel Modal */}
       {showEditChannelModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl w-full max-w-md flex flex-col">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50">
+          <div className="bg-white border border-corp-border rounded-xl w-full max-w-md flex flex-col shadow-card">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-corp-border">
               <div className="flex items-center gap-2">
-                <Edit3 size={16} className="text-gold" />
-                <h3 className="text-sm font-medium text-white">Editar Canal</h3>
+                <Edit3 size={16} className="text-navy" />
+                <h3 className="text-sm font-medium text-corp-text">Editar Canal</h3>
               </div>
               <button
                 onClick={() => setShowEditChannelModal(false)}
-                className="text-slate-400 hover:text-white p-1"
+                className="text-corp-muted hover:text-corp-text p-1"
               >
                 <X size={16} />
               </button>
             </div>
             <div className="px-4 py-4 space-y-3">
               <div>
-                <label className="text-[11px] text-slate-400 font-medium mb-1 block">
+                <label className="text-[11px] text-corp-muted font-medium mb-1 block">
                   Nome do Canal
                 </label>
                 <input
@@ -794,11 +794,11 @@ export default function GroupChatView({
                   value={editChannelName}
                   onChange={(e) => setEditChannelName(e.target.value)}
                   autoFocus
-                  className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="text-[11px] text-slate-400 font-medium mb-1 block">
+                <label className="text-[11px] text-corp-muted font-medium mb-1 block">
                   Descri&ccedil;&atilde;o (opcional)
                 </label>
                 <input
@@ -806,21 +806,21 @@ export default function GroupChatView({
                   value={editChannelDesc}
                   onChange={(e) => setEditChannelDesc(e.target.value)}
                   placeholder="Sobre o que é este canal..."
-                  className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none"
+                  className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none"
                 />
               </div>
             </div>
-            <div className="flex justify-end gap-2 px-4 py-3 border-t border-slate-700/50">
+            <div className="flex justify-end gap-2 px-4 py-3 border-t border-corp-border">
               <button
                 onClick={() => setShowEditChannelModal(false)}
-                className="px-3 py-2 text-xs text-slate-400 hover:text-white transition-colors"
+                className="px-3 py-2 text-xs text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleEditChannel}
                 disabled={!editChannelName.trim() || savingChannel}
-                className="px-4 py-2 text-xs font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-30"
+                className="px-4 py-2 text-xs font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-30"
               >
                 {savingChannel ? "Salvando..." : "Salvar"}
               </button>

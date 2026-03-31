@@ -30,12 +30,12 @@ import Modal from "@/components/ui/Modal";
 import type { Member, Post, PostCategory, PostComment } from "@/types/database";
 
 const CATEGORY_CONFIG: Record<PostCategory, { label: string; icon: typeof Megaphone; color: string }> = {
-  anuncio: { label: "Anúncio", icon: Megaphone, color: "text-blue-400 bg-blue-500/10 border-blue-500/20" },
-  oportunidade: { label: "Oportunidade", icon: Briefcase, color: "text-gold bg-gold/10 border-gold/20" },
-  parceria: { label: "Parceria", icon: Handshake, color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
-  evento: { label: "Evento", icon: Calendar, color: "text-purple-400 bg-purple-500/10 border-purple-500/20" },
-  discussao: { label: "Discussão", icon: MessageSquare, color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20" },
-  geral: { label: "Geral", icon: Tag, color: "text-slate-400 bg-slate-500/10 border-slate-500/20" },
+  anuncio: { label: "Anúncio", icon: Megaphone, color: "text-blue-700 bg-blue-50 border-blue-200" },
+  oportunidade: { label: "Oportunidade", icon: Briefcase, color: "text-navy bg-navy/5 border-navy/15" },
+  parceria: { label: "Parceria", icon: Handshake, color: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+  evento: { label: "Evento", icon: Calendar, color: "text-purple-700 bg-purple-50 border-purple-200" },
+  discussao: { label: "Discussão", icon: MessageSquare, color: "text-cyan-700 bg-cyan-50 border-cyan-200" },
+  geral: { label: "Geral", icon: Tag, color: "text-corp-muted bg-slate-50 border-corp-border" },
 };
 
 type PostWithAuthor = Post & { author: { full_name: string; company: string | null; role: string; avatar_url: string | null } };
@@ -168,14 +168,14 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-white">Mural</h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <h1 className="text-xl font-semibold text-corp-text">Mural</h1>
+          <p className="text-sm text-corp-muted mt-0.5">
             {feedStats.totalPosts} {feedStats.totalPosts === 1 ? "publicação" : "publicações"} · {feedStats.totalOpportunities} {feedStats.totalOpportunities === 1 ? "oportunidade" : "oportunidades"}
           </p>
         </div>
         <button
           onClick={() => setShowNewPost(true)}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors"
         >
           <MessageSquarePlus size={16} /> Nova Publicação
         </button>
@@ -188,8 +188,8 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
           className={cn(
             "px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
             activeFilter === "all"
-              ? "bg-gold/10 text-gold border-gold/20"
-              : "text-slate-400 border-slate-700/50 hover:text-white hover:border-slate-600"
+              ? "bg-navy/5 text-navy border-navy/15"
+              : "text-corp-muted border-corp-border hover:text-corp-text hover:border-slate-400"
           )}
         >
           Todos
@@ -199,8 +199,8 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
           className={cn(
             "px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
             activeFilter === "oportunidades"
-              ? "bg-gold/10 text-gold border-gold/20"
-              : "text-slate-400 border-slate-700/50 hover:text-white hover:border-slate-600"
+              ? "bg-navy/5 text-navy border-navy/15"
+              : "text-corp-muted border-corp-border hover:text-corp-text hover:border-slate-400"
           )}
         >
           Oportunidades
@@ -215,7 +215,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                 "px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors",
                 activeFilter === cat
                   ? config.color
-                  : "text-slate-400 border-slate-700/50 hover:text-white hover:border-slate-600"
+                  : "text-corp-muted border-corp-border hover:text-corp-text hover:border-slate-400"
               )}
             >
               {config.label}
@@ -224,16 +224,16 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
         })}
 
         <div className="relative ml-auto">
-          <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-corp-muted" />
           <input
             type="text"
             placeholder="Buscar..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-8 pr-3 py-1.5 text-xs bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder:text-slate-500 focus:border-gold/40 focus:outline-none w-48"
+            className="pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none w-48"
           />
           {searchTerm && (
-            <button onClick={() => setSearchTerm("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">
+            <button onClick={() => setSearchTerm("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-corp-muted hover:text-corp-text">
               <X size={12} />
             </button>
           )}
@@ -243,10 +243,10 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
       {/* Posts Feed */}
       <div className="space-y-4">
         {filteredPosts.length === 0 && (
-          <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-12 text-center">
-            <MessageSquarePlus size={32} className="mx-auto text-slate-600 mb-3" />
-            <p className="text-slate-400 text-sm">Nenhuma publicação encontrada.</p>
-            <p className="text-slate-500 text-xs mt-1">Seja o primeiro a publicar!</p>
+          <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
+            <MessageSquarePlus size={32} className="mx-auto text-slate-300 mb-3" />
+            <p className="text-corp-muted text-sm">Nenhuma publicação encontrada.</p>
+            <p className="text-corp-muted text-xs mt-1">Seja o primeiro a publicar!</p>
           </div>
         )}
 
@@ -263,8 +263,8 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
             <div
               key={post.id}
               className={cn(
-                "bg-[#0D1B2A] border rounded-xl overflow-hidden transition-all",
-                post.is_pinned ? "border-gold/30 ring-1 ring-gold/10" : "border-slate-700/50"
+                "bg-white shadow-card border rounded-xl overflow-hidden transition-all",
+                post.is_pinned ? "border-navy/30 ring-1 ring-navy/10" : "border-corp-border"
               )}
             >
               {/* Post Header */}
@@ -274,18 +274,18 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                     {/* Avatar */}
                     <div className={cn(
                       "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold",
-                      isLeadership ? "bg-gold/20 text-gold" : "bg-slate-700/50 text-slate-300"
+                      isLeadership ? "bg-navy/10 text-navy" : "bg-slate-100 text-slate-600"
                     )}>
                       {post.author.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-white truncate">{post.author.full_name}</p>
+                        <p className="text-sm font-medium text-corp-text truncate">{post.author.full_name}</p>
                         {isLeadership && (
                           <Badge variant="gold">{ROLE_LABELS[post.author.role] || post.author.role}</Badge>
                         )}
                       </div>
-                      <div className="flex items-center gap-2 text-[11px] text-slate-500">
+                      <div className="flex items-center gap-2 text-[11px] text-corp-muted">
                         {post.author.company && <span>{post.author.company}</span>}
                         <span>· {timeAgo(post.created_at)}</span>
                       </div>
@@ -294,7 +294,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
 
                   <div className="flex items-center gap-1.5 flex-shrink-0">
                     {post.is_pinned && (
-                      <Pin size={14} className="text-gold" />
+                      <Pin size={14} className="text-navy" />
                     )}
                     <div className={cn("px-2 py-0.5 rounded-md border text-[10px] font-medium", catConfig.color)}>
                       {catConfig.label}
@@ -304,19 +304,19 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
 
                 {/* Post Content */}
                 <div className="mt-3">
-                  <h3 className="text-base font-semibold text-white">{post.title}</h3>
+                  <h3 className="text-base font-semibold text-corp-text">{post.title}</h3>
                   {post.is_opportunity && post.opportunity_type && (
                     <Badge variant={post.opportunity_type === "oferta" ? "success" : "warning"} className="mt-1">
                       {post.opportunity_type === "oferta" ? "Ofereço" : "Procuro"}
                     </Badge>
                   )}
-                  <p className="text-sm text-slate-300 mt-2 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-sm text-slate-600 mt-2 whitespace-pre-wrap leading-relaxed">
                     {post.content.length > 300 && !isExpanded
                       ? post.content.slice(0, 300) + "..."
                       : post.content}
                   </p>
                   {post.content.length > 300 && (
-                    <button onClick={() => toggleExpand(post.id)} className="text-gold text-xs mt-1 hover:underline">
+                    <button onClick={() => toggleExpand(post.id)} className="text-navy text-xs mt-1 hover:underline">
                       {isExpanded ? "Ver menos" : "Ver mais"}
                     </button>
                   )}
@@ -326,7 +326,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                 {post.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-3">
                     {post.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] px-2 py-0.5 bg-slate-800/50 text-slate-400 rounded-md border border-slate-700/30">
+                      <span key={tag} className="text-[10px] px-2 py-0.5 bg-slate-50 text-corp-muted rounded-md border border-corp-border">
                         #{tag}
                       </span>
                     ))}
@@ -335,12 +335,12 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
               </div>
 
               {/* Actions Bar */}
-              <div className="px-5 py-2.5 border-t border-slate-800/50 flex items-center gap-4">
+              <div className="px-5 py-2.5 border-t border-corp-border flex items-center gap-4">
                 <button
                   onClick={() => handleLike(post.id)}
                   className={cn(
                     "flex items-center gap-1.5 text-xs transition-colors",
-                    isLiked ? "text-red-400" : "text-slate-500 hover:text-red-400"
+                    isLiked ? "text-red-600" : "text-corp-muted hover:text-red-600"
                   )}
                 >
                   <Heart size={15} fill={isLiked ? "currentColor" : "none"} />
@@ -349,7 +349,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
 
                 <button
                   onClick={() => toggleExpand(post.id)}
-                  className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-corp-muted hover:text-corp-text transition-colors"
                 >
                   <MessageCircle size={15} />
                   {post.comments_count > 0 && <span>{post.comments_count}</span>}
@@ -361,7 +361,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                       onClick={() => handlePin(post.id)}
                       className={cn(
                         "p-1.5 rounded-lg text-xs transition-colors",
-                        post.is_pinned ? "text-gold bg-gold/10" : "text-slate-500 hover:text-gold hover:bg-gold/5"
+                        post.is_pinned ? "text-navy bg-navy/10" : "text-corp-muted hover:text-navy hover:bg-navy/5"
                       )}
                       title={post.is_pinned ? "Desafixar" : "Fixar"}
                     >
@@ -371,7 +371,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                   {(isAdmin || isAuthor) && (
                     <button
                       onClick={() => handleDelete(post.id)}
-                      className="p-1.5 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/5 transition-colors"
+                      className="p-1.5 rounded-lg text-corp-muted hover:text-red-600 hover:bg-red-50 transition-colors"
                       title="Excluir"
                     >
                       <Trash2 size={14} />
@@ -382,26 +382,26 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
 
               {/* Comments Section */}
               {isExpanded && (
-                <div className="border-t border-slate-800/50 bg-slate-900/20">
+                <div className="border-t border-corp-border bg-slate-50/50">
                   {/* Existing comments */}
                   {postComments.length > 0 && (
-                    <div className="divide-y divide-slate-800/30">
+                    <div className="divide-y divide-corp-border">
                       {postComments.map((c) => (
                         <div key={c.id} className="px-5 py-3 flex items-start gap-3">
-                          <div className="w-7 h-7 rounded-full bg-slate-700/50 flex items-center justify-center flex-shrink-0 text-[10px] font-semibold text-slate-300">
+                          <div className="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 text-[10px] font-semibold text-slate-600">
                             {c.author.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
-                              <span className="text-xs font-medium text-white">{c.author.full_name}</span>
-                              <span className="text-[10px] text-slate-500">{timeAgo(c.created_at)}</span>
+                              <span className="text-xs font-medium text-corp-text">{c.author.full_name}</span>
+                              <span className="text-[10px] text-corp-muted">{timeAgo(c.created_at)}</span>
                             </div>
-                            <p className="text-xs text-slate-300 mt-0.5">{c.content}</p>
+                            <p className="text-xs text-slate-600 mt-0.5">{c.content}</p>
                           </div>
                           {(isAdmin || c.author_id === currentMember.id) && (
                             <button
                               onClick={() => handleDeleteComment(c.id)}
-                              className="text-slate-600 hover:text-red-400 transition-colors flex-shrink-0"
+                              className="text-slate-300 hover:text-red-600 transition-colors flex-shrink-0"
                             >
                               <Trash2 size={12} />
                             </button>
@@ -412,19 +412,19 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                   )}
 
                   {/* Add comment */}
-                  <div className="px-5 py-3 flex items-center gap-2 border-t border-slate-800/30">
+                  <div className="px-5 py-3 flex items-center gap-2 border-t border-corp-border">
                     <input
                       type="text"
                       placeholder="Escreva um comentário..."
                       value={commentText[post.id] || ""}
                       onChange={(e) => setCommentText((prev) => ({ ...prev, [post.id]: e.target.value }))}
                       onKeyDown={(e) => { if (e.key === "Enter") handleComment(post.id); }}
-                      className="flex-1 px-3 py-2 text-xs bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder:text-slate-500 focus:border-gold/40 focus:outline-none"
+                      className="flex-1 px-3 py-2 text-xs bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none"
                     />
                     <button
                       onClick={() => handleComment(post.id)}
                       disabled={!commentText[post.id]?.trim()}
-                      className="p-2 bg-gold/10 text-gold rounded-lg hover:bg-gold/20 transition-colors disabled:opacity-30"
+                      className="p-2 bg-navy/5 text-navy rounded-lg hover:bg-navy/10 transition-colors disabled:opacity-30"
                     >
                       <Send size={14} />
                     </button>
@@ -441,7 +441,7 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
         <form onSubmit={handleCreatePost} className="space-y-4">
           {/* Category */}
           <div>
-            <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-2">Categoria</label>
+            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-2">Categoria</label>
             <div className="grid grid-cols-3 gap-2">
               {(Object.keys(CATEGORY_CONFIG) as PostCategory[]).map((cat) => {
                 const config = CATEGORY_CONFIG[cat];
@@ -451,8 +451,8 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
                     key={cat}
                     className={cn(
                       "flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors text-xs",
-                      "has-[:checked]:bg-gold/10 has-[:checked]:border-gold/30 has-[:checked]:text-gold",
-                      "border-slate-700/50 text-slate-400 hover:border-slate-600"
+                      "has-[:checked]:bg-navy/5 has-[:checked]:border-navy/30 has-[:checked]:text-navy",
+                      "border-corp-border text-corp-muted hover:border-slate-400"
                     )}
                   >
                     <input type="radio" name="category" value={cat} defaultChecked={cat === "geral"} className="hidden" />
@@ -466,33 +466,33 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
 
           {/* Title */}
           <div>
-            <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Título *</label>
+            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Título *</label>
             <input
               name="title"
               required
               placeholder="Título da publicação"
-              className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder:text-slate-500 focus:border-gold/40 focus:outline-none"
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none"
             />
           </div>
 
           {/* Content */}
           <div>
-            <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Conteúdo *</label>
+            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Conteúdo *</label>
             <textarea
               name="content"
               required
               rows={5}
               placeholder="Compartilhe uma oportunidade, anúncio ou discussão com os membros..."
-              className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder:text-slate-500 focus:border-gold/40 focus:outline-none resize-none"
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none resize-none"
             />
           </div>
 
           {/* Opportunity Type */}
           <div>
-            <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Tipo de Oportunidade (se aplicável)</label>
+            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Tipo de Oportunidade (se aplicável)</label>
             <select
               name="opportunity_type"
-              className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none"
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none"
             >
               <option value="">Não é oportunidade</option>
               <option value="oferta">Ofereço (serviço/produto/parceria)</option>
@@ -502,19 +502,19 @@ export default function FeedView({ posts, totalPosts, currentMember, isAdmin, li
 
           {/* Tags */}
           <div>
-            <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Tags (separadas por vírgula)</label>
+            <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Tags (separadas por vírgula)</label>
             <input
               name="tags"
               placeholder="Ex: importação, construção, contabilidade"
-              className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder:text-slate-500 focus:border-gold/40 focus:outline-none"
+              className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder:text-slate-400 focus:border-navy/30 focus:outline-none"
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-2 border-t border-slate-700/50">
-            <button type="button" onClick={() => setShowNewPost(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-white rounded-lg transition-colors">
+          <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
+            <button type="button" onClick={() => setShowNewPost(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors">
               Cancelar
             </button>
-            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50">
+            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
               {loading ? "Publicando..." : "Publicar"}
             </button>
           </div>

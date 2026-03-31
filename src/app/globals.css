@@ -3,23 +3,29 @@
 @tailwind utilities;
 
 :root {
-  --navy: #0A1628;
-  --dark-blue: #1B2A4A;
-  --gold: #C9A84C;
-  --light-gold: #E8D5A0;
+  --navy: #1B3A6B;
+  --dark-navy: #0D1B2A;
+  --light-navy: #2A4F8F;
+  --gold: #C8A96E;
+  --light-gold: #D4BC8A;
   --accent: #2D5F8A;
+  --corp-bg: #F8F9FA;
+  --corp-card: #FFFFFF;
+  --corp-border: #E2E8F0;
+  --corp-text: #1E293B;
+  --corp-muted: #64748B;
 }
 
 body {
   font-family: "Inter", system-ui, sans-serif;
-  background: var(--navy);
-  color: #ffffff;
+  background: var(--corp-bg);
+  color: var(--corp-text);
 }
 
 @layer utilities {
   .text-gold { color: var(--gold); }
   .bg-navy { background-color: var(--navy); }
-  .bg-dark-blue { background-color: var(--dark-blue); }
+  .bg-dark-navy { background-color: var(--dark-navy); }
   .border-gold { border-color: var(--gold); }
   .gold-gradient {
     background: linear-gradient(135deg, var(--gold), var(--light-gold));

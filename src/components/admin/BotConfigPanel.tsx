@@ -50,19 +50,19 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
   }
 
   return (
-    <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5 space-y-5">
+    <div className="bg-white shadow-card border border-corp-border rounded-xl p-5 space-y-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Bot size={18} className="text-gold" />
-          <h3 className="text-sm font-medium text-white">Assistente Virtual (WhatsApp Bot)</h3>
+          <Bot size={18} className="text-navy" />
+          <h3 className="text-sm font-medium text-corp-text">Assistente Virtual (WhatsApp Bot)</h3>
         </div>
         <button
           onClick={() => updateField("is_active", !form.is_active)}
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
             form.is_active
-              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"
-              : "bg-slate-800/50 text-slate-500 border border-slate-700/50"
+              ? "bg-emerald-50 text-emerald-700 border border-emerald-500/20"
+              : "bg-slate-50 text-corp-muted border border-corp-border"
           )}
         >
           <Power size={12} />
@@ -72,7 +72,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
 
       {/* Model Selection */}
       <div>
-        <label className="text-[11px] text-slate-500 uppercase tracking-wider block mb-2">
+        <label className="text-[11px] text-corp-muted uppercase tracking-wider block mb-2">
           <Brain size={10} className="inline mr-1" />
           Modelo de AI
         </label>
@@ -84,12 +84,12 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
               className={cn(
                 "p-3 rounded-lg text-left border transition-colors",
                 form.model === opt.value
-                  ? "border-gold/40 bg-gold/5"
-                  : "border-slate-700/50 hover:border-slate-600"
+                  ? "border-navy/30 bg-navy/10"
+                  : "border-corp-border hover:border-slate-400"
               )}
             >
-              <p className="text-xs font-medium text-white">{opt.label}</p>
-              <p className="text-[10px] text-slate-500">{opt.desc}</p>
+              <p className="text-xs font-medium text-corp-text">{opt.label}</p>
+              <p className="text-[10px] text-corp-muted">{opt.desc}</p>
             </button>
           ))}
         </div>
@@ -97,23 +97,23 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
 
       {/* System Prompt */}
       <div>
-        <label className="text-[11px] text-slate-500 uppercase tracking-wider block mb-2">
+        <label className="text-[11px] text-corp-muted uppercase tracking-wider block mb-2">
           Personalidade / System Prompt
         </label>
         <textarea
           value={form.system_prompt}
           onChange={(e) => updateField("system_prompt", e.target.value)}
           rows={5}
-          className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none resize-y"
+          className="w-full bg-slate-50 border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none resize-y"
           placeholder="Você é o assistente virtual da BSWFCC..."
         />
-        <p className="text-[10px] text-slate-600 mt-1">{form.system_prompt.length} caracteres</p>
+        <p className="text-[10px] text-corp-muted mt-1">{form.system_prompt.length} caracteres</p>
       </div>
 
       {/* Parameters Row */}
       <div className="grid sm:grid-cols-3 gap-4">
         <div>
-          <label className="text-[11px] text-slate-500 uppercase tracking-wider block mb-2">
+          <label className="text-[11px] text-corp-muted uppercase tracking-wider block mb-2">
             Max Tokens
           </label>
           <input
@@ -123,12 +123,12 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
             step={50}
             value={form.max_tokens}
             onChange={(e) => updateField("max_tokens", parseInt(e.target.value) || 500)}
-            className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-white focus:border-gold/40 focus:outline-none"
+            className="w-full bg-slate-50 border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-navy/30 focus:outline-none"
           />
-          <p className="text-[10px] text-slate-600 mt-1">Tamanho max da resposta</p>
+          <p className="text-[10px] text-corp-muted mt-1">Tamanho max da resposta</p>
         </div>
         <div>
-          <label className="text-[11px] text-slate-500 uppercase tracking-wider block mb-2">
+          <label className="text-[11px] text-corp-muted uppercase tracking-wider block mb-2">
             Temperatura
           </label>
           <div className="flex items-center gap-2">
@@ -139,20 +139,20 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
               step={0.1}
               value={form.temperature}
               onChange={(e) => updateField("temperature", parseFloat(e.target.value))}
-              className="flex-1 accent-gold"
+              className="flex-1 accent-navy"
             />
-            <span className="text-sm text-white font-mono w-8">{form.temperature}</span>
+            <span className="text-sm text-corp-text font-mono w-8">{form.temperature}</span>
           </div>
-          <p className="text-[10px] text-slate-600 mt-1">0 = preciso, 1 = criativo</p>
+          <p className="text-[10px] text-corp-muted mt-1">0 = preciso, 1 = criativo</p>
         </div>
         <div>
-          <label className="text-[11px] text-slate-500 uppercase tracking-wider block mb-2">
+          <label className="text-[11px] text-corp-muted uppercase tracking-wider block mb-2">
             Delay Resposta
           </label>
           <select
             value={form.auto_reply_delay_ms}
             onChange={(e) => updateField("auto_reply_delay_ms", parseInt(e.target.value))}
-            className="w-full bg-slate-800/50 border border-slate-700/50 rounded-lg px-3 py-2 text-sm text-white focus:border-gold/40 focus:outline-none"
+            className="w-full bg-slate-50 border border-corp-border rounded-lg px-3 py-2 text-sm text-corp-text focus:border-navy/30 focus:outline-none"
           >
             <option value={0}>Imediato</option>
             <option value={1000}>1 segundo</option>
@@ -160,7 +160,7 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
             <option value={5000}>5 segundos</option>
             <option value={10000}>10 segundos</option>
           </select>
-          <p className="text-[10px] text-slate-600 mt-1">Pausa antes de responder</p>
+          <p className="text-[10px] text-corp-muted mt-1">Pausa antes de responder</p>
         </div>
       </div>
 
@@ -171,9 +171,9 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
             type="checkbox"
             checked={form.auto_reply_enabled}
             onChange={(e) => updateField("auto_reply_enabled", e.target.checked)}
-            className="accent-gold w-4 h-4 rounded"
+            className="accent-navy w-4 h-4 rounded"
           />
-          <span className="text-sm text-slate-300 flex items-center gap-1">
+          <span className="text-sm text-slate-600 flex items-center gap-1">
             <Zap size={12} /> Auto-resposta ativa
           </span>
         </label>
@@ -182,9 +182,9 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
             type="checkbox"
             checked={form.working_hours_only}
             onChange={(e) => updateField("working_hours_only", e.target.checked)}
-            className="accent-gold w-4 h-4 rounded"
+            className="accent-navy w-4 h-4 rounded"
           />
-          <span className="text-sm text-slate-300 flex items-center gap-1">
+          <span className="text-sm text-slate-600 flex items-center gap-1">
             <Clock size={12} /> Só horário comercial
           </span>
         </label>
@@ -193,33 +193,33 @@ export default function BotConfigPanel({ config }: BotConfigPanelProps) {
       {form.working_hours_only && (
         <div className="flex items-center gap-3 pl-6">
           <div>
-            <label className="text-[10px] text-slate-500 block mb-1">Início</label>
+            <label className="text-[10px] text-corp-muted block mb-1">Início</label>
             <input
               type="time"
               value={form.working_hours_start}
               onChange={(e) => updateField("working_hours_start", e.target.value)}
-              className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-3 py-1.5 text-sm text-white focus:border-gold/40 focus:outline-none"
+              className="bg-slate-50 border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-navy/30 focus:outline-none"
             />
           </div>
-          <span className="text-slate-500 mt-4">até</span>
+          <span className="text-corp-muted mt-4">até</span>
           <div>
-            <label className="text-[10px] text-slate-500 block mb-1">Fim</label>
+            <label className="text-[10px] text-corp-muted block mb-1">Fim</label>
             <input
               type="time"
               value={form.working_hours_end}
               onChange={(e) => updateField("working_hours_end", e.target.value)}
-              className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-3 py-1.5 text-sm text-white focus:border-gold/40 focus:outline-none"
+              className="bg-slate-50 border border-corp-border rounded-lg px-3 py-1.5 text-sm text-corp-text focus:border-navy/30 focus:outline-none"
             />
           </div>
         </div>
       )}
 
       {/* Save */}
-      <div className="flex justify-end pt-2 border-t border-slate-700/50">
+      <div className="flex justify-end pt-2 border-t border-corp-border">
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50"
         >
           <Save size={14} />
           {saving ? "Salvando..." : "Salvar Configuração"}

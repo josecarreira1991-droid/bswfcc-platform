@@ -12,8 +12,8 @@ export default async function ChatPage() {
   return (
     <div>
       <div className="mb-4">
-        <h1 className="text-xl font-semibold text-white">Chat</h1>
-        <p className="text-sm text-slate-500 mt-0.5">
+        <h1 className="text-xl font-semibold text-corp-text">Chat</h1>
+        <p className="text-sm text-corp-muted mt-0.5">
           Mensagens diretas entre membros da c&acirc;mara
         </p>
       </div>

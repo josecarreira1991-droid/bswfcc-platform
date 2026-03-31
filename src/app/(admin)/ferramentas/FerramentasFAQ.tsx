@@ -37,19 +37,19 @@ export default function FerramentasFAQ() {
         return (
           <div
             key={i}
-            className="rounded-xl border border-slate-700/50 overflow-hidden"
+            className="rounded-xl border border-corp-border overflow-hidden"
           >
             <button
               onClick={() => setOpenIndex(isOpen ? null : i)}
-              className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-white/[0.02] transition-colors"
+              className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left hover:bg-slate-50 transition-colors"
             >
-              <span className="text-sm font-medium text-white">
+              <span className="text-sm font-medium text-corp-text">
                 {faq.question}
               </span>
               <ChevronDown
                 size={18}
                 className={cn(
-                  "text-slate-400 flex-shrink-0 transition-transform duration-200",
+                  "text-corp-muted flex-shrink-0 transition-transform duration-200",
                   isOpen && "rotate-180"
                 )}
               />
@@ -60,7 +60,7 @@ export default function FerramentasFAQ() {
                 isOpen ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
               )}
             >
-              <p className="px-5 pb-4 text-sm text-slate-400 leading-relaxed">
+              <p className="px-5 pb-4 text-sm text-corp-muted leading-relaxed">
                 {faq.answer}
               </p>
             </div>

@@ -47,28 +47,28 @@ export default function Modal({ open, onClose, title, description, children, siz
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40"
       onClick={(e) => {
         if (e.target === overlayRef.current) onClose();
       }}
     >
       <div
         className={cn(
-          "w-full bg-[#0D1B2A] border border-slate-700/50 rounded-xl shadow-2xl",
+          "w-full bg-white border border-corp-border rounded-xl shadow-xl",
           sizeClasses[size]
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700/50">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-corp-border">
           <div>
-            <h2 className="text-lg font-semibold text-white">{title}</h2>
+            <h2 className="text-lg font-semibold text-corp-text">{title}</h2>
             {description && (
-              <p className="text-sm text-slate-400 mt-0.5">{description}</p>
+              <p className="text-sm text-corp-muted mt-0.5">{description}</p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors"
+            className="text-slate-400 hover:text-corp-text p-1 rounded-lg hover:bg-slate-100 transition-colors"
           >
             <X size={18} />
           </button>

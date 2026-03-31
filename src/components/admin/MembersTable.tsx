@@ -162,13 +162,13 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
         {/* Search */}
         <div className="relative flex-1 w-full sm:max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-corp-muted" />
           <input
             type="text"
             placeholder="Buscar nome, email, empresa..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}
-            className="w-full pl-8 pr-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none transition-colors"
+            className="w-full pl-8 pr-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none transition-colors"
           />
         </div>
 
@@ -177,7 +177,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
           <select
             value={filterStatus}
             onChange={(e) => { setFilterStatus(e.target.value); setPage(0); }}
-            className="px-3 py-2 text-xs bg-slate-800/50 border border-slate-700/50 rounded-lg text-slate-300 focus:border-gold/40 focus:outline-none"
+            className="px-3 py-2 text-xs bg-slate-50 border border-corp-border rounded-lg text-slate-600 focus:border-navy/30 focus:outline-none"
           >
             <option value="all">Todos os status</option>
             <option value="ativo">Ativos</option>
@@ -188,7 +188,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
           <select
             value={filterRole}
             onChange={(e) => { setFilterRole(e.target.value); setPage(0); }}
-            className="px-3 py-2 text-xs bg-slate-800/50 border border-slate-700/50 rounded-lg text-slate-300 focus:border-gold/40 focus:outline-none"
+            className="px-3 py-2 text-xs bg-slate-50 border border-corp-border rounded-lg text-slate-600 focus:border-navy/30 focus:outline-none"
           >
             <option value="all">Todos os cargos</option>
             {uniqueRoles.map((r) => (
@@ -199,7 +199,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
           {admin && (
             <button
               onClick={exportCSV}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs text-slate-400 hover:text-white border border-slate-700/50 rounded-lg hover:bg-white/5 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs text-corp-muted hover:text-corp-text border border-corp-border rounded-lg hover:bg-slate-50 transition-colors"
             >
               <Download size={12} /> CSV
             </button>
@@ -208,16 +208,16 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
       </div>
 
       {/* Results count */}
-      <p className="text-[11px] text-slate-500 mb-2">
+      <p className="text-[11px] text-corp-muted mb-2">
         {filtered.length} membro{filtered.length !== 1 ? "s" : ""} encontrado{filtered.length !== 1 ? "s" : ""}
       </p>
 
       {/* Table */}
-      <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl overflow-hidden">
+      <div className="bg-white shadow-card border border-corp-border rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-700/50">
+              <tr className="border-b border-corp-border">
                 {[
                   { key: "full_name" as SortKey, label: "Nome" },
                   { key: "company" as SortKey, label: "Empresa" },
@@ -228,7 +228,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                   <th
                     key={col.key}
                     onClick={() => toggleSort(col.key)}
-                    className="px-4 py-3 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider cursor-pointer hover:text-slate-300 select-none"
+                    className="px-4 py-3 text-left text-[11px] font-semibold text-corp-muted uppercase tracking-wider cursor-pointer hover:text-slate-600 select-none"
                   >
                     <span className="flex items-center gap-1">
                       {col.label} <SortIcon col={col.key} />
@@ -236,7 +236,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                   </th>
                 ))}
                 {admin && (
-                  <th className="px-4 py-3 text-right text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                  <th className="px-4 py-3 text-right text-[11px] font-semibold text-corp-muted uppercase tracking-wider">
                     Ações
                   </th>
                 )}
@@ -247,28 +247,28 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                 <tr
                   key={m.id}
                   className={cn(
-                    "border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors",
-                    i % 2 === 0 ? "bg-transparent" : "bg-slate-900/20"
+                    "border-b border-corp-border hover:bg-slate-50 transition-colors",
+                    i % 2 === 0 ? "bg-transparent" : "bg-slate-50/50"
                   )}
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gold/15 flex items-center justify-center flex-shrink-0">
-                        <span className="text-gold text-xs font-semibold">
+                      <div className="w-8 h-8 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-navy text-xs font-semibold">
                           {m.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
                         </span>
                       </div>
                       <div className="min-w-0">
-                        <p className="font-medium text-white truncate">{m.full_name}</p>
-                        <p className="text-[11px] text-slate-500 truncate">
+                        <p className="font-medium text-corp-text truncate">{m.full_name}</p>
+                        <p className="text-[11px] text-corp-muted truncate">
                           {m.email}
-                          {m.referrer_name && <span className="ml-2 text-gold/60">via {m.referrer_name}</span>}
+                          {m.referrer_name && <span className="ml-2 text-navy/60">via {m.referrer_name}</span>}
                         </p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-slate-400 truncate max-w-[160px]">
-                    {m.company || <span className="text-slate-600">—</span>}
+                  <td className="px-4 py-3 text-slate-600 truncate max-w-[160px]">
+                    {m.company || <span className="text-corp-muted">—</span>}
                   </td>
                   <td className="px-4 py-3">
                     <Badge variant="gold">{ROLE_LABELS[m.role] || m.role}</Badge>
@@ -278,7 +278,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                       {m.status.charAt(0).toUpperCase() + m.status.slice(1)}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 text-slate-500 text-xs">
+                  <td className="px-4 py-3 text-corp-muted text-xs">
                     {formatDate(m.created_at)}
                   </td>
                   {admin && (
@@ -286,14 +286,14 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                       <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => setSelectedMember(m)}
-                          className="p-1.5 rounded-md text-slate-500 hover:text-white hover:bg-white/5 transition-colors"
+                          className="p-1.5 rounded-md text-corp-muted hover:text-corp-text hover:bg-slate-50 transition-colors"
                           title="Detalhes"
                         >
                           <Eye size={14} />
                         </button>
                         <button
                           onClick={() => setEditMember(m)}
-                          className="p-1.5 rounded-md text-slate-500 hover:text-gold hover:bg-gold/5 transition-colors"
+                          className="p-1.5 rounded-md text-corp-muted hover:text-navy hover:bg-navy/5 transition-colors"
                           title="Editar"
                         >
                           <Edit2 size={14} />
@@ -302,14 +302,14 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                           <>
                             <button
                               onClick={() => setConfirmAction({ id: m.id, name: m.full_name, action: "approve", referrer: m.referrer_name })}
-                              className="p-1.5 rounded-md text-emerald-500/70 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"
+                              className="p-1.5 rounded-md text-emerald-500/70 hover:text-emerald-700 hover:bg-emerald-50 transition-colors"
                               title="Aprovar"
                             >
                               <Check size={14} />
                             </button>
                             <button
                               onClick={() => setConfirmAction({ id: m.id, name: m.full_name, action: "reject", referrer: m.referrer_name })}
-                              className="p-1.5 rounded-md text-red-500/70 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                              className="p-1.5 rounded-md text-red-500/70 hover:text-red-600 hover:bg-red-50 transition-colors"
                               title="Rejeitar"
                             >
                               <X size={14} />
@@ -323,7 +323,7 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
               ))}
               {paged.length === 0 && (
                 <tr>
-                  <td colSpan={admin ? 6 : 5} className="px-4 py-12 text-center text-slate-500 text-sm">
+                  <td colSpan={admin ? 6 : 5} className="px-4 py-12 text-center text-corp-muted text-sm">
                     Nenhum membro encontrado com os filtros selecionados.
                   </td>
                 </tr>
@@ -334,22 +334,22 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-slate-700/50">
-            <p className="text-[11px] text-slate-500">
+          <div className="flex items-center justify-between px-4 py-3 border-t border-corp-border">
+            <p className="text-[11px] text-corp-muted">
               Página {page + 1} de {totalPages}
             </p>
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setPage(Math.max(0, page - 1))}
                 disabled={page === 0}
-                className="px-3 py-1 text-xs text-slate-400 hover:text-white border border-slate-700/50 rounded-md disabled:opacity-30 transition-colors"
+                className="px-3 py-1 text-xs text-corp-muted hover:text-corp-text border border-corp-border rounded-md disabled:opacity-30 transition-colors"
               >
                 Anterior
               </button>
               <button
                 onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
                 disabled={page >= totalPages - 1}
-                className="px-3 py-1 text-xs text-slate-400 hover:text-white border border-slate-700/50 rounded-md disabled:opacity-30 transition-colors"
+                className="px-3 py-1 text-xs text-corp-muted hover:text-corp-text border border-corp-border rounded-md disabled:opacity-30 transition-colors"
               >
                 Próxima
               </button>
@@ -382,15 +382,15 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
                 { label: "Membro desde", value: formatDate(selectedMember.created_at) },
               ].map((field) => (
                 <div key={field.label}>
-                  <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">{field.label}</p>
-                  <p className="text-sm text-white">{field.value || "—"}</p>
+                  <p className="text-[11px] text-corp-muted uppercase tracking-wider mb-1">{field.label}</p>
+                  <p className="text-sm text-corp-text">{field.value || "—"}</p>
                 </div>
               ))}
             </div>
             {selectedMember.bio && (
               <div>
-                <p className="text-[11px] text-slate-500 uppercase tracking-wider mb-1">Bio</p>
-                <p className="text-sm text-slate-300">{selectedMember.bio}</p>
+                <p className="text-[11px] text-corp-muted uppercase tracking-wider mb-1">Bio</p>
+                <p className="text-sm text-slate-600">{selectedMember.bio}</p>
               </div>
             )}
           </div>
@@ -408,43 +408,43 @@ export default function MembersTable({ members, currentMember }: MembersTablePro
           <form onSubmit={handleEditSubmit} className="space-y-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Nome</label>
-                <input name="full_name" defaultValue={editMember.full_name} required className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
+                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Nome</label>
+                <input name="full_name" defaultValue={editMember.full_name} required className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Empresa</label>
-                <input name="company" defaultValue={editMember.company || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
+                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Empresa</label>
+                <input name="company" defaultValue={editMember.company || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Indústria</label>
-                <input name="industry" defaultValue={editMember.industry || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
+                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Indústria</label>
+                <input name="industry" defaultValue={editMember.industry || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Cidade</label>
-                <input name="city" defaultValue={editMember.city || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
+                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Cidade</label>
+                <input name="city" defaultValue={editMember.city || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Telefone</label>
-                <input name="phone" defaultValue={editMember.phone || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
+                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Telefone</label>
+                <input name="phone" defaultValue={editMember.phone || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">LinkedIn</label>
-                <input name="linkedin" defaultValue={editMember.linkedin || ""} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" />
+                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">LinkedIn</label>
+                <input name="linkedin" defaultValue={editMember.linkedin || ""} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" />
               </div>
               <div>
-                <label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Cargo</label>
-                <select name="role" defaultValue={editMember.role} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none">
+                <label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Cargo</label>
+                <select name="role" defaultValue={editMember.role} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none">
                   {Object.entries(ROLE_LABELS).map(([value, label]) => (
                     <option key={value} value={value}>{label}</option>
                   ))}
                 </select>
               </div>
             </div>
-            <div className="flex justify-end gap-3 pt-2 border-t border-slate-700/50">
-              <button type="button" onClick={() => setEditMember(null)} className="px-4 py-2 text-sm text-slate-400 hover:text-white rounded-lg transition-colors">
+            <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
+              <button type="button" onClick={() => setEditMember(null)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors">
                 Cancelar
               </button>
-              <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50">
+              <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
                 {loading ? "Salvando..." : "Salvar"}
               </button>
             </div>

@@ -7,8 +7,8 @@ import { useState, useEffect, Suspense } from "react";
 import { UserCheck, ShieldAlert, X } from "lucide-react";
 
 const INPUT_CLASS =
-  "w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors";
-const LABEL_CLASS = "block text-sm text-gray-400 mb-1.5";
+  "w-full px-4 py-3 bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none focus:ring-1 focus:ring-navy/20 transition-colors";
+const LABEL_CLASS = "block text-sm text-corp-muted mb-1.5";
 
 const tiers = [
   { value: "membro", slug: "community", label: "Community", price: "$50/mês ($600/ano)", desc: "Mixers mensais, diretório de membros, newsletter, introduções básicas" },
@@ -95,10 +95,10 @@ function RegisterForm() {
   // Loading — show spinner while validating the referral code
   if (validatingCode || !codeChecked) {
     return (
-      <div className="min-h-screen bg-navy flex items-center justify-center px-4">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-400 text-sm">Validando convite...</p>
+          <div className="w-8 h-8 border-2 border-navy/30 border-t-navy rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-corp-muted text-sm">Validando convite...</p>
         </div>
       </div>
     );
@@ -107,22 +107,22 @@ function RegisterForm() {
   // No referral code — invite-only gate
   if (!refCode) {
     return (
-      <div className="min-h-screen bg-navy flex items-center justify-center px-4 py-12">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-lg text-center">
           <div className="text-center mb-8">
-            <Link href="/" className="text-3xl font-bold gold-gradient">BSWFCC</Link>
+            <Link href="/" className="text-3xl font-bold text-navy">BSWFCC</Link>
           </div>
-          <div className="bg-dark-blue/80 rounded-2xl p-8 border border-gold/10">
-            <div className="w-16 h-16 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-6">
-              <ShieldAlert size={28} className="text-gold" />
+          <div className="bg-white rounded-2xl p-8 border border-corp-border shadow-card">
+            <div className="w-16 h-16 rounded-full bg-navy/5 border border-navy/15 flex items-center justify-center mx-auto mb-6">
+              <ShieldAlert size={28} className="text-navy" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-3">Cadastro por Indicação</h2>
-            <p className="text-gray-400 mb-6">
+            <h2 className="text-2xl font-bold text-corp-text mb-3">Cadastro por Indicação</h2>
+            <p className="text-corp-muted mb-6">
               O cadastro na BSWFCC funciona por indicação de membros ativos. Peça seu convite a um membro da câmara para receber seu link exclusivo de cadastro.
             </p>
-            <div className="bg-navy/60 rounded-xl p-4 border border-white/5 mb-6">
-              <p className="text-sm text-gray-300 mb-2 font-medium">Como funciona:</p>
-              <ol className="text-sm text-gray-400 space-y-2 text-left">
+            <div className="bg-slate-50 rounded-xl p-4 border border-corp-border mb-6">
+              <p className="text-sm text-corp-text mb-2 font-medium">Como funciona:</p>
+              <ol className="text-sm text-corp-muted space-y-2 text-left">
                 {[
                   "Um membro ativo gera um link de convite exclusivo",
                   "Você acessa o link e preenche o formulário de cadastro",
@@ -130,7 +130,7 @@ function RegisterForm() {
                   "Você recebe acesso completo e seu próprio código de indicação",
                 ].map((step, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className="text-gold font-bold mt-0.5">{i + 1}.</span>
+                    <span className="text-navy font-bold mt-0.5">{i + 1}.</span>
                     {step}
                   </li>
                 ))}
@@ -139,13 +139,13 @@ function RegisterForm() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/"
-                className="px-6 py-3 bg-gold text-navy font-semibold rounded-xl hover:bg-light-gold transition-colors"
+                className="px-6 py-3 bg-navy text-white font-semibold rounded-xl hover:bg-light-navy transition-colors"
               >
                 Voltar ao Site
               </Link>
               <Link
                 href="/login"
-                className="px-6 py-3 border border-gold/30 text-gold rounded-xl hover:bg-gold/10 transition-colors"
+                className="px-6 py-3 border border-navy/20 text-navy rounded-xl hover:bg-navy/5 transition-colors"
               >
                 Já tenho conta
               </Link>
@@ -159,22 +159,22 @@ function RegisterForm() {
   // Invalid referral code
   if (!referrer) {
     return (
-      <div className="min-h-screen bg-navy flex items-center justify-center px-4 py-12">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-lg text-center">
           <div className="text-center mb-8">
-            <Link href="/" className="text-3xl font-bold gold-gradient">BSWFCC</Link>
+            <Link href="/" className="text-3xl font-bold text-navy">BSWFCC</Link>
           </div>
-          <div className="bg-dark-blue/80 rounded-2xl p-8 border border-red-500/20">
-            <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-6">
-              <span className="text-red-400 text-2xl font-bold">!</span>
+          <div className="bg-white rounded-2xl p-8 border border-red-200 shadow-card">
+            <div className="w-16 h-16 rounded-full bg-red-50 border border-red-200 flex items-center justify-center mx-auto mb-6">
+              <span className="text-red-600 text-2xl font-bold">!</span>
             </div>
-            <h2 className="text-2xl font-bold text-white mb-3">Convite Inválido</h2>
-            <p className="text-gray-400 mb-6">
+            <h2 className="text-2xl font-bold text-corp-text mb-3">Convite Inválido</h2>
+            <p className="text-corp-muted mb-6">
               Este código de convite não é mais válido. Ele pode já ter sido utilizado ou expirado. Entre em contato com a BSWFCC para solicitar um novo convite.
             </p>
             <Link
               href="/"
-              className="inline-block px-6 py-3 bg-gold text-navy font-semibold rounded-xl hover:bg-light-gold transition-colors"
+              className="inline-block px-6 py-3 bg-navy text-white font-semibold rounded-xl hover:bg-light-navy transition-colors"
             >
               Voltar ao Site
             </Link>
@@ -185,30 +185,30 @@ function RegisterForm() {
   }
 
   return (
-    <div className="min-h-screen bg-navy flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-2xl">
         <div className="text-center mb-8">
-          <Link href="/" className="text-3xl font-bold gold-gradient">BSWFCC</Link>
-          <p className="text-gray-400 mt-2">Torne-se membro da câmara</p>
+          <Link href="/" className="text-3xl font-bold text-navy">BSWFCC</Link>
+          <p className="text-corp-muted mt-2">Torne-se membro da câmara</p>
         </div>
 
         {/* Referrer Banner */}
         {referrer && (
-          <div className="mb-6 bg-gold/5 border border-gold/20 rounded-xl p-4 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-              <UserCheck size={22} className="text-gold" />
+          <div className="mb-6 bg-navy/5 border border-navy/15 rounded-xl p-4 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0">
+              <UserCheck size={22} className="text-navy" />
             </div>
             <div>
-              <p className="text-sm text-gold font-medium">Indicado por {referrer.full_name}</p>
-              {referrer.company && <p className="text-xs text-gray-400">{referrer.company}</p>}
-              <p className="text-[10px] text-gray-500 mt-1">Ao se cadastrar, seus serviços serão recomendados a outros membros da rede através do nosso sistema de Matchmaking inteligente.</p>
+              <p className="text-sm text-navy font-medium">Indicado por {referrer.full_name}</p>
+              {referrer.company && <p className="text-xs text-corp-muted">{referrer.company}</p>}
+              <p className="text-[10px] text-corp-muted mt-1">Ao se cadastrar, seus serviços serão recomendados a outros membros da rede através do nosso sistema de Matchmaking inteligente.</p>
             </div>
           </div>
         )}
 
         {/* Membership Tiers */}
         <div className="mb-8">
-          <h3 className="text-sm font-semibold text-gold uppercase tracking-wider mb-4 text-center">Planos de Membership</h3>
+          <h3 className="text-sm font-semibold text-navy uppercase tracking-wider mb-4 text-center">Planos de Membership</h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {tiers.map((tier, i) => (
               <button
@@ -217,30 +217,30 @@ function RegisterForm() {
                 onClick={() => setSelectedTier(i)}
                 className={`rounded-xl p-4 border text-left transition-all ${
                   selectedTier === i
-                    ? "border-gold bg-gold/10"
-                    : "border-white/10 bg-dark-blue/40 hover:border-gold/30"
+                    ? "border-navy bg-navy/5 shadow-card"
+                    : "border-corp-border bg-white hover:border-navy/30"
                 }`}
               >
-                <p className={`font-semibold text-sm ${selectedTier === i ? "text-gold" : "text-white"}`}>
+                <p className={`font-semibold text-sm ${selectedTier === i ? "text-navy" : "text-corp-text"}`}>
                   {tier.label}
                 </p>
-                <p className="text-xs text-gray-400 mt-1">{tier.price}</p>
-                <p className="text-[10px] text-gray-500 mt-2 line-clamp-2">{tier.desc}</p>
+                <p className="text-xs text-corp-muted mt-1">{tier.price}</p>
+                <p className="text-[10px] text-corp-muted mt-2 line-clamp-2">{tier.desc}</p>
               </button>
             ))}
           </div>
-          <div className="mt-3 bg-dark-blue/40 rounded-lg p-3 border border-gold/10">
-            <p className="text-xs text-gray-400">
-              <span className="text-gold font-medium">Informativo:</span> A seleção de tier será confirmada após aprovação. O pagamento é configurado pós-cadastro.
+          <div className="mt-3 bg-slate-50 rounded-lg p-3 border border-corp-border">
+            <p className="text-xs text-corp-muted">
+              <span className="text-navy font-medium">Informativo:</span> A seleção de tier será confirmada após aprovação. O pagamento é configurado pós-cadastro.
             </p>
           </div>
         </div>
 
-        <div className="bg-dark-blue/80 rounded-2xl p-8 border border-gold/10">
-          <h2 className="text-2xl font-bold mb-6">Cadastro Completo</h2>
+        <div className="bg-white rounded-2xl p-8 border border-corp-border shadow-card">
+          <h2 className="text-2xl font-bold text-corp-text mb-6">Cadastro Completo</h2>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
               {error}
             </div>
           )}
@@ -310,8 +310,8 @@ function RegisterForm() {
             </div>
 
             {/* Business Info */}
-            <div className="pt-4 border-t border-white/5">
-              <p className="text-xs font-semibold text-gold uppercase tracking-wider mb-4">Perfil Empresarial</p>
+            <div className="pt-4 border-t border-corp-border">
+              <p className="text-xs font-semibold text-navy uppercase tracking-wider mb-4">Perfil Empresarial</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="website" className={LABEL_CLASS}>Website</label>
@@ -403,7 +403,7 @@ function RegisterForm() {
                 className={`${INPUT_CLASS} resize-none`}
                 placeholder="Descreva brevemente sua empresa e o que ela faz..."
               />
-              <p className="text-[10px] text-gray-500 text-right mt-1">{bioLength}/500</p>
+              <p className="text-[10px] text-corp-muted text-right mt-1">{bioLength}/500</p>
             </div>
 
             {/* Services */}
@@ -421,7 +421,7 @@ function RegisterForm() {
                 <button
                   type="button"
                   onClick={addServiceTag}
-                  className="px-4 py-3 bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/20 transition-colors text-sm font-medium"
+                  className="px-4 py-3 bg-navy/5 text-navy border border-navy/15 rounded-lg hover:bg-navy/10 transition-colors text-sm font-medium"
                 >
                   Adicionar
                 </button>
@@ -431,35 +431,35 @@ function RegisterForm() {
                   {serviceTags.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-gold/10 text-gold border border-gold/20 rounded-full text-xs font-medium"
+                      className="inline-flex items-center gap-1 px-3 py-1 bg-navy/5 text-navy border border-navy/15 rounded-full text-xs font-medium"
                     >
                       {tag}
-                      <button type="button" onClick={() => removeServiceTag(tag)} className="hover:text-red-400 transition-colors">
+                      <button type="button" onClick={() => removeServiceTag(tag)} className="hover:text-red-600 transition-colors">
                         <X size={12} />
                       </button>
                     </span>
                   ))}
                 </div>
               )}
-              <p className="text-[10px] text-gray-500 mt-1">Ex: Pintura, Reforma, Consultoria, Design, Marketing Digital...</p>
+              <p className="text-[10px] text-corp-muted mt-1">Ex: Pintura, Reforma, Consultoria, Design, Marketing Digital...</p>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gold text-navy font-semibold rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+              className="w-full py-3 bg-navy text-white font-semibold rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6"
             >
               {loading ? "Cadastrando..." : "Cadastrar"}
             </button>
           </form>
 
-          <p className="text-xs text-gray-500 mt-4 text-center">
+          <p className="text-xs text-corp-muted mt-4 text-center">
             Seu cadastro será revisado pela diretoria. Status inicial: pendente. A seleção de tier será confirmada após aprovação.
           </p>
 
-          <div className="mt-6 text-center text-sm text-gray-400">
+          <div className="mt-6 text-center text-sm text-corp-muted">
             Já tem conta?{" "}
-            <Link href="/login" className="text-gold hover:text-light-gold transition-colors">
+            <Link href="/login" className="text-navy hover:text-light-navy font-medium transition-colors">
               Entrar
             </Link>
           </div>
@@ -472,8 +472,8 @@ function RegisterForm() {
 export default function RegisterPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-navy flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin" />
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-navy/30 border-t-navy rounded-full animate-spin" />
       </div>
     }>
       <RegisterForm />

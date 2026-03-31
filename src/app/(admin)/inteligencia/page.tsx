@@ -57,8 +57,8 @@ export default async function InteligenciaPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-white">Inteligência & Relatórios</h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <h1 className="text-xl font-semibold text-corp-text">Inteligência & Relatórios</h1>
+          <p className="text-sm text-corp-muted mt-0.5">
             Relatórios estratégicos e análises de mercado
           </p>
         </div>
@@ -68,27 +68,27 @@ export default async function InteligenciaPage() {
         {reports.map((report) => (
           <div
             key={report.title}
-            className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5 hover:border-slate-600 transition-colors"
+            className="bg-white shadow-card border border-corp-border rounded-xl p-5 hover:border-slate-300 transition-colors"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-4 min-w-0">
-                <div className="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center flex-shrink-0">
-                  <FileText size={18} className="text-slate-500" strokeWidth={1.5} />
+                <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                  <FileText size={18} className="text-slate-400" strokeWidth={1.5} />
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <Badge variant={categoryVariant[report.category] || "default"}>
                       {report.category}
                     </Badge>
-                    <span className="text-[11px] text-slate-500">{report.date}</span>
+                    <span className="text-[11px] text-corp-muted">{report.date}</span>
                   </div>
-                  <h3 className="text-sm font-medium text-white mb-1">{report.title}</h3>
-                  <p className="text-xs text-slate-500 mb-2">{report.description}</p>
+                  <h3 className="text-sm font-medium text-corp-text mb-1">{report.title}</h3>
+                  <p className="text-xs text-corp-muted mb-2">{report.description}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {report.highlights.map((h) => (
                       <span
                         key={h}
-                        className="px-2 py-0.5 text-[10px] bg-slate-800/60 text-slate-400 rounded-md"
+                        className="px-2 py-0.5 text-[10px] bg-slate-100 text-slate-600 rounded-md"
                       >
                         {h}
                       </span>
@@ -96,7 +96,7 @@ export default async function InteligenciaPage() {
                   </div>
                 </div>
               </div>
-              <span className="p-2 text-slate-700 opacity-40 flex-shrink-0 cursor-not-allowed" title="Relatório em produção — disponível em breve">
+              <span className="p-2 text-slate-400 opacity-40 flex-shrink-0 cursor-not-allowed" title="Relatório em produção — disponível em breve">
                 <Download size={16} />
               </span>
             </div>
@@ -104,9 +104,9 @@ export default async function InteligenciaPage() {
         ))}
       </div>
 
-      <div className="mt-6 bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 text-center">
-        <p className="text-sm text-amber-400 mb-1">Dados ilustrativos — relatórios reais em breve</p>
-        <p className="text-xs text-slate-500">Os relatórios acima são exemplos do formato que será entregue. Dados reais serão integrados via APIs de mercado (Enterprise Florida, Census Bureau, etc).</p>
+      <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-5 text-center">
+        <p className="text-sm text-amber-700 mb-1">Dados ilustrativos — relatórios reais em breve</p>
+        <p className="text-xs text-corp-muted">Os relatórios acima são exemplos do formato que será entregue. Dados reais serão integrados via APIs de mercado (Enterprise Florida, Census Bureau, etc).</p>
       </div>
     </div>
   );

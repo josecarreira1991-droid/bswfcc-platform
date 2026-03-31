@@ -12,8 +12,8 @@ export default async function GrupoPage() {
   return (
     <div>
       <div className="mb-4">
-        <h1 className="text-xl font-semibold text-white">Grupo</h1>
-        <p className="text-sm text-slate-500 mt-0.5">
+        <h1 className="text-xl font-semibold text-corp-text">Grupo</h1>
+        <p className="text-sm text-corp-muted mt-0.5">
           Canais de conversa da c&acirc;mara
         </p>
       </div>

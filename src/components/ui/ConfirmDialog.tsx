@@ -29,23 +29,23 @@ export default function ConfirmDialog({
       ? "bg-red-600 hover:bg-red-700 text-white"
       : variant === "warning"
         ? "bg-amber-600 hover:bg-amber-700 text-white"
-        : "bg-gold hover:bg-light-gold text-navy";
+        : "bg-navy text-white hover:bg-light-navy";
 
   return (
     <Modal open={open} onClose={onClose} title={title} size="sm">
       <div className="flex items-start gap-3 mb-6">
         {variant !== "default" && (
-          <div className={`mt-0.5 ${variant === "danger" ? "text-red-400" : "text-amber-400"}`}>
+          <div className={`mt-0.5 ${variant === "danger" ? "text-red-500" : "text-amber-500"}`}>
             <AlertTriangle size={20} />
           </div>
         )}
-        <p className="text-sm text-slate-300">{message}</p>
+        <p className="text-sm text-corp-muted">{message}</p>
       </div>
       <div className="flex justify-end gap-3">
         <button
           onClick={onClose}
           disabled={loading}
-          className="px-4 py-2 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+          className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors"
         >
           Cancelar
         </button>

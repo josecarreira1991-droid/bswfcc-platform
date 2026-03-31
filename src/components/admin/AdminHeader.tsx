@@ -39,22 +39,22 @@ export default function AdminHeader({ onMenuClick, pendingCount = 0 }: AdminHead
   const pageTitle = BREADCRUMB_MAP[pathname] || "BSWFCC";
 
   return (
-    <header className="h-16 bg-[#0D1B2A]/80 backdrop-blur-md border-b border-slate-700/50 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30">
+    <header className="h-14 bg-white border-b border-corp-border flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30">
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="lg:hidden text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition-colors"
+          className="lg:hidden text-corp-muted hover:text-corp-text p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
         >
           <Menu size={20} />
         </button>
 
         {/* Breadcrumbs */}
         <nav className="flex items-center gap-1.5 text-sm">
-          <Link href="/dashboard" className="text-slate-500 hover:text-slate-300 transition-colors">
+          <Link href="/dashboard" className="text-corp-muted hover:text-navy transition-colors">
             BSWFCC
           </Link>
-          <span className="text-slate-600">/</span>
-          <span className="text-white font-medium">{pageTitle}</span>
+          <span className="text-slate-300">/</span>
+          <span className="text-corp-text font-medium">{pageTitle}</span>
         </nav>
       </div>
 
@@ -62,12 +62,12 @@ export default function AdminHeader({ onMenuClick, pendingCount = 0 }: AdminHead
         {/* Pending members alert */}
         <button
           onClick={() => pendingCount > 0 ? router.push("/membros") : null}
-          className={`relative p-2 rounded-lg transition-colors ${pendingCount > 0 ? "text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 cursor-pointer" : "text-slate-500 cursor-default"}`}
+          className={`relative p-2 rounded-lg transition-colors ${pendingCount > 0 ? "text-amber-600 hover:text-amber-700 hover:bg-amber-50 cursor-pointer" : "text-slate-400 cursor-default"}`}
           title={pendingCount > 0 ? `${pendingCount} membro${pendingCount > 1 ? "s" : ""} pendente${pendingCount > 1 ? "s" : ""} de aprovação` : "Nenhuma notificação"}
         >
           <Bell size={18} strokeWidth={1.8} />
           {pendingCount > 0 && (
-            <span className="absolute top-1 right-1 w-4 h-4 bg-amber-500 rounded-full text-[10px] font-bold text-navy flex items-center justify-center">
+            <span className="absolute top-1 right-1 w-4 h-4 bg-amber-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center">
               {pendingCount > 9 ? "9+" : pendingCount}
             </span>
           )}

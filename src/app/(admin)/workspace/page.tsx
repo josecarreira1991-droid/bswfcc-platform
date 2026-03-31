@@ -15,8 +15,8 @@ export default async function WorkspacePage() {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <Lock size={32} className="text-slate-600 mb-3" />
-        <h2 className="text-lg font-medium text-white mb-1">Acesso Restrito</h2>
-        <p className="text-sm text-slate-500">Workspace disponível para administradores.</p>
+        <h2 className="text-lg font-medium text-corp-text mb-1">Acesso Restrito</h2>
+        <p className="text-sm text-corp-muted">Workspace disponível para administradores.</p>
       </div>
     );
   }

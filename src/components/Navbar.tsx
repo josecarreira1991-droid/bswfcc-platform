@@ -15,12 +15,12 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-navy/95 backdrop-blur-md border-b border-gold/20">
+    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-corp-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-3">
-            <span className="text-2xl font-bold gold-gradient">BSWFCC</span>
-            <span className="hidden sm:block text-xs text-gray-400 max-w-[200px] leading-tight">
+            <span className="text-2xl font-bold text-navy">BSWFCC</span>
+            <span className="hidden sm:block text-xs text-corp-muted max-w-[200px] leading-tight">
               Brazilian Southwest Florida<br />Chamber of Commerce
             </span>
           </Link>
@@ -30,20 +30,20 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-3 py-2 text-sm text-gray-300 hover:text-gold transition-colors rounded-lg hover:bg-white/5"
+                className="px-3 py-2 text-sm text-slate-600 hover:text-navy transition-colors rounded-lg hover:bg-navy/5"
               >
                 {item.label}
               </Link>
             ))}
             <Link
               href="/login"
-              className="ml-4 px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors"
+              className="ml-4 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors"
             >
               Entrar
             </Link>
           </div>
 
-          <button onClick={() => setOpen(!open)} className="md:hidden text-gold p-2">
+          <button onClick={() => setOpen(!open)} className="md:hidden text-navy p-2">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {open ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -56,18 +56,18 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="md:hidden bg-dark-blue border-t border-gold/20">
+        <div className="md:hidden bg-white border-t border-corp-border">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="block px-4 py-3 text-gray-300 hover:text-gold hover:bg-white/5"
+              className="block px-4 py-3 text-slate-600 hover:text-navy hover:bg-navy/5"
             >
               {item.label}
             </Link>
           ))}
-          <Link href="/login" onClick={() => setOpen(false)} className="block px-4 py-3 text-gold font-medium">
+          <Link href="/login" onClick={() => setOpen(false)} className="block px-4 py-3 text-navy font-medium">
             Entrar
           </Link>
         </div>

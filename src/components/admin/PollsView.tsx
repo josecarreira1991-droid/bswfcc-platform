@@ -98,11 +98,11 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-white">Votações & Enquetes</h1>
-          <p className="text-sm text-slate-500 mt-0.5">{polls.filter((p) => p.status === "active").length} ativas &middot; {polls.length} total</p>
+          <h1 className="text-xl font-semibold text-corp-text">Votações & Enquetes</h1>
+          <p className="text-sm text-corp-muted mt-0.5">{polls.filter((p) => p.status === "active").length} ativas &middot; {polls.length} total</p>
         </div>
         {isAdmin && (
-          <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors">
+          <button onClick={() => setShowCreate(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors">
             <Plus size={16} /> Nova Enquete
           </button>
         )}
@@ -114,26 +114,26 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
           const config = statusConfig[poll.status] || statusConfig.draft;
           return (
             <button key={poll.id} onClick={() => openPoll(poll)}
-              className="w-full bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5 text-left hover:border-slate-600 transition-colors">
+              className="w-full bg-white shadow-card border border-corp-border rounded-xl p-5 text-left hover:border-slate-300 transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <Badge variant={config.variant}>{config.label}</Badge>
                   <Badge variant="default">{poll.type === "single" ? "Escolha única" : poll.type === "multiple" ? "Múltipla escolha" : "Ranking"}</Badge>
                 </div>
-                <span className="text-[11px] text-slate-500">{new Date(poll.created_at).toLocaleDateString("pt-BR")}</span>
+                <span className="text-[11px] text-corp-muted">{new Date(poll.created_at).toLocaleDateString("pt-BR")}</span>
               </div>
-              <h3 className="text-sm font-medium text-white">{poll.title}</h3>
-              {poll.description && <p className="text-xs text-slate-500 mt-1">{poll.description}</p>}
+              <h3 className="text-sm font-medium text-corp-text">{poll.title}</h3>
+              {poll.description && <p className="text-xs text-corp-muted mt-1">{poll.description}</p>}
               {poll.ends_at && (
-                <p className="text-[10px] text-slate-600 mt-2 flex items-center gap-1"><Clock size={10} /> Encerra: {new Date(poll.ends_at).toLocaleDateString("pt-BR")}</p>
+                <p className="text-[10px] text-corp-muted mt-2 flex items-center gap-1"><Clock size={10} /> Encerra: {new Date(poll.ends_at).toLocaleDateString("pt-BR")}</p>
               )}
             </button>
           );
         })}
         {polls.length === 0 && (
-          <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-12 text-center">
-            <Vote size={32} className="text-slate-600 mx-auto mb-3" />
-            <p className="text-sm text-slate-400">Nenhuma enquete criada ainda</p>
+          <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
+            <Vote size={32} className="text-slate-300 mx-auto mb-3" />
+            <p className="text-sm text-corp-muted">Nenhuma enquete criada ainda</p>
           </div>
         )}
       </div>
@@ -142,7 +142,7 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
       <Modal open={!!viewPoll} onClose={() => setViewPoll(null)} title={viewPoll?.poll.title || ""} description={viewPoll?.poll.description || undefined} size="md">
         {viewPoll && (
           <div className="space-y-4">
-            <p className="text-xs text-slate-500">{viewPoll.totalVoters} voto{viewPoll.totalVoters !== 1 ? "s" : ""}</p>
+            <p className="text-xs text-corp-muted">{viewPoll.totalVoters} voto{viewPoll.totalVoters !== 1 ? "s" : ""}</p>
             <div className="space-y-2">
               {viewPoll.options.map((opt) => {
                 const votes = viewPoll.results[opt.id] || 0;
@@ -152,21 +152,21 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
                     <button
                       onClick={() => viewPoll.poll.status === "active" ? handleVote(opt.id) : undefined}
                       disabled={voting || viewPoll.poll.status !== "active"}
-                      className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-slate-800/40 border border-slate-700/30 hover:border-gold/30 transition-colors disabled:cursor-default relative overflow-hidden"
+                      className="w-full flex items-center justify-between px-4 py-3 rounded-lg bg-slate-50 border border-corp-border hover:border-navy/30 transition-colors disabled:cursor-default relative overflow-hidden"
                     >
-                      <div className="absolute inset-0 bg-gold/5 transition-all" style={{ width: `${pct}%` }} />
-                      <span className="text-sm text-white relative z-10">{opt.label}</span>
-                      <span className="text-xs text-slate-400 relative z-10">{votes} ({pct}%)</span>
+                      <div className="absolute inset-0 bg-navy/5 transition-all" style={{ width: `${pct}%` }} />
+                      <span className="text-sm text-corp-text relative z-10">{opt.label}</span>
+                      <span className="text-xs text-corp-muted relative z-10">{votes} ({pct}%)</span>
                     </button>
                   </div>
                 );
               })}
             </div>
             {isAdmin && (
-              <div className="flex gap-2 pt-2 border-t border-slate-700/50">
-                {viewPoll.poll.status === "draft" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "active"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-emerald-500/10 text-emerald-400 rounded-lg hover:bg-emerald-500/20">Ativar</button>}
-                {viewPoll.poll.status === "active" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "closed"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20">Encerrar</button>}
-                {viewPoll.poll.status === "closed" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "archived"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-slate-500/10 text-slate-400 rounded-lg hover:bg-slate-500/20">Arquivar</button>}
+              <div className="flex gap-2 pt-2 border-t border-corp-border">
+                {viewPoll.poll.status === "draft" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "active"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-emerald-50 text-emerald-700 rounded-lg hover:bg-emerald-100">Ativar</button>}
+                {viewPoll.poll.status === "active" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "closed"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-red-50 text-red-700 rounded-lg hover:bg-red-100">Encerrar</button>}
+                {viewPoll.poll.status === "closed" && <button onClick={() => { handleStatusChange(viewPoll.poll.id, "archived"); setViewPoll(null); }} className="px-3 py-1.5 text-xs bg-slate-100 text-corp-muted rounded-lg hover:bg-slate-200">Arquivar</button>}
               </div>
             )}
           </div>
@@ -176,25 +176,25 @@ export default function PollsView({ polls, currentMember, isAdmin }: PollsViewPr
       {/* Create Modal */}
       <Modal open={showCreate} onClose={() => setShowCreate(false)} title="Nova Enquete" size="md">
         <form onSubmit={handleCreate} className="space-y-4">
-          <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Título *</label>
-            <input name="title" required className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none" /></div>
-          <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Descrição</label>
-            <textarea name="description" rows={2} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none resize-none" /></div>
-          <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Opções (uma por linha, mínimo 2) *</label>
-            <textarea name="options" rows={4} required placeholder={"Opção 1\nOpção 2\nOpção 3"} className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:border-gold/40 focus:outline-none resize-none" /></div>
+          <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Título *</label>
+            <input name="title" required className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none" /></div>
+          <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Descrição</label>
+            <textarea name="description" rows={2} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none resize-none" /></div>
+          <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Opções (uma por linha, mínimo 2) *</label>
+            <textarea name="options" rows={4} required placeholder={"Opção 1\nOpção 2\nOpção 3"} className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none resize-none" /></div>
           <div className="grid grid-cols-2 gap-4">
-            <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Tipo</label>
-              <select name="type" defaultValue="single" className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none">
+            <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Tipo</label>
+              <select name="type" defaultValue="single" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none">
                 <option value="single">Escolha única</option><option value="multiple">Múltipla escolha</option>
               </select></div>
-            <div><label className="block text-[11px] text-slate-500 uppercase tracking-wider mb-1">Status</label>
-              <select name="status" defaultValue="active" className="w-full px-3 py-2 text-sm bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:border-gold/40 focus:outline-none">
+            <div><label className="block text-[11px] text-corp-muted uppercase tracking-wider mb-1">Status</label>
+              <select name="status" defaultValue="active" className="w-full px-3 py-2 text-sm bg-slate-50 border border-corp-border rounded-lg text-corp-text focus:border-navy/30 focus:outline-none">
                 <option value="draft">Rascunho</option><option value="active">Ativa</option>
               </select></div>
           </div>
-          <div className="flex justify-end gap-3 pt-2 border-t border-slate-700/50">
-            <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-white rounded-lg transition-colors">Cancelar</button>
-            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50">
+          <div className="flex justify-end gap-3 pt-2 border-t border-corp-border">
+            <button type="button" onClick={() => setShowCreate(false)} className="px-4 py-2 text-sm text-corp-muted hover:text-corp-text hover:bg-slate-100 rounded-lg transition-colors">Cancelar</button>
+            <button type="submit" disabled={loading} className="px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
               {loading ? "Criando..." : "Criar Enquete"}
             </button>
           </div>

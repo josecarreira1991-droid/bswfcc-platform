@@ -72,45 +72,45 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-white">Networking AI</h1>
-          <p className="text-sm text-slate-500 mt-0.5">Sugestões inteligentes de conexões</p>
+          <h1 className="text-xl font-semibold text-corp-text">Networking AI</h1>
+          <p className="text-sm text-corp-muted mt-0.5">Sugestões inteligentes de conexões</p>
         </div>
         <button onClick={handleGenerate} disabled={generating || !hasProfile}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gold text-navy rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50">
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-navy text-white rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50">
           {generating ? <RefreshCw size={16} className="animate-spin" /> : <Sparkles size={16} />}
           {generating ? "Gerando..." : "Gerar Sugestões"}
         </button>
       </div>
 
       {!hasProfile && (
-        <div className="bg-gold/5 border border-gold/20 rounded-xl p-4 mb-6">
-          <p className="text-sm text-gold">Complete seu Business Profile em <a href="/matchmaking" className="underline">Matchmaking</a> para receber sugestões personalizadas.</p>
+        <div className="bg-navy/5 border border-navy/15 rounded-xl p-4 mb-6">
+          <p className="text-sm text-navy">Complete seu Business Profile em <a href="/matchmaking" className="underline">Matchmaking</a> para receber sugestões personalizadas.</p>
         </div>
       )}
 
       {suggestions.length > 0 ? (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {suggestions.map((s) => (
-            <div key={s.id} className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5 hover:border-slate-600 transition-colors">
+            <div key={s.id} className="bg-white shadow-card border border-corp-border rounded-xl p-5 hover:border-slate-300 transition-colors">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-9 h-9 rounded-full bg-gold/15 flex items-center justify-center">
-                    <span className="text-gold text-xs font-semibold">
+                  <div className="w-9 h-9 rounded-full bg-navy/10 flex items-center justify-center">
+                    <span className="text-navy text-xs font-semibold">
                       {s.members?.full_name?.[0]?.toUpperCase() || "?"}
                     </span>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">{s.members?.full_name}</p>
-                    <p className="text-[11px] text-slate-500">{s.members?.company}</p>
+                    <p className="text-sm font-medium text-corp-text">{s.members?.full_name}</p>
+                    <p className="text-[11px] text-corp-muted">{s.members?.company}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Zap size={12} className="text-gold" />
-                  <span className="text-xs font-bold text-gold">{s.score}%</span>
+                  <Zap size={12} className="text-navy" />
+                  <span className="text-xs font-bold text-navy">{s.score}%</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 mb-3 text-[11px] text-slate-500">
+              <div className="flex items-center gap-2 mb-3 text-[11px] text-corp-muted">
                 {s.members?.industry && <span>{s.members.industry}</span>}
                 {s.members?.city && <span className="flex items-center gap-1"><MapPin size={9} />{s.members.city}</span>}
               </div>
@@ -118,8 +118,8 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
               {s.reasons.length > 0 && (
                 <div className="mb-3 space-y-1">
                   {s.reasons.slice(0, 3).map((r, i) => (
-                    <p key={i} className="text-[10px] text-slate-400 flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-gold flex-shrink-0" /> {r}
+                    <p key={i} className="text-[10px] text-corp-muted flex items-center gap-1">
+                      <span className="w-1 h-1 rounded-full bg-navy flex-shrink-0" /> {r}
                     </p>
                   ))}
                 </div>
@@ -128,11 +128,11 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
               <div className="flex gap-2">
                 <button onClick={() => handleConnect(s.id, s.suggested_member_id, s.members?.full_name || "")}
                   disabled={connecting === s.id}
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/15 transition-colors disabled:opacity-50">
+                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium bg-navy/5 text-navy border border-navy/15 rounded-lg hover:bg-navy/10 transition-colors disabled:opacity-50">
                   <Handshake size={12} /> {connecting === s.id ? "..." : "Conectar"}
                 </button>
                 <button onClick={() => handleDismiss(s.id)}
-                  className="p-2 text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 rounded-lg transition-colors">
+                  className="p-2 text-corp-muted hover:text-corp-text hover:bg-slate-50 rounded-lg transition-colors">
                   <X size={14} />
                 </button>
               </div>
@@ -140,10 +140,10 @@ export default function NetworkingView({ suggestions, currentMember, hasProfile 
           ))}
         </div>
       ) : (
-        <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-12 text-center">
-          <Sparkles size={32} className="text-slate-600 mx-auto mb-3" />
-          <p className="text-sm text-slate-400">Nenhuma sugestão disponível</p>
-          <p className="text-[11px] text-slate-500 mt-1">Clique em "Gerar Sugestões" para encontrar conexões</p>
+        <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
+          <Sparkles size={32} className="text-slate-300 mx-auto mb-3" />
+          <p className="text-sm text-corp-muted">Nenhuma sugestão disponível</p>
+          <p className="text-[11px] text-corp-muted mt-1">Clique em "Gerar Sugestões" para encontrar conexões</p>
         </div>
       )}
     </div>

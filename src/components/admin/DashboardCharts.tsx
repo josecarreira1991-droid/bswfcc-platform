@@ -6,9 +6,9 @@ import {
   ResponsiveContainer, CartesianGrid,
 } from "recharts";
 
-const COLORS = ["#C9A84C", "#2D5F8A", "#6366f1", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"];
+const COLORS = ["#1B3A6B", "#2D5F8A", "#C8A96E", "#22c55e", "#f59e0b", "#6366f1", "#8b5cf6", "#ec4899"];
 
-const TOOLTIP_CLASS = "bg-[#1B2A4A] border border-slate-600/50 rounded-lg px-3 py-2 text-xs text-white shadow-xl";
+const TOOLTIP_CLASS = "bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-corp-text shadow-lg";
 
 interface ChartCardProps {
   title: string;
@@ -17,8 +17,8 @@ interface ChartCardProps {
 
 function ChartCard({ title, children }: ChartCardProps) {
   return (
-    <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5">
-      <h3 className="text-sm font-medium text-slate-300 mb-4">{title}</h3>
+    <div className="bg-white border border-corp-border rounded-xl p-5 shadow-card">
+      <h3 className="text-sm font-medium text-corp-text mb-4">{title}</h3>
       {children}
     </div>
   );
@@ -30,7 +30,7 @@ function formatRoleName(role: string): string {
 
 function EmptyChart() {
   return (
-    <div className="flex items-center justify-center h-[220px] text-sm text-slate-500">
+    <div className="flex items-center justify-center h-[220px] text-sm text-corp-muted">
       Dados insuficientes
     </div>
   );
@@ -40,8 +40,8 @@ function PieTooltip({ active, payload }: { active?: boolean; payload?: Array<{ n
   if (!active || !payload?.length) return null;
   return (
     <div className={TOOLTIP_CLASS}>
-      <p className="text-slate-400">{payload[0].name}</p>
-      <p className="font-semibold">{payload[0].value} membros</p>
+      <p className="text-corp-muted">{payload[0].name}</p>
+      <p className="font-semibold text-corp-text">{payload[0].value} membros</p>
     </div>
   );
 }
@@ -50,8 +50,8 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
   if (!active || !payload?.length) return null;
   return (
     <div className={TOOLTIP_CLASS}>
-      <p className="text-slate-400">{label}</p>
-      <p className="font-semibold">{payload[0].value}</p>
+      <p className="text-corp-muted">{label}</p>
+      <p className="font-semibold text-corp-text">{payload[0].value}</p>
     </div>
   );
 }
@@ -86,7 +86,7 @@ export function RoleDistributionChart({ data }: { data: Record<string, number> }
       </ResponsiveContainer>
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2">
         {chartData.map((item, i) => (
-          <div key={item.name} className="flex items-center gap-1.5 text-[11px] text-slate-400">
+          <div key={item.name} className="flex items-center gap-1.5 text-[11px] text-corp-muted">
             <div className="w-2 h-2 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
             {item.name} ({item.value})
           </div>
@@ -108,16 +108,16 @@ export function IndustryChart({ data }: { data: Record<string, number> }) {
     <ChartCard title="Membros por Indústria">
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={chartData} layout="vertical" margin={{ left: 0, right: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={false} />
-          <XAxis type="number" tick={{ fill: "#64748b", fontSize: 11 }} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" horizontal={false} />
+          <XAxis type="number" tick={{ fill: "#64748B", fontSize: 11 }} />
           <YAxis
             type="category"
             dataKey="name"
-            tick={{ fill: "#94a3b8", fontSize: 11 }}
+            tick={{ fill: "#475569", fontSize: 11 }}
             width={100}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="value" fill="#C9A84C" radius={[0, 4, 4, 0]} barSize={16} />
+          <Bar dataKey="value" fill="#1B3A6B" radius={[0, 4, 4, 0]} barSize={16} />
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>

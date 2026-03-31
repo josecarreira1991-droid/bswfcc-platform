@@ -12,8 +12,8 @@ export default async function DiretoriaAdminPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-white">Diretoria BSWFCC</h1>
-        <p className="text-sm text-slate-500 mt-0.5">
+        <h1 className="text-xl font-semibold text-corp-text">Diretoria BSWFCC</h1>
+        <p className="text-sm text-corp-muted mt-0.5">
           Conselho executivo e diretores
         </p>
       </div>
@@ -23,21 +23,21 @@ export default async function DiretoriaAdminPage() {
           {directors.map((d) => (
             <div
               key={d.id}
-              className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-5 hover:border-slate-600 transition-colors"
+              className="bg-white shadow-card border border-corp-border rounded-xl p-5 hover:border-slate-300 transition-colors"
             >
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-11 h-11 rounded-full bg-gold/15 flex items-center justify-center flex-shrink-0">
-                  <span className="text-gold font-semibold text-sm">
+                <div className="w-11 h-11 rounded-full bg-navy/10 flex items-center justify-center flex-shrink-0">
+                  <span className="text-navy font-semibold text-sm">
                     {(d.name || "").split(" ").filter(Boolean).map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || "?"}
                   </span>
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{d.name}</p>
-                  <p className="text-[11px] text-gold">{d.role}</p>
+                  <p className="text-sm font-medium text-corp-text truncate">{d.name}</p>
+                  <p className="text-[11px] text-navy">{d.role}</p>
                 </div>
               </div>
-              <p className="text-xs text-slate-400 mb-3 line-clamp-3">{d.profile}</p>
-              <div className="flex items-center gap-3 text-[11px] text-slate-500">
+              <p className="text-xs text-corp-muted mb-3 line-clamp-3">{d.profile}</p>
+              <div className="flex items-center gap-3 text-[11px] text-corp-muted">
                 {d.company && (
                   <span className="flex items-center gap-1"><Building2 size={11} /> {d.company}</span>
                 )}
@@ -46,7 +46,7 @@ export default async function DiretoriaAdminPage() {
                     href={d.linkedin.startsWith("http") ? d.linkedin : `https://${d.linkedin}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-blue-400 hover:text-blue-300"
+                    className="flex items-center gap-1 text-blue-700 hover:text-blue-600"
                   >
                     <Linkedin size={11} /> LinkedIn
                   </a>
@@ -56,9 +56,9 @@ export default async function DiretoriaAdminPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-[#0D1B2A] border border-slate-700/50 rounded-xl p-12 text-center">
-          <Shield size={32} className="text-slate-600 mx-auto mb-3" />
-          <p className="text-sm text-slate-400">Nenhum diretor cadastrado ainda.</p>
+        <div className="bg-white shadow-card border border-corp-border rounded-xl p-12 text-center">
+          <Shield size={32} className="text-slate-400 mx-auto mb-3" />
+          <p className="text-sm text-corp-muted">Nenhum diretor cadastrado ainda.</p>
         </div>
       )}
     </div>

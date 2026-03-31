@@ -5,7 +5,7 @@ import { login } from "@/lib/actions/auth";
 import { useState, Suspense } from "react";
 
 const INPUT_CLASS =
-  "w-full px-4 py-3 bg-navy/60 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 transition-colors";
+  "w-full px-4 py-3 bg-slate-50 border border-corp-border rounded-lg text-corp-text placeholder-slate-400 focus:border-navy/30 focus:outline-none focus:ring-1 focus:ring-navy/20 transition-colors";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -25,25 +25,25 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-navy flex items-center justify-center px-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="text-3xl font-bold gold-gradient">BSWFCC</Link>
-          <p className="text-gray-400 mt-2">Acesse a plataforma</p>
+          <Link href="/" className="text-3xl font-bold text-navy">BSWFCC</Link>
+          <p className="text-corp-muted mt-2">Acesse a plataforma</p>
         </div>
 
-        <div className="bg-dark-blue/80 rounded-2xl p-8 border border-gold/10">
-          <h2 className="text-2xl font-bold mb-6">Entrar</h2>
+        <div className="bg-white rounded-2xl p-8 border border-corp-border shadow-card">
+          <h2 className="text-2xl font-bold text-corp-text mb-6">Entrar</h2>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
               {error}
             </div>
           )}
 
           <form action={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm text-gray-400 mb-1.5">Email</label>
+              <label htmlFor="email" className="block text-sm text-corp-muted mb-1.5">Email</label>
               <input
                 id="email"
                 name="email"
@@ -54,7 +54,7 @@ function LoginForm() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm text-gray-400 mb-1.5">Senha</label>
+              <label htmlFor="password" className="block text-sm text-corp-muted mb-1.5">Senha</label>
               <input
                 id="password"
                 name="password"
@@ -68,15 +68,15 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gold text-navy font-semibold rounded-lg hover:bg-light-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-navy text-white font-semibold rounded-lg hover:bg-light-navy transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? "Entrando..." : "Entrar"}
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-400">
+          <div className="mt-6 text-center text-sm text-corp-muted">
             Não tem conta?{" "}
-            <Link href="/register" className="text-gold hover:text-light-gold transition-colors">
+            <Link href="/register" className="text-navy hover:text-light-navy font-medium transition-colors">
               Cadastrar-se
             </Link>
           </div>
@@ -88,7 +88,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-navy flex items-center justify-center"><div className="text-gold">Carregando...</div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center"><div className="text-navy">Carregando...</div></div>}>
       <LoginForm />
     </Suspense>
   );
