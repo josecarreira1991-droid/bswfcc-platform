@@ -15,7 +15,7 @@ const config: Config = {
         "accent-light": "#A78BFA",
         "accent-dim": "#7C3AED",
         // Semantic tokens
-        "corp-bg": "#FFFFFF",
+        "corp-bg": "#F5F5F7",
         "corp-card": "#1A1C28",
         "corp-border": "rgba(139,92,246,0.08)",
         "corp-text": "#E8ECF2",
